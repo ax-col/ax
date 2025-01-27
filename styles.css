@@ -33,8 +33,8 @@
     }
 
     .button:hover {
-      background-color: red; /* Cambia fondo a rojo al pasar el mouse */
-      color: black; /* Cambia texto a negro */
+      background-color: aqua; /* Cambia fondo a rojo al pasar el mouse */
+      color: white; /* Cambia texto a negro */
       cursor: pointer;
     }
 
