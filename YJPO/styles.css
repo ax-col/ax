@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000; /* Fondo negro */
+    color: white; /* Texto en blanco */
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column; /* Mantiene otros elementos centrados */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilos solo para el contador */
+.timer {
+    display: flex;
+    justify-content: center; /* Centra el contador */
+    gap: 15px; /* Espaciado entre elementos */
+    flex-wrap: wrap; /* Permite ajuste en pantallas pequeñas */
+    margin-top: 20px; /* Separa del título si lo hay */
+}
+
+.time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90px; /* Ajuste para que todo quepa */
+}
+
+.time-part {
+    font-size: 2.2rem; /* Tamaño reducido solo para el contador */
+    color: red; /* Color de números */
+    padding: 10px;
+    text-align: center;
+}
+
+.label {
+    font-size: 1rem; /* Texto más pequeño solo en el contador */
+    color: red;
+    margin-top: 5px;
+}
+ /* Bloqueo de pantalla */
+ #bloqueo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .login-box {
+    background-color: #111;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,255,255,0.3);
+  }
+
+  input[type="password"] {
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    background-color: aqua;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+
+  /* ❌ Ocultar todo el contenido hasta que se desbloquee */
+  #contenido.bloqueado {
+    filter: blur(10px);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  #contenido.desbloqueado {
+    filter: none;
+    pointer-events: auto;
+    user-select: auto;
+  }
+
+  #contenido {
+    padding: 50px;
+    text-align: center;
+  }

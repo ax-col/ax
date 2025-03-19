@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W E B - 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h2 class="description">C P W E B</h2>
+        <h3>SOLO CALDO DE POLLO [CP]</h3>
+    </header>
+
+    <!-- Medidor de velocidad debajo de la descripción -->
+    <div class="speedometer">
+        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
+        <div class="ping" id="ping">Ping: -- ms</div>
+        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
+    </div>
+
+    <!-- Botones para redirigir a cada sección -->
+    <div class="section-buttons">
+        <a href="index1.html" class="button">Sección 1</a>
+        <a href="index2.html" class="button">Sección 2</a>
+        <a href="index3.html" class="button">Sección 3</a>
+      <!--
+       <h2 class="description2">X - W E B</h2>
+        <h3>ESTO ES DE INTERNET</h3>
+        <a href="index4.html" class="button">Sección 1</a>
+       <a href="index5.html" class="button">Sección 2</a>
+        <a href="index6.html" class="button">Sección 3</a>
+        <a href="index7.html" class="button">Sección 4</a>
+        <a href="index8.html" class="button">Sección 5</a>
+        <a href="index9.html" class="button">Sección 6</a>
+      -->
+    </div>
+
+    <script src="script.js"></script>
+
+      <!-- Pantalla de contraseña -->
+  <div id="bloqueo">
+    <div class="login-box">
+      <h2>Introduce la contraseña</h2>
+      <input type="password" id="password" placeholder="Contraseña" />
+      <button onclick="verificar()">Entrar</button>
+      <div class="error" id="error"></div>
+    </div>
+  </div>
+  
+</body>
+</html>

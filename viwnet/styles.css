@@ -1,0 +1,342 @@
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-shadow: 1px 0px white;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.logo-container {
+    position: absolute; /* Posiciona el logotipo de forma absoluta */
+    top: 50px; /* Ajusta la distancia desde la parte superior (incrementado para bajar más) */
+    left: 10px; /* Mantén el logotipo cerca del borde izquierdo */
+    padding: 2px;
+}
+
+.logo {
+    width: 75px; /* Ajusta el tamaño del logotipo según sea necesario */
+    height: auto;
+}
+
+.banner {
+    position: relative;
+    display: inline-block;
+}
+
+.banner-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Ajustar según el tamaño de tu banner */
+    border-bottom: 2px solid black; /* Línea en la parte inferior */
+}
+
+.profile-pic1, .profile-pic2, .profile-pic3, .profile-pic4, .profile-pic5, .profile-pic6 {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 3px solid #222;
+    position: absolute;
+    bottom: -37.5px; /* Parte inferior de la imagen sale del contenedor */
+}
+
+.profile-pic1 {
+    left: 9%; /* Imagen a la izquierda */
+    transform: translateX(-50%);
+}
+
+.profile-pic2 {
+    left: 26%; /* Imagen en el centro */
+    transform: translateX(-50%);
+}
+
+.profile-pic3 {
+    left: 42%; /* Imagen a la derecha */
+    transform: translateX(-50%);
+}
+
+.profile-pic4 {
+    left: 58%; /* Imagen a la derecha */
+    transform: translateX(-50%);
+}
+
+.profile-pic5 {
+    left: 74%; /* Imagen a la derecha */
+    transform: translateX(-50%);
+}
+
+.profile-pic6 {
+    left: 91%; /* Imagen a la derecha */
+    transform: translateX(-50%);
+}
+
+/* Sección de encabezado */
+.header {
+    position: relative;
+    padding-top: 40px;
+    margin-bottom: 50px;
+}
+
+h1 {
+    font-size: 31ppx;
+    margin-top: 15px;
+}
+
+.description {
+    font-size: 20px;
+    margin-top: 10px;
+    color: red;
+}
+
+.description2 {
+    font-size: 18px;
+    margin-top: 10px;
+    color: red;
+    bottom: 50px;
+}
+
+/* Sección de opciones */
+.options {
+    margin-top: 30px;
+}
+
+.option {
+    background-color: black;
+    color: whitesmoke;
+    font-family: Arial, sans-serif;
+    margin: 20px 0;
+    padding: 20px;
+    border: 3px solid #FE2234; /* Borde verde claro */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0px 0px 10px rgba(255, 0, 0, 0); /* Sombra inicial */
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    transition: transform 0.3s ease-in-out;
+    animation: colorCycle 15s infinite; /* Animación infinita de 15 segundos */
+}
+
+.option p {
+    margin: 15px 0;
+    font-size: 5px;
+}
+
+/* Animación de sombra multicolor */
+@keyframes colorCycle {
+    0% {
+        box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.8);  /* Rojo */
+    }
+    20% {
+        box-shadow: 0px 0px 20px rgba(0, 128, 0, 0.8); /* Verde */
+    }
+    40% {
+        box-shadow: 0px 0px 20px rgba(0, 0, 255, 0.8); /* Azul */
+    }
+    60% {
+        box-shadow: 0px 0px 20px rgba(255, 255, 0, 0.8); /* Amarillo */
+    }
+    80% {
+        box-shadow: 0px 0px 20px rgba(238, 130, 238, 0.8); /* Violeta */
+    }
+    100% {
+        box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.8);  /* Rojo */
+    }
+}
+
+/* Efecto hover en las opciones */
+.option:hover {
+    transform: scale(1.05); /* Agrandamiento al pasar el mouse */
+}
+
+/* Botón */
+.button {
+    background-color: transparent;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    border: 2px solid white; /* Borde blanco */
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.button:hover {
+    background-color: #00CDDC;
+}
+
+/* Estilos del contador con animación de sombra blanca */
+.timer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px;
+    background-color: #333;
+    animation: whiteShadowBlink 2s infinite; /* Animación infinita de parpadeo */
+}
+
+/* Animación para sombra blanca parpadeante */
+@keyframes whiteShadowBlink {
+    0%, 50% {
+        box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.8); /* Sombra blanca intensa */
+    }
+    50.01%, 100% {
+        box-shadow: none; /* Sin sombra */
+    }
+}
+
+.time-section {
+    margin: 0 15px;
+}
+
+.time-part {
+    font-size: 48px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Pie de página */
+footer {
+    margin-top: 1px;
+    padding: 20px;
+    background-color: #111;
+    color: white;
+    font-size: 14px;
+}
+
+/* Centramos el botón especial */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Apilar el botón y el texto uno debajo del otro */
+    justify-content: center;
+    align-items: center;
+    height: 8vh; /* Ajustar la altura del contenedor */
+}
+
+#special-button {
+    background-color: transparent; /* Botón transparente */
+    color: white; /* Texto blanco */
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 16px;
+    border: 2px solid white; /* Borde blanco */
+    cursor: pointer;
+    display: none; /* Oculto por defecto */
+    animation: shadowBlink 1.5s infinite ease-in-out; /* Animación de sombra parpadeante */
+}
+
+/* Estilo hover: cambia el color del borde y del texto cuando se pasa el ratón */
+#special-button:hover {
+    background-color: transparent;
+    color: red; /* Texto cambia a rojo */
+    border: 2px solid red; /* Borde cambia a rojo */
+}
+
+/* Animación de sombra blanca y roja */
+@keyframes shadowBlink {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Blanco */
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); /* Rojo */
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Blanco */
+    }
+}
+
+/* Estilo para el texto debajo del botón */
+.description2 {
+    color: red; /* Texto rojo */
+    font-size: 18px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Estilos del medidor de velocidad */
+.speedometer {
+    display: flex;
+    justify-content: center; /* Centra los elementos horizontalmente */
+    align-items: center;     /* Centra los elementos verticalmente */
+    gap: 20px;
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-top: 50px; /* Espacio adicional debajo de la descripción */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    max-width: 600px; /* Puedes ajustar este valor según el tamaño deseado */
+    margin-left: auto; /* Centra el contenedor horizontalmente */
+    margin-right: auto; /* Centra el contenedor horizontalmente */
+}
+
+.upload, .ping, .download {
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+#animated-text {
+    font-size: 33px;
+    letter-spacing: 4px;
+    color: white;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.color-red1 {
+    color: red;
+}
+
+/* Animación del texto SERVIDOR 1 × ANDREX */
+#animated-text {
+    font-size: 33px;
+    font-family: Arial, sans-serif;
+    display: block; /* Asegura que el texto esté en una nueva línea */
+    margin-top: 50px; /* Coloca el texto 50px debajo de la imagen */
+    letter-spacing: 4px;
+    text-align: center; /* Centra el texto */
+}
+
+/* Color de las letras para la animación */
+spanti {
+    color: black; /* Color original */
+    transition: color 0.3s ease-in-out;
+}
+
+.color-red1 {
+    color: red;
+}
+
+/* Estilos para la imagen */
+img {
+    display: block; /* Asegura que la imagen ocupe toda la línea y esté centrada */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilos específicos para pantallas grandes */
+@media (min-width: 1024px) {
+    #animated-text {
+        display: block; /* Asegura que el texto esté debajo de la imagen en pantallas grandes */
+        margin-top: 50px; /* Ajuste de margen superior a 50px */
+    }
+
+    img {
+        display: block; /* Hace que la imagen ocupe toda la fila */
+        margin-left: auto; /* Centra la imagen horizontalmente */
+        margin-right: auto; /* Centra la imagen horizontalmente */
+    }
+}
