@@ -1,0 +1,39 @@
+   body {
+      background-color: #000; /* Fondo negro */
+      color: red; /* Letra roja */
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 2.5em;
+    }
+
+    .button-container {
+      margin: 50px 15xp;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button {
+      margin: 3px 0; /* Separación entre botones */
+      padding: 25px 100px;
+      color: white; /* Texto rojo */
+      background-color: transparent; /* Fondo transparente */
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2em;
+      border: 2px solid white; /* Borde rojo */
+      border-radius: 25px; /* Bordes redondeados de 25px */
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .button:hover {
+      background-color: aqua; /* Cambia fondo a rojo al pasar el mouse */
+      color: white; /* Cambia texto a negro */
+      cursor: pointer;
+    }
