@@ -1,15 +1,11 @@
 body {
   background-color: #000;
-  color: red;
+  color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
+  justify-content: center;
   margin: 0;
   padding: 0;
-}
-
-h1 {
-  margin-top: 40px;
-  font-size: 3em;
 }
 
 .button-container {
@@ -40,3 +36,18 @@ h1 {
   color: black;
   cursor: pointer;
 }
+
+    #animated-text {
+      font-size: 40px;
+      letter-spacing: 4px;
+      text-align: center;
+    }
+
+    #animated-text span {
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .color-red1 {
+      color: black;
+      text-shadow: 0 0 10px red;
+    }
