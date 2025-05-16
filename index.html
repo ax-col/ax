@@ -66,6 +66,20 @@
         });
     }
   </script>
+
+  <script>
+  const localVersion = '1.0.0'; // debe coincidir con lo que pusiste en version.txt
+
+  fetch('version.txt', { cache: 'no-store' })
+    .then(response => response.text())
+    .then(serverVersion => {
+      if (serverVersion.trim() !== localVersion) {
+        console.log("Nueva versión detectada. Recargando...");
+        location.reload(true); // fuerza recarga completa
+      }
+    })
+    .catch(error => console.error("Error verificando versión:", error));
+  </script>
   
   <script src="script.js"></script>
 </body>
