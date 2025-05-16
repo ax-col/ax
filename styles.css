@@ -21,9 +21,9 @@ body {
   display: block;
   width: 100%;
   padding: 20px;
-  color: white;
+  color: rgb(20, 170, 170);
   background-color: transparent;
-  border: 2px solid white;
+  border: 2px solid red;
   border-radius: 12px;
   text-decoration: none;
   font-weight: bold;
@@ -32,14 +32,14 @@ body {
 }
 
 .button:hover {
-  background-color: aqua;
+  background-color: rgb(77, 125, 172);
   color: black;
   cursor: pointer;
 }
 
     #animated-text {
-      font-size: 40px;
-      letter-spacing: 4px;
+      font-size: 50px;
+      letter-spacing: 5px;
       text-align: center;
     }
 
@@ -48,9 +48,27 @@ body {
     }
 
     .color-red1 {
-      color: black;
-      text-shadow: 0 0 10px red;
-    }
+  color: black; /* Negro suave para mejor contraste */
+  text-shadow: 
+    0 0 12px rgba(255, 0, 0, 0.8), /* Sombra 1 */
+    0 0 1px rgb(0, 0, 0); /* Sombra 2 */
+  transition: text-shadow 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+}
+
+/* Efecto hover para mayor interactividad */
+.color-red-glow:hover {
+  text-shadow: 
+    0 0 12px rgba(255, 0, 0, 1), /* Sombra roja más intensa */
+    0 0 20px rgba(255, 255, 255, 0.8); /* Sombra blanca más pronunciada */
+  color: #333333; /* Ligeramente más claro en hover */
+}
+
+/* Clase opcional para textos más grandes */
+.color-red-glow--large {
+  text-shadow: 
+    0 0 10px rgba(255, 0, 0, 0.8), 
+    0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
+}
 
     /* Contenedor del video */
     .video-background {
