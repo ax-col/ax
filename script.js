@@ -1,5 +1,7 @@
-
-const textElement = document.getElementById('animated-text');
+// ============ ANIMACIÓN DE TEXTO ============
+document.addEventListener('DOMContentLoaded', function() {
+  const textElement = document.getElementById('animated-text');
+  if (textElement) { // Verifica si el elemento existe
     const text = textElement.textContent;
     const letters = text.split('');
 
@@ -26,3 +28,19 @@ const textElement = document.getElementById('animated-text');
     }
 
     changeColor();
+  }
+});
+
+// ============ SERVICE WORKER ============
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(
+      function(registration) {
+        console.log('ServiceWorker registrado con éxito: ', registration.scope);
+      },
+      function(err) {
+        console.log('Error al registrar ServiceWorker: ', err);
+      }
+    );
+  });
+}
