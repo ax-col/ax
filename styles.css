@@ -21,7 +21,7 @@ body {
   display: block;
   width: 100%;
   padding: 20px;
-  color: rgb(20, 170, 170);
+  color: black;
   background-color: transparent;
   border: 3px solid red;
   border-radius: 12px;
@@ -32,8 +32,8 @@ body {
 }
 
 .button:hover {
-  background-color: rgb(77, 125, 172);
-  color: black;
+  background-color: rebeccapurple;
+  color: white;
   cursor: pointer;
 }
 
