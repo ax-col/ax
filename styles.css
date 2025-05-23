@@ -70,7 +70,6 @@ body {
     0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
 }
 
-/* Contenedor del video */
 .video-background {
   position: fixed;
   top: 0;
@@ -81,7 +80,6 @@ body {
   overflow: hidden;
 }
 
-/* Video responsivo para cubrir toda la pantalla */
 .video-background video {
   position: absolute;
   top: 50%;
@@ -89,17 +87,5 @@ body {
   transform: translate(-50%, -50%);
   min-width: 100%;
   min-height: 100%;
-  width: auto;
-  height: auto;
   object-fit: cover;
-}
-
-/* Contenido principal encima del video */
-.content {
-  position: relative;
-  z-index: 1;
-  color: white;
-  text-align: center;
-  padding: 50px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
