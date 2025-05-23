@@ -16,7 +16,7 @@
     <a href="viwnet/" class="button">ANTIGUO VIWNET</a>
     <a href="Windows/" class="button">Activación de Windows</a>
     <a href="web-apks/" class="button">ApHacks (INAPKS)</a>
-   <!-- <a href="YJPO/" class="button">YJPO (Offline)</a> -->
+   <!-- <a href="/" class="button>(Offline)</a> -->
     <a href="CPWEB/" class="button">CP WEB (Colaboración)</a>
     <a href="x/" class="button">Próximamente</a>
     <a href="x/" class="button">Próximamente</a>
@@ -72,7 +72,7 @@
   </script>
 
 <script>
-  const localVersion = '1.0.8';
+  const localVersion = '1.0.9';
 
   function checkVersion() {
     fetch('version.txt', { cache: 'no-store' })
@@ -86,8 +86,8 @@
       .catch(error => console.error("Error verificando versión:", error));
   }
 
-  // Verifica cada 10 segundos
-  setInterval(checkVersion, 10000);
+  // Verifica cada 1 segundos
+  setInterval(checkVersion, 1000);
 
   // También revisa al cargar la página
   checkVersion();
