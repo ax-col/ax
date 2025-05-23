@@ -35,10 +35,18 @@
 <iframe height="80px" width="300px" frameborder="0" src=https://livecounts.io/embed/youtube-live-subscriber-counter/UC1ZPgKGxaT5P7QKN_bk9xkw style="border: 0; width:300px; height:80px;"></iframe>
 <h3>F R E E  F I R E</h3>
 
-<video autoplay muted loop playsinline preload="auto">
-  <source src="https://files.catbox.moe/jsvevz.mp4" type="video/mp4">
-  Tu navegador no soporta video HTML5.
-</video>
+<!-- Contenedor del video de fondo -->
+<div class="video-background">
+  <video
+    src="https://files.catbox.moe/jsvevz.mp4"
+    autoplay
+    muted
+    playsinline
+    loop
+    preload="auto"
+  ></video>
+</div>
+
 
 <script>
   const video = document.getElementById('bg-video');
@@ -64,7 +72,7 @@
   </script>
 
 <script>
-  const localVersion = '1.0.6';
+  const localVersion = '1.0.7';
 
   function checkVersion() {
     fetch('version.txt', { cache: 'no-store' })
