@@ -35,17 +35,32 @@
 <iframe height="80px" width="300px" frameborder="0" src=https://livecounts.io/embed/youtube-live-subscriber-counter/UC1ZPgKGxaT5P7QKN_bk9xkw style="border: 0; width:300px; height:80px;"></iframe>
 <h3>F R E E  F I R E</h3>
 
-<!-- Contenedor del video de fondo -->
-<div class="video-background">
-  <video
-    src="https://files.catbox.moe/jsvevz.mp4"
-    autoplay
-    muted
-    playsinline
-    loop
-    preload="auto"
-  ></video>
-</div>
+
+<!-- Botón para activar/desactivar sonido -->
+<button class="mute-toggle" onclick="toggleMute()">Activar sonido</button>
+
+<!-- Video para escritorio -->
+<video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto">
+  <source src="https://files.catbox.moe/jsvevz.mp4" type="video/mp4" />
+</video>
+
+<!-- Video para móviles -->
+<video class="video-mobile" id="videoMobile" autoplay muted loop playsinline preload="auto">
+  <source src="https://files.catbox.moe/jsvevz.mp4" type="video/mp4" />
+</video>
+
+<script>
+  function toggleMute() {
+    const videoDesktop = document.getElementById('videoDesktop');
+    const videoMobile = document.getElementById('videoMobile');
+    const btn = document.querySelector('.mute-toggle');
+
+    const activeVideo = window.innerWidth >= 768 ? videoDesktop : videoMobile;
+
+    activeVideo.muted = !activeVideo.muted;
+    btn.textContent = activeVideo.muted ? 'Activar sonido' : 'Silenciar';
+  }
+</script> 
 
 
 <script>
