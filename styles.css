@@ -29,6 +29,7 @@ body {
   font-weight: bold;
   font-size: 1.1em;
   transition: all 0.3s ease;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9); /* sombra blanca */
 }
 
 .button:hover {
