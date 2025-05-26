@@ -129,3 +129,17 @@ body {
   padding: 50px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
+
+.video-inline {
+  max-width: 800px;
+  margin: 30px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.video-inline video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
