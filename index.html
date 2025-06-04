@@ -46,16 +46,29 @@
 
 <!-- Video para escritorio -->
 <video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto">
-  <source src="https://files.catbox.moe/xfe1j6.mp4" type="video/mp4" />
+  <source id="videoSource" src="" type="video/mp4" />
 </video>
-<!--Videos Edit 1 https://files.catbox.moe/xfe1j6.mp4 - 
-Edit 2 https://files.catbox.moe/zosvri.mp4 -->
 
-<!-- Video para móviles -->
-<video class="video-mobile" id="videoMobile" autoplay muted loop playsinline preload="auto">
-  <source src="https://files.catbox.moe/jsvevz.mp4" type="video/mp4" />
-</video>
-<!-- Video original "https://files.catbox.moe/jsvevz.mp4 -->
+<!-- Script para alternar videos aleatoriamente -->
+<script>
+  // Lista de videos disponibles
+  const videos = [
+    "https://files.catbox.moe/xfe1j6.mp4", // Edit 1
+    "https://files.catbox.moe/zosvri.mp4"  // Edit 2
+  ];
+
+  // Elegir uno aleatoriamente
+  const randomIndex = Math.floor(Math.random() * videos.length);
+  const selectedVideo = videos[randomIndex];
+
+  // Referencias al video y source
+  const videoElement = document.getElementById("videoDesktop");
+  const sourceElement = document.getElementById("videoSource");
+
+  // Asignar el video seleccionado
+  sourceElement.src = selectedVideo;
+  videoElement.load();
+</script>
 
 
 <script>
