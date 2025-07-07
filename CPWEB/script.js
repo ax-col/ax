@@ -29,7 +29,7 @@ function updateMetrics() {
 
 function verificar() {
     const clave = document.getElementById("password").value;
-    const correcta = "123456789"; // ← Tu contraseña
+    const correcta = "79454582242928340222"; // ← Tu contraseña
   
     if (clave === correcta) {
         document.getElementById("bloqueo").style.display = "none";
