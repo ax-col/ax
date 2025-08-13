@@ -100,49 +100,7 @@
   }
 </script>
 
-<script>
-// Elimina cualquier Service Worker viejo y borra caché
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations().then(registrations => {
-    for (let registration of registrations) {
-      registration.unregister();
-    }
-  });
 
-  if (caches) {
-    caches.keys().then(names => {
-      for (let name of names) {
-        caches.delete(name);
-      }
-    });
-  }
-}
-</script>
-
-<script>
-(function autoReloadOnChange() {
-  let lastVersion = null;
-
-  async function checkVersion() {
-    try {
-      const res = await fetch("/", { cache: "no-store" });
-      const text = await res.text();
-      const hash = btoa(text);
-
-      if (!lastVersion) {
-        lastVersion = hash;
-      } else if (lastVersion !== hash) {
-        console.log("Nueva versión detectada. Recargando...");
-        location.reload(true);
-      }
-    } catch (err) {
-      console.error("Error comprobando cambios:", err);
-    }
-  }
-
-  setInterval(checkVersion, 30000); // cada 30 segundos
-})();
-</script>
 
   <script src="script.js"></script>
 
