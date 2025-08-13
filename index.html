@@ -87,7 +87,30 @@
   }
 </script>
 
+<script>
+(function autoReloadOnChange() {
+  let lastVersion = null;
 
+  async function checkVersion() {
+    try {
+      const res = await fetch(window.location.href, { cache: "no-store" });
+      const text = await res.text();
+      const hash = btoa(text);
+
+      if (!lastVersion) {
+        lastVersion = hash;
+      } else if (lastVersion !== hash) {
+        console.log("Nueva versión detectada. Recargando...");
+        location.reload(true);
+      }
+    } catch (err) {
+      console.error("Error comprobando cambios:", err);
+    }
+  }
+
+  setInterval(checkVersion, 1000); // cada 1 segundos
+})();
+</script>
 
   <script src="script.js"></script>
 
