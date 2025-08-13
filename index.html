@@ -93,9 +93,13 @@
 
   async function checkVersion() {
     try {
-      const res = await fetch(window.location.href, { cache: "no-store" });
-      const text = await res.text();
-      const hash = btoa(text);
+      const res = await fetch("version.txt", { cache: "no-store" });
+const text = await res.text();
+if (!lastVersion) {
+  lastVersion = text.trim();
+} else if (lastVersion !== text.trim()) {
+  location.reload();
+}
 
       if (!lastVersion) {
         lastVersion = hash;
