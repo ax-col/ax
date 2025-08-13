@@ -94,16 +94,12 @@
   async function checkVersion() {
     try {
       const res = await fetch("version.txt", { cache: "no-store" });
-const text = await res.text();
-if (!lastVersion) {
-  lastVersion = text.trim();
-} else if (lastVersion !== text.trim()) {
-  location.reload();
-}
+      const text = await res.text();
+      const currentVersion = text.trim();
 
       if (!lastVersion) {
-        lastVersion = hash;
-      } else if (lastVersion !== hash) {
+        lastVersion = currentVersion;
+      } else if (lastVersion !== currentVersion) {
         console.log("Nueva versión detectada. Recargando...");
         location.reload();
       }
