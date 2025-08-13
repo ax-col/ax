@@ -55,48 +55,35 @@
 </video>
 
 <script>
-  // Listas de videos
   const videosDesktop = [
     "https://files.catbox.moe/cqlm62.mp4"
   ];
-  
+
   const videosMobile = [
     "https://files.catbox.moe/exrhil.mp4",
     "https://files.catbox.moe/nylp8o.mp4"
   ];
 
   const isDesktop = window.innerWidth >= 768;
+  let videoElement, videoSource;
 
   if (isDesktop) {
-    document.getElementById("videoDesktop").style.display = "block";
-    const randomVideo = videosDesktop[Math.floor(Math.random() * videosDesktop.length)];
-    document.getElementById("videoSourceDesktop").src = randomVideo;
-    document.getElementById("videoDesktop").load();
+    videoElement = document.getElementById("videoDesktop");
+    videoSource = document.getElementById("videoSourceDesktop");
+    videoSource.src = videosDesktop[Math.floor(Math.random() * videosDesktop.length)];
   } else {
-    document.getElementById("videoMobile").style.display = "block";
-    const randomVideo = videosMobile[Math.floor(Math.random() * videosMobile.length)];
-    document.getElementById("videoSourceMobile").src = randomVideo;
-    document.getElementById("videoMobile").load();
+    videoElement = document.getElementById("videoMobile");
+    videoSource = document.getElementById("videoSourceMobile");
+    videoSource.src = videosMobile[Math.floor(Math.random() * videosMobile.length)];
   }
 
-  // Función para alternar sonido
+  videoElement.style.display = "block";
+  videoElement.load();
+
   function toggleMute() {
-    const videoDesktop = document.getElementById('videoDesktop');
-    const videoMobile = document.getElementById('videoMobile');
     const btn = document.querySelector('.mute-toggle');
-
-    const activeVideo = isDesktop ? videoDesktop : videoMobile;
-    activeVideo.muted = !activeVideo.muted;
-    btn.textContent = activeVideo.muted ? 'Activar sonido' : 'Silenciar';
-  }
-</script>
-
-<script>
-  // Bloquea videos en conexiones lentas
-  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  if (connection && connection.effectiveType && ['2g', 'slow-2g', '3g'].includes(connection.effectiveType)) {
-    document.getElementById('videoDesktop').remove();
-    document.getElementById('videoMobile').remove();
+    videoElement.muted = !videoElement.muted;
+    btn.textContent = videoElement.muted ? 'Activar sonido' : 'Silenciar';
   }
 </script>
 
