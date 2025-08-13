@@ -101,7 +101,7 @@
         lastVersion = hash;
       } else if (lastVersion !== hash) {
         console.log("Nueva versión detectada. Recargando...");
-        location.reload(true);
+        location.reload();
       }
     } catch (err) {
       console.error("Error comprobando cambios:", err);
