@@ -41,58 +41,63 @@
 <h3>T  S E R I E S</h3>
 
 
-<!-- Botón para activar/desactivar sonido -->
+<<!-- Botón para activar/desactivar sonido -->
 <button class="mute-toggle" onclick="toggleMute()">Activar sonido</button>
 
 <!-- Video para escritorio -->
-<video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto">
-  <source id="videoSource" src="" type="video/mp4" />
+<video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto" style="display:none;">
+  <source id="videoSourceDesktop" src="" type="video/mp4" />
 </video>
 
-<!-- Script para alternar videos aleatoriamente -->
+<!-- Video para móviles -->
+<video class="video-mobile" id="videoMobile" autoplay muted loop playsinline preload="auto" style="display:none;">
+  <source id="videoSourceMobile" src="" type="video/mp4" />
+</video>
+
 <script>
-  // Lista de videos disponibles
-  const videos = [
-    "https://files.catbox.moe/cqlm62.mp4", // Edit 1
-    "https://"  // Edit 2
+  // Listas de videos
+  const videosDesktop = [
+    "https://files.catbox.moe/cqlm62.mp4",
+    "https://example.com/video2.mp4"
+  ];
+  
+  const videosMobile = [
+    "https://example.com/video_mobile1.mp4",
+    "https://example.com/video_mobile2.mp4"
   ];
 
-  // Elegir uno aleatoriamente
-  const randomIndex = Math.floor(Math.random() * videos.length);
-  const selectedVideo = videos[randomIndex];
+  const isDesktop = window.innerWidth >= 768;
 
-  // Referencias al video y source
-  const videoElement = document.getElementById("videoDesktop");
-  const sourceElement = document.getElementById("videoSource");
+  if (isDesktop) {
+    document.getElementById("videoDesktop").style.display = "block";
+    const randomVideo = videosDesktop[Math.floor(Math.random() * videosDesktop.length)];
+    document.getElementById("videoSourceDesktop").src = randomVideo;
+    document.getElementById("videoDesktop").load();
+  } else {
+    document.getElementById("videoMobile").style.display = "block";
+    const randomVideo = videosMobile[Math.floor(Math.random() * videosMobile.length)];
+    document.getElementById("videoSourceMobile").src = randomVideo;
+    document.getElementById("videoMobile").load();
+  }
 
-  // Asignar el video seleccionado
-  sourceElement.src = selectedVideo;
-  videoElement.load();
-</script>
-
-
-<script>
+  // Función para alternar sonido
   function toggleMute() {
     const videoDesktop = document.getElementById('videoDesktop');
     const videoMobile = document.getElementById('videoMobile');
     const btn = document.querySelector('.mute-toggle');
 
-    const activeVideo = window.innerWidth >= 768 ? videoDesktop : videoMobile;
-
+    const activeVideo = isDesktop ? videoDesktop : videoMobile;
     activeVideo.muted = !activeVideo.muted;
     btn.textContent = activeVideo.muted ? 'Activar sonido' : 'Silenciar';
   }
-</script> 
-
+</script>
 
 <script>
-  const video = document.getElementById('bg-video');
+  // Bloquea videos en conexiones lentas
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-
-  if (connection && connection.effectiveType) {
-    if (['2g', 'slow-2g', '3g'].includes(connection.effectiveType)) {
-      video.remove(); // Conexión lenta, no se carga el video
-    }
+  if (connection && connection.effectiveType && ['2g', 'slow-2g', '3g'].includes(connection.effectiveType)) {
+    document.getElementById('videoDesktop').remove();
+    document.getElementById('videoMobile').remove();
   }
 </script>
 
