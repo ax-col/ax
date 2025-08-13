@@ -101,6 +101,25 @@
 </script>
 
 <script>
+// Elimina cualquier Service Worker viejo y borra caché
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+
+  if (caches) {
+    caches.keys().then(names => {
+      for (let name of names) {
+        caches.delete(name);
+      }
+    });
+  }
+}
+</script>
+
+<script>
 (function autoReloadOnChange() {
   let lastVersion = null;
 
@@ -108,21 +127,20 @@
     try {
       const res = await fetch("/", { cache: "no-store" });
       const text = await res.text();
-      const hash = btoa(text); // Convierte el HTML en un hash base64
+      const hash = btoa(text);
 
       if (!lastVersion) {
-        lastVersion = hash; // Guarda la versión actual
+        lastVersion = hash;
       } else if (lastVersion !== hash) {
         console.log("Nueva versión detectada. Recargando...");
-        location.reload(true); // Recarga forzada
+        location.reload(true);
       }
     } catch (err) {
       console.error("Error comprobando cambios:", err);
     }
   }
 
-  // Revisa cada 30 segundos
-  setInterval(checkVersion, 30000);
+  setInterval(checkVersion, 30000); // cada 30 segundos
 })();
 </script>
 
