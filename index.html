@@ -101,40 +101,33 @@
   }
 </script>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(function(registration) {
-          console.log('Service Worker registrado con éxito:', registration);
-        })
-        .catch(function(error) {
-          console.log('Error al registrar el Service Worker:', error);
-        });
-    }
-  </script>
-
 <script>
-  const localVersion = '1.1.3';
+(function autoReloadOnChange() {
+  let lastVersion = null;
 
-  function checkVersion() {
-    fetch('version.txt', { cache: 'no-store' })
-      .then(response => response.text())
-      .then(serverVersion => {
-        if (serverVersion.trim() !== localVersion) {
-          console.log("Nueva versión detectada. Recargando...");
-          location.reload(true);
-        }
-      })
-      .catch(error => console.error("Error verificando versión:", error));
+  async function checkVersion() {
+    try {
+      const res = await fetch("/", { cache: "no-store" });
+      const text = await res.text();
+      const hash = btoa(text); // Convierte el HTML en un hash base64
+
+      if (!lastVersion) {
+        lastVersion = hash; // Guarda la versión actual
+      } else if (lastVersion !== hash) {
+        console.log("Nueva versión detectada. Recargando...");
+        location.reload(true); // Recarga forzada
+      }
+    } catch (err) {
+      console.error("Error comprobando cambios:", err);
+    }
   }
 
-  // Verifica cada 1 segundos
-  setInterval(checkVersion, 1000);
-
-  // También revisa al cargar la página
-  checkVersion();
+  // Revisa cada 30 segundos
+  setInterval(checkVersion, 30000);
+})();
 </script>
-  
+
   <script src="script.js"></script>
+
 </body>
 </html>
