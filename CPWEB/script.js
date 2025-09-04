@@ -27,18 +27,6 @@ function updateMetrics() {
         });
 }
 
-function verificar() {
-    const clave = document.getElementById("password").value;
-    const correcta = "79454582242928340222"; // ← Tu contraseña
-  
-    if (clave === correcta) {
-        document.getElementById("bloqueo").style.display = "none";
-        const contenido = document.getElementById("contenido");
-        contenido.classList.remove("bloqueado");
-        contenido.classList.add("desbloqueado");
-    } else {
-        document.getElementById("error").innerText = "Contraseña incorrecta.";
-    }
   }
 
 // Ejecutar la actualización de métricas cada segundo
