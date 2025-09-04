@@ -27,7 +27,6 @@ function updateMetrics() {
         });
 }
 
-  }
 
 // Ejecutar la actualización de métricas cada segundo
 window.onload = () => {
