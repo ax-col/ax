@@ -156,7 +156,7 @@
 <!-- Botón para activar/desactivar sonido (MÁS GRANDE) -->
 <button class="mute-toggle" onclick="toggleMute()">🔇 ACTIVAR SONIDO</button>
 
-<!-- BOTONES DE VIDEO CN1-CN6 - ALTAMENTE VISIBLES -->
+<!-- BOTONES DE VIDEO CN1-CN5 - ALTAMENTE VISIBLES -->
 <div class="botones-video-container">
   <div class="titulo-segmentos">SEGMENTOS DE VIDEO</div>
   <div class="mensaje-movil">Los segmentos de video solo están disponibles en versión de escritorio</div>
@@ -166,7 +166,6 @@
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN3.mp4', 2)">CN3</button>
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN4.mp4', 3)">CN4</button>
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN5.mp4', 4)">CN5</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN6.mp4', 4)">CN6</button>
   </div>
   <div class="info-video" id="infoVideo">Video actual: CN1.mp4</div>
 </div>
@@ -232,11 +231,11 @@
     videoElement.muted = !videoElement.muted;
     
     if (videoElement.muted) {
-      btn.textContent = 'ACTIVAR SONIDO';
-      btn.style.background = 'linear-gradient(135deg, #00A6FF 0%, #5E02FF 100%)';
+      btn.textContent = '🔇 ACTIVAR SONIDO';
+      btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%)';
     } else {
-      btn.textContent = 'SILENCIAR';
-      btn.style.background = 'linear-gradient(135deg, #00EAFF 0%, #00FF44 100%)';
+      btn.textContent = '🔊 SILENCIAR';
+      btn.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
     }
   }
 
@@ -298,9 +297,6 @@
 </script>
 
   <script src="script.js"></script>
-
-</body>
-</html>
 
 </body>
 </html>
