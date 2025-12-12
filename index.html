@@ -166,7 +166,7 @@
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN3.mp4', 2)">CN3</button>
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN4.mp4', 3)">CN4</button>
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN5.mp4', 4)">CN5</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN6.mp4', 4)">CN6</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN6.mp4', 5)">CN6</button>
   </div>
   <div class="info-video" id="infoVideo">Video actual: CN6.mp4</div>
 </div>
@@ -197,43 +197,29 @@
 
   const isDesktop = window.innerWidth >= 768;
   let videoElement, videoSource;
-<script>
-  const videosDesktop = [
-    "AX NAVEGADOR/CN1.mp4",
-    "AX NAVEGADOR/CN2.mp4", 
-    "AX NAVEGADOR/CN3.mp4",
-    "AX NAVEGADOR/CN4.mp4",
-    "AX NAVEGADOR/CN5.mp4",
-    "AX NAVEGADOR/CN6.mp4" 
-  ];
-
-  const videosMobile = [
-    "AX NAVEGADOR/BG.mp4"
-  ];
-
-  const isDesktop = window.innerWidth >= 768;
-  let videoElement, videoSource;
   let currentVideoIndex = 0;
   let botonesVideo = [];
 
-  // Inicializar los botones CN
-  function inicializarBotonesCN() {
-    botonesVideo = document.querySelectorAll('.btn-video');
-    
-    // Marcar el botón CORRESPONDIENTE al video aleatorio como activo
-    if (botonesVideo.length > 0 && botonesVideo[currentVideoIndex]) {
-      botonesVideo[currentVideoIndex].classList.add('activo');
-    }
+// Inicializar los botones CN
+function inicializarBotonesCN() {
+  botonesVideo = document.querySelectorAll('.btn-video');
+  
+  // Marcar el botón CORRESPONDIENTE al video aleatorio como activo
+  botonesVideo.forEach(btn => btn.classList.remove('activo'));
+  if (botonesVideo.length > 0 && botonesVideo[currentVideoIndex]) {
+    botonesVideo[currentVideoIndex].classList.add('activo');
   }
+}
 
   if (isDesktop) {
-    videoElement = document.getElementById("videoDesktop");
-    videoSource = document.getElementById("videoSourceDesktop");
-    // Seleccionar un CN#.mp4 al AZAR entre los 6 disponibles
-    currentVideoIndex = Math.floor(Math.random() * videosDesktop.length);
-    videoSource.src = videosDesktop[currentVideoIndex];
-    document.getElementById('infoVideo').textContent = `Video actual: CN${currentVideoIndex + 1}.mp4`;
-  } else {
+  videoElement = document.getElementById("videoDesktop");
+  videoSource = document.getElementById("videoSourceDesktop");
+  // Seleccionar un CN#.mp4 al AZAR entre los 6 disponibles
+  currentVideoIndex = Math.floor(Math.random() * videosDesktop.length);
+  videoSource.src = videosDesktop[currentVideoIndex];
+  document.getElementById('infoVideo').textContent = `Video actual: CN${currentVideoIndex + 1}.mp4`;
+}
+ else {
     videoElement = document.getElementById("videoMobile");
     videoSource = document.getElementById("videoSourceMobile");
     videoSource.src = videosMobile[Math.floor(Math.random() * videosMobile.length)];
@@ -286,6 +272,31 @@
       console.log('Autoplay bloqueado');
     });
   });
+</script>
+
+<script>
+(function autoReloadOnChange() {
+  let lastVersion = null;
+
+  async function checkVersion() {
+    try {
+      const res = await fetch("version.txt", { cache: "no-store" });
+      const text = await res.text();
+      const currentVersion = text.trim();
+
+      if (!lastVersion) {
+        lastVersion = currentVersion;
+      } else if (lastVersion !== currentVersion) {
+        console.log("Nueva versión detectada. Recargando...");
+        location.reload();
+      }
+    } catch (err) {
+      console.error("Error comprobando cambios:", err);
+    }
+  }
+
+  setInterval(checkVersion, 5000); // cada 5 segundos
+})();
 </script>
 
   <script src="script.js"></script>
