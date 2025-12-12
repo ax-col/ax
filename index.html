@@ -40,9 +40,136 @@
 <iframe height="80px" width="300px" frameborder="0" src=https://livecounts.io/embed/youtube-live-subscriber-counter/UCq-Fj5jknLsUf-MWSy4_brA style="border: 0; width:300px; height:80px;"></iframe>
 <h3>T  S E R I E S</h3>
 
+<style>
+/* ESTILO ORIGINAL PARA TODO EXCEPTO LOS BOTONES CN */
+  
+/* Botón de sonido grande (modificado) */
+.mute-toggle {
+  padding: 20px 40px !important;
+  font-size: 1.5em !important;
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  margin: 30px auto !important;
+  display: block !important;
+  min-width: 250px !important;
+  font-weight: bold !important;
+  border: 2px solid #00ffcc !important;
+}
 
-<!-- Botón para activar/desactivar sonido -->
-<button class="mute-toggle" onclick="toggleMute()">Activar sonido</button>
+.mute-toggle:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 0 15px #4CAF50 !important;
+}
+
+/* Contenedor de botones CN - Manteniendo el estilo actual */
+.botones-video-container {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  border: 3px solid #ff0000 !important;
+  border-radius: 15px !important;
+  padding: 25px !important;
+  margin: 40px auto !important;
+  max-width: 900px !important;
+  text-align: center !important;
+}
+
+.titulo-segmentos {
+  color: #ffcc00 !important;
+  font-size: 2em !important;
+  margin-bottom: 25px !important;
+  text-shadow: 0 0 10px #ffcc00 !important;
+}
+
+.botones-video {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 20px !important;
+  margin-top: 20px !important;
+}
+
+.btn-video {
+  padding: 20px 30px !important;
+  font-size: 1.4em !important;
+  font-weight: bold !important;
+  background: linear-gradient(135deg, #ff0000 0%, #990000 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  min-width: 120px !important;
+  border: 2px solid #ffcc00 !important;
+  transition: all 0.3s !important;
+}
+
+.btn-video:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 20px #ff0000 !important;
+  background: linear-gradient(135deg, #990000 0%, #ff0000 100%) !important;
+}
+
+.btn-video.activo {
+  background: linear-gradient(135deg, #00ff00 0%, #009900 100%) !important;
+  border-color: #00ffcc !important;
+  box-shadow: 0 0 20px #00ff00 !important;
+}
+
+.info-video {
+  color: #00ffcc !important;
+  font-size: 1.3em !important;
+  margin-top: 20px !important;
+  font-weight: bold !important;
+}
+
+.mensaje-movil {
+  display: none !important;
+  color: #ffcc00 !important;
+  font-size: 1.2em !important;
+  margin: 20px !important;
+  text-align: center !important;
+}
+
+/* Responsive para botones CN */
+@media (max-width: 768px) {
+  .mensaje-movil { display: block !important; }
+  .botones-video { display: none !important; }
+  .titulo-segmentos { display: none !important; }
+  .botones-video-container { padding: 20px !important; margin: 30px 15px !important; }
+  .mute-toggle { 
+    padding: 15px 30px !important; 
+    font-size: 1.3em !important; 
+    min-width: 200px !important; 
+  }
+}
+
+@media (max-width: 480px) {
+  .mute-toggle { 
+    padding: 12px 25px !important; 
+    font-size: 1.2em !important; 
+    min-width: 180px !important; 
+  }
+}
+</style>
+
+<!-- Botón para activar/desactivar sonido (MÁS GRANDE) -->
+<button class="mute-toggle" onclick="toggleMute()">🔇 ACTIVAR SONIDO</button>
+
+<!-- BOTONES DE VIDEO CN1-CN6 - ALTAMENTE VISIBLES -->
+<div class="botones-video-container">
+  <div class="titulo-segmentos">SEGMENTOS DE VIDEO</div>
+  <div class="mensaje-movil">Los segmentos de video solo están disponibles en versión de escritorio</div>
+  <div class="botones-video">
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN1.mp4', 0)">CN1</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN2.mp4', 1)">CN2</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN3.mp4', 2)">CN3</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN4.mp4', 3)">CN4</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN5.mp4', 4)">CN5</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN6.mp4', 4)">CN6</button>
+  </div>
+  <div class="info-video" id="infoVideo">Video actual: CN1.mp4</div>
+</div>
 
 <!-- Video para escritorio -->
 <video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto" style="display:none;">
@@ -70,15 +197,31 @@
 
   const isDesktop = window.innerWidth >= 768;
   let videoElement, videoSource;
+  let currentVideoIndex = 0;
+  let botonesVideo = [];
+
+  // Inicializar los botones CN
+  function inicializarBotonesCN() {
+    botonesVideo = document.querySelectorAll('.btn-video');
+    
+    // Marcar el primer botón como activo
+    if (botonesVideo.length > 0) {
+      botonesVideo[0].classList.add('activo');
+    }
+  }
 
   if (isDesktop) {
     videoElement = document.getElementById("videoDesktop");
     videoSource = document.getElementById("videoSourceDesktop");
-    videoSource.src = videosDesktop[Math.floor(Math.random() * videosDesktop.length)];
+    // Usar CN1 por defecto
+    currentVideoIndex = 0;
+    videoSource.src = videosDesktop[currentVideoIndex];
+    document.getElementById('infoVideo').textContent = `Video actual: CN1.mp4`;
   } else {
     videoElement = document.getElementById("videoMobile");
     videoSource = document.getElementById("videoSourceMobile");
     videoSource.src = videosMobile[Math.floor(Math.random() * videosMobile.length)];
+    document.getElementById('infoVideo').textContent = `Video actual: BG.mp4`;
   }
 
   videoElement.style.display = "block";
@@ -87,8 +230,46 @@
   function toggleMute() {
     const btn = document.querySelector('.mute-toggle');
     videoElement.muted = !videoElement.muted;
-    btn.textContent = videoElement.muted ? 'Activar sonido' : 'Silenciar';
+    
+    if (videoElement.muted) {
+      btn.textContent = '🔇 ACTIVAR SONIDO';
+      btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%)';
+    } else {
+      btn.textContent = '🔊 SILENCIAR';
+      btn.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+    }
   }
+
+  // Función para cambiar video (solo escritorio)
+  function cambiarVideo(rutaVideo, indice) {
+    if (!isDesktop) return;
+    
+    // Actualizar video
+    videoSource.src = rutaVideo;
+    videoElement.load();
+    videoElement.play();
+    
+    // Actualizar información
+    document.getElementById('infoVideo').textContent = `Video actual: CN${indice + 1}.mp4`;
+    
+    // Actualizar botones activos
+    botonesVideo.forEach(btn => btn.classList.remove('activo'));
+    if (botonesVideo[indice]) {
+      botonesVideo[indice].classList.add('activo');
+    }
+    
+    currentVideoIndex = indice;
+  }
+
+  // Inicializar botones cuando cargue la página
+  document.addEventListener('DOMContentLoaded', function() {
+    inicializarBotonesCN();
+    
+    // Reproducir video
+    videoElement.play().catch(e => {
+      console.log('Autoplay bloqueado');
+    });
+  });
 </script>
 
 <script>
@@ -117,6 +298,9 @@
 </script>
 
   <script src="script.js"></script>
+
+</body>
+</html>
 
 </body>
 </html>
