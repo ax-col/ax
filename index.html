@@ -47,8 +47,8 @@
 .mute-toggle {
   padding: 20px 40px !important;
   font-size: 1.5em !important;
-  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
-  color: white !important;
+  background: linear-gradient(135deg, transparent 0%, #00b3ff 100%) !important;
+  color: rgb(255, 255, 255) !important;
   border: none !important;
   border-radius: 10px !important;
   cursor: pointer !important;
@@ -61,13 +61,13 @@
 
 .mute-toggle:hover {
   transform: scale(1.05) !important;
-  box-shadow: 0 0 15px #4CAF50 !important;
+  box-shadow: 0 0 15px #002fff !important;
 }
 
 /* Contenedor de botones CN - Manteniendo el estilo actual */
 .botones-video-container {
-  background-color: rgba(0, 0, 0, 0.8) !important;
-  border: 3px solid #ff0000 !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  border: 3px solid #ffffff !important;
   border-radius: 15px !important;
   padding: 25px !important;
   margin: 40px auto !important;
@@ -76,10 +76,10 @@
 }
 
 .titulo-segmentos {
-  color: #ffcc00 !important;
+  color: #00ff15af !important;
   font-size: 2em !important;
   margin-bottom: 25px !important;
-  text-shadow: 0 0 10px #ffcc00 !important;
+  text-shadow: 0 0 10px #ffffff !important;
 }
 
 .botones-video {
@@ -94,26 +94,26 @@
   padding: 20px 30px !important;
   font-size: 1.4em !important;
   font-weight: bold !important;
-  background: linear-gradient(135deg, #ff0000 0%, #990000 100%) !important;
-  color: white !important;
+  background: linear-gradient(135deg, #ffffff 0%, transparent 100%) !important;
+  color: rgb(255, 0, 0) !important;
   border: none !important;
   border-radius: 10px !important;
   cursor: pointer !important;
   min-width: 120px !important;
-  border: 2px solid #ffcc00 !important;
+  border: 2px solid #ffffff !important;
   transition: all 0.3s !important;
 }
 
 .btn-video:hover {
   transform: scale(1.1) !important;
-  box-shadow: 0 0 20px #ff0000 !important;
-  background: linear-gradient(135deg, #990000 0%, #ff0000 100%) !important;
+  box-shadow: 0 0 20px #704949 !important;
+  background: linear-gradient(135deg, #0c0000 0%, #ff0000 100%) !important;
 }
 
 .btn-video.activo {
-  background: linear-gradient(135deg, #00ff00 0%, #009900 100%) !important;
-  border-color: #00ffcc !important;
-  box-shadow: 0 0 20px #00ff00 !important;
+  background: linear-gradient(135deg, #00fbbc 100%, #ff0000 100%) !important;
+  border-color: #000000 !important;
+  box-shadow: 0 0 20px #0073ff !important;
 }
 
 .info-video {
@@ -125,7 +125,7 @@
 
 .mensaje-movil {
   display: none !important;
-  color: #ffcc00 !important;
+  color: #ff0000 !important;
   font-size: 1.2em !important;
   margin: 20px !important;
   text-align: center !important;
@@ -154,9 +154,9 @@
 </style>
 
 <!-- Botón para activar/desactivar sonido (MÁS GRANDE) -->
-<button class="mute-toggle" onclick="toggleMute()">🔇 ACTIVAR SONIDO</button>
+<button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
 
-<!-- BOTONES DE VIDEO CN1-CN5 - ALTAMENTE VISIBLES -->
+<!-- BOTONES DE VIDEO CN1-CN6 - ALTAMENTE VISIBLES -->
 <div class="botones-video-container">
   <div class="titulo-segmentos">SEGMENTOS DE VIDEO</div>
   <div class="mensaje-movil">Los segmentos de video solo están disponibles en versión de escritorio</div>
@@ -166,8 +166,9 @@
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN3.mp4', 2)">CN3</button>
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN4.mp4', 3)">CN4</button>
     <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN5.mp4', 4)">CN5</button>
+    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN6.mp4', 4)">CN6</button>
   </div>
-  <div class="info-video" id="infoVideo">Video actual: CN1.mp4</div>
+  <div class="info-video" id="infoVideo">Video actual: CN6.mp4</div>
 </div>
 
 <!-- Video para escritorio -->
@@ -231,11 +232,11 @@
     videoElement.muted = !videoElement.muted;
     
     if (videoElement.muted) {
-      btn.textContent = '🔇 ACTIVAR SONIDO';
-      btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%)';
+      btn.textContent = 'ACTIVAR SONIDO';
+      btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
     } else {
-      btn.textContent = '🔊 SILENCIAR';
-      btn.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+      btn.textContent = 'SILENCIAR';
+      btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
     }
   }
 
