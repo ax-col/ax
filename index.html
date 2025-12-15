@@ -1,19 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="manifest" href="manifest.json">
-  <title>AX PRINCIPAL</title>
-  <!-- Favicon principal para navegadores -->
-<link rel="icon" type="image/png" sizes="192x192" href="png-principal/icon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="png-principal/icon-512x512.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Íconos para Android y Apple (opcional pero recomendado) -->
-<link rel="apple-touch-icon" sizes="192x192" href="png-principal/icon-192x192.png">
-<link rel="apple-touch-icon" sizes="512x512" href="png-principal/icon-512x512.png">
+<title>AX PRINCIPAL</title>
 
+<meta name="description"
+      content="AX es un portal tecnológico con herramientas web, proyectos experimentales, IA y utilidades alojadas en GitHub Pages.">
+
+<!-- Favicon principal -->
+<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
+
+<!-- PWA / Android -->
+<link rel="icon" sizes="192x192" href="png-principal/icon-192x192.png">
+<link rel="icon" sizes="512x512" href="png-principal/icon-512x512.png">
+
+<!-- Apple -->
+<link rel="apple-touch-icon" href="png-principal/icon-192x192.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Estilos -->
+<link rel="stylesheet" href="styles.css">
+
+<!-- Open Graph -->
+<meta property="og:title" content="AX – Plataforma Tecnológica">
+<meta property="og:description"
+      content="Herramientas, IA y utilidades alojadas en GitHub Pages">
+<meta property="og:image"
+      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
+<meta property="og:url" content="https://ax-col.github.io/ax/">
+<meta property="og:type" content="website">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 
@@ -150,44 +172,6 @@
     font-size: 1.2em !important; 
     min-width: 180px !important; 
   }
-}
-
-/*PARTE DEL DISEÑO DEL PORTAFOLIO*/
-.link-card {
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  max-width: 460px;
-  background: #0e0e0e;
-  border-radius: 14px;
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,.45);
-}
-
-.preview {
-  width: 72px;
-  height: 72px;
-  border-radius: 12px;
-}
-
-.meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  opacity: .85;
-}
-
-.favicon {
-  width: 16px;
-  height: 16px;
-}
-
-.link-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
-  font-size: 14px;
 }
 </style>
 
@@ -339,27 +323,5 @@ function inicializarBotonesCN() {
 
   <script src="script.js"></script>
 
-<div class="link-card">
-  <img 
-    src="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-192x192.png"
-    alt="Icono AX"
-    class="preview"
-  >
-
-  <div class="info">
-    <h3>AX – Portal Principal</h3>
-
-    <div class="meta">
-      <img src="/ax/favicon.ico" class="favicon" alt="favicon">
-      <span>ax-col.github.io/ax</span>
-    </div>
-
-    <ul>
-      <li>📁 Subpáginas: <span id="count">–</span></li>
-      <li>📅 Creación: 2024</li>
-    </ul>
-  </div>
-</div>
-  
 </body>
 </html>
