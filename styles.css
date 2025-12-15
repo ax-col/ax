@@ -1,13 +1,54 @@
+/*
+|======================================================|
+| ESTILOS GLOBALES Y DE CONTENIDO (NUEVOS DEL USUARIO) |
+|======================================================|
+*/
+
 body {
   background-color: #000;
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
-  justify-content: center;
+  /* justify-content: center; <-- Se ignora, no aplica directamente al body sin display: flex */
   margin: 0;
   padding: 0;
 }
 
+#animated-text {
+  font-size: 50px;
+  letter-spacing: 5px;
+  text-align: center;
+}
+
+#animated-text span {
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* Estilos de brillo de texto (color-red1, color-red-glow, etc.) */
+.color-red1 {
+  color: black; /* Negro suave para mejor contraste */
+  text-shadow: 
+    0 0 12px rgba(255, 0, 0, 0.8), /* Sombra 1 */
+    0 0 1px rgb(0, 0, 0); /* Sombra 2 */
+  transition: text-shadow 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+}
+
+/* Efecto hover para mayor interactividad */
+.color-red-glow:hover {
+  text-shadow: 
+    0 0 12px rgba(255, 0, 0, 1), /* Sombra roja más intensa */
+    0 0 20px rgba(255, 255, 255, 0.8); /* Sombra blanca más pronunciada */
+  color: #333333; /* Ligeramente más claro en hover */
+}
+
+/* Clase opcional para textos más grandes */
+.color-red-glow--large {
+  text-shadow: 
+    0 0 10px rgba(255, 0, 0, 0.8), 
+    0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
+}
+
+/* Contenedor de botones principal (AX, VIWNET, etc.) */
 .button-container {
   display: flex;
   flex-direction: column;
@@ -38,41 +79,7 @@ body {
   cursor: pointer;
 }
 
-    #animated-text {
-      font-size: 50px;
-      letter-spacing: 5px;
-      text-align: center;
-    }
-
-    #animated-text span {
-      transition: color 0.3s, text-shadow 0.3s;
-    }
-
-    .color-red1 {
-  color: black; /* Negro suave para mejor contraste */
-  text-shadow: 
-    0 0 12px rgba(255, 0, 0, 0.8), /* Sombra 1 */
-    0 0 1px rgb(0, 0, 0); /* Sombra 2 */
-  transition: text-shadow 0.3s ease, color 0.3s ease; /* Transiciones suaves */
-}
-
-/* Efecto hover para mayor interactividad */
-.color-red-glow:hover {
-  text-shadow: 
-    0 0 12px rgba(255, 0, 0, 1), /* Sombra roja más intensa */
-    0 0 20px rgba(255, 255, 255, 0.8); /* Sombra blanca más pronunciada */
-  color: #333333; /* Ligeramente más claro en hover */
-}
-
-/* Clase opcional para textos más grandes */
-.color-red-glow--large {
-  text-shadow: 
-    0 0 10px rgba(255, 0, 0, 0.8), 
-    0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
-}
-
-/* Contenedor del video eliminado porque ya no se usa */
-/* Estilos para los dos videos de fondo */
+/* Estilos para el video de fondo */
 .video-desktop,
 .video-mobile {
   display: none;
@@ -99,27 +106,6 @@ body {
   }
 }
 
-/* Botón de sonido */
-.mute-toggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 10;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  backdrop-filter: blur(4px);
-  transition: background 0.3s;
-}
-
-.mute-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
 /* Contenido principal encima del video */
 .content {
   position: relative;
@@ -142,4 +128,148 @@ body {
   width: 100%;
   height: auto;
   display: block;
+}
+
+
+/*
+|=========================================================|
+| ESTILOS DE BOTONES/VIDEO (PREVIAMENTE SEPARADOS DEL HTML)|
+|=========================================================|
+*/
+  
+/* Botón de sonido grande (mute-toggle) */
+.mute-toggle {
+  /* Propiedades de posicionamiento/tamaño del nuevo código */
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  backdrop-filter: blur(4px);
+  transition: background 0.3s;
+  
+  /* Sobreescrituras y estilos del código original (previamente separado) */
+  padding: 20px 40px !important; /* Más grande que el nuevo */
+  font-size: 1.5em !important; /* Más grande que el nuevo */
+  /* El background y el color del original serán establecidos por JS en toggleMute() */
+  background: linear-gradient(135deg, transparent 0%, #00b3ff 100%) !important; 
+  color: rgb(255, 255, 255) !important;
+  border: 2px solid #00ffcc !important;
+  
+  /* Estilos para el botón centrado en el HTML */
+  margin: 30px auto !important;
+  display: block !important;
+  min-width: 250px !important;
+  font-weight: bold !important;
+  
+  /* Sobreescritura del hover */
+  background-color: transparent; /* Permite que el linear-gradient del original/JS se muestre */
+}
+
+.mute-toggle:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 0 15px #002fff !important;
+  /* El background del nuevo código se ignora a favor del original */
+  background-color: transparent; 
+}
+
+
+/* Contenedor de botones CN */
+.botones-video-container {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border: 3px solid #ffffff !important;
+  border-radius: 15px !important;
+  padding: 25px !important;
+  margin: 40px auto !important;
+  max-width: 900px !important;
+  text-align: center !important;
+}
+
+.titulo-segmentos {
+  color: #00ff15af !important;
+  font-size: 2em !important;
+  margin-bottom: 25px !important;
+  text-shadow: 0 0 10px #ffffff !important;
+}
+
+.botones-video {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 20px !important;
+  margin-top: 20px !important;
+}
+
+.btn-video {
+  padding: 20px 30px !important;
+  font-size: 1.4em !important;
+  font-weight: bold !important;
+  background: linear-gradient(135deg, #ffffff 0%, transparent 100%) !important;
+  color: rgb(255, 0, 0) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  min-width: 120px !important;
+  border: 2px solid #ffffff !important;
+  transition: all 0.3s !important;
+}
+
+.btn-video:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 20px #704949 !important;
+  background: linear-gradient(135deg, #0c0000 0%, #ff0000 100%) !important;
+}
+
+.btn-video.activo {
+  background: linear-gradient(135deg, #00fbbc 100%, #ff0000 100%) !important;
+  border-color: #000000 !important;
+  box-shadow: 0 0 20px #0073ff !important;
+}
+
+.info-video {
+  color: #00ffcc !important;
+  font-size: 1.3em !important;
+  margin-top: 20px !important;
+  font-weight: bold !important;
+}
+
+.mensaje-movil {
+  display: none !important;
+  color: #ff0000 !important;
+  font-size: 1.2em !important;
+  margin: 20px !important;
+  text-align: center !important;
+}
+
+/* Responsive para botones CN */
+@media (max-width: 768px) {
+  .mensaje-movil { display: block !important; }
+  .botones-video { display: none !important; }
+  .titulo-segmentos { display: none !important; }
+  .botones-video-container { padding: 20px !important; margin: 30px 15px !important; }
+  /* Ajustes del mute-toggle para móvil (originalmente separado) */
+  .mute-toggle { 
+    padding: 15px 30px !important; 
+    font-size: 1.3em !important; 
+    min-width: 200px !important; 
+    /* Se remueven los estilos position:fixed del nuevo código aquí para que el botón se centre */
+    position: static !important; 
+    top: auto !important;
+    right: auto !important;
+    margin: 30px auto !important; 
+  }
+}
+
+@media (max-width: 700px) {
+  .mute-toggle { 
+    padding: 10px 20px !important; 
+    font-size: 1.0em !important; 
+    min-width: 150px !important; 
+  }
 }
