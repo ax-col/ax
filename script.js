@@ -4,7 +4,8 @@ const videosDesktop = [
   "AX NAVEGADOR/CN3.mp4",
   "AX NAVEGADOR/CN4.mp4",
   "AX NAVEGADOR/CN5.mp4",
-  "AX NAVEGADOR/CN6.mp4" 
+  "AX NAVEGADOR/CN6.mp4", 
+  "AX NAVEGADOR/CN7.mp4"
 ];
 
 const videosMobile = [
