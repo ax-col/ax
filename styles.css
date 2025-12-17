@@ -13,13 +13,11 @@ body {
   padding: 0;
 }
 
-
 .devonshire-regular {
   font-family: "Devonshire", cursive; /* Aquí sí dejamos cursive porque es su estilo */
   font-weight: 400; /* Devonshire solo tiene un peso (400) */
   font-style: normal;
 }
-
 
 #animated-text {
   font-size: 50px;
