@@ -7,11 +7,17 @@
 body {
   background-color: #000;
   color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Roboto", cursive;
   text-align: center;
   /* justify-content: center; <-- Se ignora, no aplica directamente al body sin display: flex */
   margin: 0;
   padding: 0;
+}
+
+.devonshire-regular {
+  font-family: "Devonshire", cursive;
+  font-weight: 700;  /* Más negrita (aunque Devonshire no tiene variantes pesadas, esto podría no cambiar mucho) */
+  font-style: normal;  /* Quita el cursivo para que sea recta */
 }
 
 #animated-text {
@@ -174,7 +180,7 @@ body {
 
 .mute-toggle:hover {
   transform: scale(1.05) !important;
-  box-shadow: 0 0 15px #002fff !important;
+  box-shadow: 0 0 10px #002fff !important;
   /* El background del nuevo código se ignora a favor del original */
   background-color: transparent; 
 }
@@ -185,17 +191,18 @@ body {
   background-color: rgba(0, 0, 0, 0) !important;
   border: 3px solid #ffffff !important;
   border-radius: 15px !important;
-  padding: 25px !important;
-  margin: 40px auto !important;
-  max-width: 900px !important;
+  padding: 20px !important;
+  margin:20px auto !important;
+  max-width: 1000px !important;
   text-align: center !important;
 }
 
 .titulo-segmentos {
-  color: #00ff15af !important;
-  font-size: 2em !important;
+  color: #ff0000 !important;
+  font-size: 2.1em !important;
   margin-bottom: 25px !important;
-  text-shadow: 0 0 10px #ffffff !important;
+  font-weight: bold !important;
+  text-shadow: 10px 0px 20px #ff0000 !important;
 }
 
 .botones-video {
@@ -207,7 +214,7 @@ body {
 }
 
 .btn-video {
-  padding: 20px 30px !important;
+  padding: 20px 20px !important;
   font-size: 1.4em !important;
   font-weight: bold !important;
   background: linear-gradient(135deg, #ffffff 0%, transparent 100%) !important;
@@ -215,26 +222,26 @@ body {
   border: none !important;
   border-radius: 10px !important;
   cursor: pointer !important;
-  min-width: 120px !important;
+  min-width: 100px !important;
   border: 2px solid #ffffff !important;
   transition: all 0.3s !important;
 }
 
 .btn-video:hover {
   transform: scale(1.1) !important;
-  box-shadow: 0 0 20px #704949 !important;
+  box-shadow: 0 0 10px #ffffff !important;
   background: linear-gradient(135deg, #0c0000 0%, #ff0000 100%) !important;
 }
 
 .btn-video.activo {
-  background: linear-gradient(135deg, #00fbbc 100%, #ff0000 100%) !important;
+  background: linear-gradient(135deg, #00fbbc 100%, rgb(0, 255, 0) 100%) !important;
   border-color: #000000 !important;
   box-shadow: 0 0 20px #0073ff !important;
 }
 
 .info-video {
   color: #00ffcc !important;
-  font-size: 1.3em !important;
+  font-size: 2.1em !important;
   margin-top: 20px !important;
   font-weight: bold !important;
 }
@@ -242,7 +249,7 @@ body {
 .mensaje-movil {
   display: none !important;
   color: #ff0000 !important;
-  font-size: 1.2em !important;
+  font-size: 1.1em !important;
   margin: 20px !important;
   text-align: center !important;
 }
