@@ -7,18 +7,19 @@
 body {
   background-color: #000;
   color: white;
-  font-family: "Roboto", cursive;
+  font-family: "Roboto", sans-serif; /* <-- Cambia 'cursive' por 'sans-serif' */
   text-align: center;
-  /* justify-content: center; <-- Se ignora, no aplica directamente al body sin display: flex */
   margin: 0;
   padding: 0;
 }
 
+
 .devonshire-regular {
-  font-family: "Devonshire", cursive;
-  font-weight: 700;  /* Más negrita (aunque Devonshire no tiene variantes pesadas, esto podría no cambiar mucho) */
-  font-style: normal;  /* Quita el cursivo para que sea recta */
+  font-family: "Devonshire", cursive; /* Aquí sí dejamos cursive porque es su estilo */
+  font-weight: 400; /* Devonshire solo tiene un peso (400) */
+  font-style: normal;
 }
+
 
 #animated-text {
   font-size: 50px;
@@ -279,4 +280,4 @@ body {
     font-size: 1.0em !important; 
     min-width: 150px !important; 
   }
-}
+    }
