@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mobile Assistant</title>
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- TensorFlow.js y Universal Sentence Encoder -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@latest"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🧠 AI Assistant</h1>
+            <div id="connection-status">🟢 Online</div>
+        </header>
+        
+        <div id="chat-container">
+            <!-- Mensajes aparecerán aquí -->
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Escribe tu pregunta..." autocomplete="off">
+            <button id="send-btn">➤</button>
+        </div>
+    </div>
+    
+    <!-- Botón para añadir conocimiento -->
+    <button id="add-knowledge-btn" class="add-knowledge-btn" title="Añadir conocimiento">
+        +
+    </button>
+    
+    <!-- Botón de configuración de APIs -->
+<button id="api-config-btn" title="Configurar APIs" style="
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    z-index: 100;
+">🔧</button>
+    
+    <!-- Scripts -->
+    <script src="online-offline.js"></script>
+    <!-- database.js temporalmente comentado por problemas -->
+    <!-- <script src="database.js"></script> -->
+    <script src="app.js"></script>
+    
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+        
+        // Botón para añadir conocimiento manualmente
+        document.getElementById('add-knowledge-btn').addEventListener('click', async () => {
+            const text = prompt('Introduce nuevo conocimiento:');
+            const category = prompt('Categoría (IA, tecnologia, programacion, etc):') || 'general';
+            
+            if (text && window.aiAssistant) {
+                const success = await window.aiAssistant.addToKnowledgeBase(text, category);
+                alert(success ? '✅ Conocimiento añadido!' : '❌ Error al añadir');
+            }
+        });
+    
+    </script>
+    
+    <!-- Botones de aprendizaje automático -->
+<div id="learning-buttons" style="position: fixed; bottom: 160px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
+    <button id="learn-wikipedia" title="Aprender de Wikipedia" style="background: #3b82f6; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);">W</button>
+    <button id="learn-news" title="Aprender noticias" style="background: #ef4444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);">N</button>
+    <button id="learn-web" title="Buscar en la web" style="background: #10b981; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">🌍</button>
+</div>
+    
+</body>
+</html>
