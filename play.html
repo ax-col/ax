@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Jungle Survival FPS - Easy Mode</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* UI Overlays */
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 10;
+        }
+
+        /* Start/Game Over Screens */
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
+            text-align: center; pointer-events: auto; z-index: 20;
+        }
+        button {
+            padding: 15px 40px; font-size: 24px; cursor: pointer;
+            background: #2ecc71; border: none; color: white; border-radius: 5px;
+            margin-top: 20px; transition: 0.2s;
+        }
+        button:hover { background: #27ae60; }
+
+        /* HUD Elements */
+        #crosshair {
+            position: absolute; top: 50%; left: 50%; width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.5); border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #stats {
+            position: absolute; bottom: 20px; left: 20px; color: white;
+        }
+        .bar-container {
+            width: 200px; height: 20px; background: rgba(0,0,0,0.5);
+            border: 2px solid white; margin-top: 5px;
+        }
+        #health-bar { width: 100%; height: 100%; background: #e74c3c; transition: width 0.3s; }
+        #score-display { font-size: 24px; font-weight: bold; text-shadow: 2px 2px 2px black; }
+
+        /* Mini-map */
+        #mini-map {
+            position: absolute; top: 20px; left: 20px; width: 150px; height: 150px;
+            background: rgba(0, 40, 0, 0.6); border: 2px solid #2ecc71;
+            border-radius: 50%; overflow: hidden;
+        }
+        .dot { position: absolute; width: 6px; height: 6px; border-radius: 50%; transform: translate(-50%, -50%); }
+        .player-dot { background: white; z-index: 5; }
+        .enemy-dot { background: red; }
+
+        /* Damage Vignette */
+        #vignette {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 100px rgba(255,0,0,0);
+            pointer-events: none; transition: box-shadow 0.1s;
+        }
+        .damaged { box-shadow: inset 0 0 150px rgba(255,0,0,0.8) !important; }
+    </style>
+</head>
+<body>
+
+    <!-- UI Overlay -->
+    <div id="ui-layer">
+        <div id="vignette"></div>
+        
+        <div id="start-screen" class="screen">
+            <h1>JUNGLE SURVIVAL</h1>
+            <p>WASD to Move | Mouse to Look | Left Click to Shoot</p>
+            <p style="color: #2ecc71;">EASY MODE: High Health, Weak Enemies</p>
+            <button onclick="startGame()">START MISSION</button>
+        </div>
+
+        <div id="game-over" class="screen" style="display: none;">
+            <h1 id="over-status">MISSION FAILED</h1>
+            <p id="final-score">Score: 0</p>
+            <button onclick="location.reload()">REPLAY</button>
+        </div>
+
+        <div id="mini-map">
+            <div id="player-dot" class="dot player-dot" style="top: 50%; left: 50%;"></div>
+            <div id="enemy-dots-container"></div>
+        </div>
+
+        <div id="crosshair"></div>
+
+        <div id="stats">
+            <div id="score-display">KILLS: 0</div>
+            <div class="bar-container">
+                <div id="health-bar"></div>
+            </div>
+            <div style="font-size: 12px; margin-top:5px">HEALTH</div>
+        </div>
+    </div>
+
+    <a-scene 
+        renderer="antialias: true; colorManagement: true;"
+        cursor="rayOrigin: mouse; fuse: false"
+        raycaster="objects: .collidable; far: 50;">
+        
+        <a-assets>
+            <!-- No external assets needed, using primitives -->
+        </a-assets>
+
+        <!-- Jungle Environment -->
+        <!-- Presets include trees, grass, and ground automatically -->
+        <a-entity environment="
+            preset: forest; 
+            dressingAmount: 500; 
+            dressingColor: #224411; 
+            groundColor: #1a2b0a; 
+            groundColor2: #2d3e1d;
+            lighting: hazy;
+            fog: 0;
+            skyType: atmospheric;
+            playArea: 1;
+        "></a-entity>
+
+        <!-- Player Rig -->
+        <a-entity id="player" position="0 0 0" 
+                  movement-controls="speed: 0.3;"
+                  kinematic-body>
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+                
+                <!-- Weapon System -->
+                <a-entity id="gun-group" position="0.3 -0.4 -0.5">
+                    <!-- Gun Body -->
+                    <a-box width="0.1" height="0.15" depth="0.5" color="#333"></a-box>
+                    <a-box width="0.08" height="0.2" depth="0.1" position="0 -0.1 0.15" color="#222"></a-box>
+                    <!-- Barrel -->
+                    <a-cylinder radius="0.02" height="0.4" rotation="90 0 0" position="0 0.04 -0.3" color="#111"></a-cylinder>
+                    
+                    <!-- Muzzle Flash (Hidden by default) -->
+                    <a-light id="muzzle-light" type="point" color="yellow" intensity="0" distance="2" position="0 0 -0.6"></a-light>
+                    <a-sphere id="muzzle-flash" radius="0.05" color="yellow" material="emissive: yellow" position="0 0.04 -0.6" visible="false"></a-sphere>
+                </a-entity>
+
+                <!-- Shooting Raycaster (Center of Screen) -->
+                <a-entity id="gun-ray" raycaster="showLine: false; objects: .enemy; far: 100" position="0 0 0"></a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- Built-in Structures for Cover -->
+        <!-- House 1 -->
+        <a-entity position="-10 0 -15">
+            <a-box position="0 1.5 0" width="5" height="3" depth="5" color="#5d4037"></a-box>
+            <a-cone position="0 3.5 0" radius-bottom="4" height="2" color="#3e2723" segments-radial="4" rotation="0 45 0"></a-cone>
+        </a-entity>
+
+        <!-- House 2 -->
+        <a-entity position="15 0 -5" rotation="0 -30 0">
+            <a-box position="0 1.5 0" width="4" height="3" depth="6" color="#5d4037"></a-box>
+            <a-cone position="0 3.5 0" radius-bottom="4.5" height="2" color="#3e2723" segments-radial="4" rotation="0 45 0"></a-cone>
+        </a-entity>
+
+        <!-- Crates -->
+        <a-box position="-2 0.5 -5" width="1" height="1" depth="1" color="#8d6e63"></a-box>
+        <a-box position="-2.2 0.5 -6.2" width="1" height="1" depth="1" color="#795548"></a-box>
+        <a-box position="5 0.5 -8" width="1.2" height="1.2" depth="1.2" color="#8d6e63"></a-box>
+
+        <!-- Large Mountain/Rock -->
+        <a-dodecahedron position="30 2 -40" radius="15" color="#444" scale="1 2 1"></a-dodecahedron>
+        <a-dodecahedron position="-35 0 -30" radius="12" color="#333" scale="1 1.5 1"></a-dodecahedron>
+
+        <!-- Enemy Container -->
+        <a-entity id="enemy-container"></a-entity>
+
+    </a-scene>
+
+    <script>
+        // Game State
+        let gameActive = false;
+        let score = 0;
+        let health = 100;
+        const enemies = [];
+        const enemyContainer = document.querySelector('#enemy-container');
+        const scoreDisplay = document.querySelector('#score-display');
+        const healthBar = document.querySelector('#health-bar');
+        const vignette = document.querySelector('#vignette');
+        const enemyDotsContainer = document.querySelector('#enemy-dots-container');
+        const player = document.querySelector('#player');
+
+        // Config
+        const SPAWN_RADIUS = 30;
+        const ENEMY_SPEED = 0.04;
+        const ENEMY_DAMAGE = 5; // Easy mode low damage
+
+        function startGame() {
+            document.querySelector('#start-screen').style.display = 'none';
+            gameActive = true;
+            // Spawn initial enemies
+            for(let i=0; i<5; i++) spawnEnemy();
+            
+            // Loop for spawning new enemies
+            setInterval(() => {
+                if(gameActive && enemies.length < 8) spawnEnemy();
+            }, 3000);
+        }
+
+        function spawnEnemy() {
+            // Random position around player
+            const angle = Math.random() * Math.PI * 2;
+            const x = Math.cos(angle) * SPAWN_RADIUS;
+            const z = Math.sin(angle) * SPAWN_RADIUS;
+
+            const enemy = document.createElement('a-entity');
+            enemy.setAttribute('class', 'enemy');
+            enemy.setAttribute('position', `${x} 0 ${z}`);
+            
+            // Visuals: Red Robot Agent
+            const body = document.createElement('a-box');
+            body.setAttribute('width', '0.6');
+            body.setAttribute('height', '1.8');
+            body.setAttribute('depth', '0.4');
+            body.setAttribute('color', '#ff0000');
+            
+            const head = document.createElement('a-box');
+            head.setAttribute('width', '0.4');
+            head.setAttribute('height', '0.4');
+            head.setAttribute('depth', '0.4');
+            head.setAttribute('position', '0 1.1 0');
+            head.setAttribute('color', '#cc0000');
+
+            const eye = document.createElement('a-box');
+            eye.setAttribute('width', '0.3');
+            eye.setAttribute('height', '0.1');
+            eye.setAttribute('depth', '0.1');
+            eye.setAttribute('position', '0 1.1 0.2');
+            eye.setAttribute('color', 'black');
+
+            enemy.appendChild(body);
+            enemy.appendChild(head);
+            enemy.appendChild(eye);
+            
+            enemy.hp = 2; // Takes 2 shots
+            enemyContainer.appendChild(enemy);
+            enemies.push(enemy);
+
+            // Add Mini-map dot
+            const dot = document.createElement('div');
+            dot.className = 'dot enemy-dot';
+            enemyDotsContainer.appendChild(dot);
+            enemy.dot = dot;
+        }
+
+        // Shooting Logic
+        window.addEventListener('mousedown', (e) => {
+            if(!gameActive || e.button !== 0) return;
+
+            // Visual Recoil
+            const gun = document.querySelector('#gun-group');
+            gun.setAttribute('animation', {
+                property: 'position',
+                to: '0.3 -0.4 -0.3',
+                dur: 50,
+                dir: 'alternate',
+                loop: 1
+            });
+
+            // Muzzle Flash
+            const flash = document.querySelector('#muzzle-flash');
+            const light = document.querySelector('#muzzle-light');
+            flash.setAttribute('visible', 'true');
+            light.setAttribute('intensity', '2');
+            setTimeout(() => {
+                flash.setAttribute('visible', 'false');
+                light.setAttribute('intensity', '0');
+            }, 50);
+
+            // Hit Detection
+            const raycaster = document.querySelector('#gun-ray').components.raycaster;
+            const intersection = raycaster.intersections[0];
+            
+            if (intersection) {
+                const target = intersection.object.el;
+                if (target.parentElement.classList.contains('enemy')) {
+                    hitEnemy(target.parentElement);
+                }
+            }
+        });
+
+        function hitEnemy(el) {
+            el.hp -= 1;
+            // Visual feedback on hit
+            el.setAttribute('scale', '1.2 1.2 1.2');
+            setTimeout(() => el.setAttribute('scale', '1 1 1'), 100);
+
+            if(el.hp <= 0) {
+                score += 100;
+                scoreDisplay.innerText = `KILLS: ${score/100}`;
+                
+                // Remove from scene and tracking
+                const index = enemies.indexOf(el);
+                if (index > -1) {
+                    enemies.splice(index, 1);
+                    if(el.dot) el.dot.remove();
+                    el.remove();
+                }
+            }
+        }
+
+        function takeDamage() {
+            if(!gameActive) return;
+            health -= ENEMY_DAMAGE;
+            healthBar.style.width = health + '%';
+            
+            // Visual effect
+            vignette.classList.add('damaged');
+            setTimeout(() => vignette.classList.remove('damaged'), 200);
+
+            if(health <= 0) endGame();
+        }
+
+        function endGame() {
+            gameActive = false;
+            document.querySelector('#game-over').style.display = 'flex';
+            document.querySelector('#final-score').innerText = `Final Score: ${score}`;
+            document.exitPointerLock();
+        }
+
+        // Game Loop
+        function tick() {
+            if(!gameActive) {
+                requestAnimationFrame(tick);
+                return;
+            }
+
+            const playerPos = player.object3D.position;
+
+            enemies.forEach(enemy => {
+                const enemyPos = enemy.object3D.position;
+                
+                // Direction to player
+                const dx = playerPos.x - enemyPos.x;
+                const dz = playerPos.z - enemyPos.z;
+                const distance = Math.sqrt(dx*dx + dz*dz);
+
+                // Movement
+                if(distance > 1.5) {
+                    enemyPos.x += (dx/distance) * ENEMY_SPEED;
+                    enemyPos.z += (dz/distance) * ENEMY_SPEED;
+                    enemy.object3D.lookAt(playerPos.x, 0, playerPos.z);
+                } else {
+                    // Attack player if close
+                    takeDamage();
+                }
+
+                // Update Mini-map Dot
+                const mapX = 75 + (enemyPos.x - playerPos.x) * 2;
+                const mapY = 75 + (enemyPos.z - playerPos.z) * 2;
+                
+                // Keep dots inside circle
+                if(enemy.dot) {
+                    enemy.dot.style.left = `${mapX}px`;
+                    enemy.dot.style.top = `${mapY}px`;
+                    // Hide if outside map bounds
+                    const distToCenter = Math.sqrt(Math.pow(mapX-75, 2) + Math.pow(mapY-75, 2));
+                    enemy.dot.style.opacity = distToCenter > 70 ? 0 : 1;
+                }
+            });
+
+            requestAnimationFrame(tick);
+        }
+
+        // Start the loop
+        tick();
+
+    </script>
+</body>
+</html>
