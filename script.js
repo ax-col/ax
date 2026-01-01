@@ -136,3 +136,85 @@ document.addEventListener('DOMContentLoaded', () => {
   animarTexto();
   videoElement.play().catch(() => console.log('Autoplay bloqueado'));
 });
+
+/*
+|======================================================|
+| LÓGICA DEL TEMPORIZADOR (ANIMACIÓN DE CAÍDA)         |
+|======================================================|
+*/
+
+let previousTimerValues = {
+    days: '00',
+    hours: '00',
+    minutes: '00',
+    seconds: '00'
+};
+
+function updateTimer() {
+    const targetDate = new Date('2026-01-01T00:00:00').getTime();
+    const now = new Date().getTime();
+    const difference = targetDate - now;
+
+    if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        updateTimerDisplay('days', days);
+        updateTimerDisplay('hours', hours);
+        updateTimerDisplay('minutes', minutes);
+        updateTimerDisplay('seconds', seconds);
+    } else {
+        const titles = document.querySelectorAll('.timer-title');
+        titles.forEach(t => t.textContent = '¡BIENVENIDO 2026!');
+    }
+}
+
+function updateTimerDisplay(elementId, value) {
+    const formattedValue = String(value).padStart(2, '0');
+    
+    if (previousTimerValues[elementId] !== formattedValue) {
+        const containers = document.querySelectorAll(`[id="${elementId}-container"]`);
+        
+        containers.forEach(container => {
+            // Solo animar si el contenedor es visible (no está comentado)
+            if (container.offsetParent !== null) {
+                const fallingNumber = document.createElement('div');
+                fallingNumber.className = 'time-value-inner current-number';
+                fallingNumber.textContent = previousTimerValues[elementId];
+                fallingNumber.style.zIndex = '2';
+                
+                const incomingNumber = document.createElement('div');
+                incomingNumber.className = 'time-value-inner next-number';
+                incomingNumber.textContent = formattedValue;
+                incomingNumber.style.zIndex = '1';
+                
+                container.innerHTML = '';
+                container.appendChild(fallingNumber);
+                container.appendChild(incomingNumber);
+                
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    const finalNumber = document.createElement('div');
+                    finalNumber.className = 'time-value-inner';
+                    finalNumber.textContent = formattedValue;
+                    container.appendChild(finalNumber);
+                }, 800);
+            } else {
+                // Si está oculto/comentado, solo actualizar el texto sin animación compleja
+                container.innerHTML = `<div class="time-value-inner">${formattedValue}</div>`;
+            }
+        });
+        
+        previousTimerValues[elementId] = formattedValue;
+    }
+}
+
+// Iniciar temporizador si existen los elementos
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('seconds-container')) {
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
+});
