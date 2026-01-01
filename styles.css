@@ -389,7 +389,7 @@ body {
 .timer-title {
     text-align: center;
     color: rgba(0, 255, 255, 0.6);
-    font-size: 14px;
+    font-size: 20px;
     margin-bottom: 20px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -403,3 +403,4 @@ body {
     .time-value-inner { font-size: 36px; }
     .timer-separator { font-size: 20px; }
 }
+
