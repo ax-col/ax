@@ -279,3 +279,127 @@ body {
     min-width: 150px !important; 
   }
   }
+
+/*
+|======================================================|
+| ESTILOS DEL TEMPORIZADOR (ANIMACIÓN DE CAÍDA)        |
+|======================================================|
+*/
+
+.timer-wrapper {
+    margin: 40px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer-container {
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 25px;
+    padding: 30px 40px;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.15),
+                0 0 20px rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    display: inline-block;
+}
+
+.timer-display {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-value {
+    position: relative;
+    width: 80px;
+    height: 100px;
+    background: rgba(0, 255, 255, 0.03);
+    border: 1.5px solid rgba(0, 255, 255, 0.15);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.05);
+}
+
+.time-value-inner {
+    position: absolute;
+    font-size: 48px;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+}
+
+.current-number {
+    animation: fallDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.next-number {
+    animation: fallIntoPlace 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes fallDown {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100px); opacity: 0; }
+}
+
+@keyframes fallIntoPlace {
+    0% { transform: translateY(-100px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.time-label {
+    font-size: 12px;
+    color: rgba(0, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+}
+
+.timer-separator {
+    font-size: 30px;
+    color: rgba(0, 255, 255, 0.3);
+    font-weight: bold;
+    margin-bottom: 25px;
+    animation: timerPulse 1s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+.timer-title {
+    text-align: center;
+    color: rgba(0, 255, 255, 0.6);
+    font-size: 14px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Responsive para el temporizador */
+@media (max-width: 600px) {
+    .timer-container { padding: 20px; }
+    .timer-display { gap: 10px; }
+    .time-value { width: 60px; height: 80px; }
+    .time-value-inner { font-size: 36px; }
+    .timer-separator { font-size: 20px; }
+}
