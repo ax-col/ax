@@ -151,7 +151,7 @@ let previousTimerValues = {
 };
 
 function updateTimer() {
-    const targetDate = new Date('2026-01-01T00:00:00').getTime();
+    const targetDate = new Date('2027-01-01T00:00:00').getTime();
     const now = new Date().getTime();
     const difference = targetDate - now;
 
