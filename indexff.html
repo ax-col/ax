@@ -259,13 +259,13 @@ body {
     <!-- CREADOR -->
     <div class="level-1">
         <div class="counter-card">
-            <div class="card-title">Creador</div>
+            <div class="card-title">Creador Harold</div>
             <div class="counter-box">
                 <div class="numbers-container" id="creador-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 10000001</div>
         </div>
     </div>
 
@@ -278,7 +278,7 @@ body {
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 239917183</div>
         </div>
 
         <div class="counter-card">
@@ -288,69 +288,69 @@ body {
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 242183160</div>
         </div>
     </div>
 
     <!-- CUENTAS FILA 1 -->
     <div class="level-3">
         <div class="counter-card">
-            <div class="card-title">Cuenta #</div>
+            <div class="card-title">Cuenta 1</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta1-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 2928340222</div>
         </div>
         <div class="counter-card">
-            <div class="card-title">Cuenta #</div>
+            <div class="card-title">Cuenta 2</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta2-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 7945458224</div>
         </div>
         <div class="counter-card">
-            <div class="card-title">Cuenta #</div>
+            <div class="card-title">Cuenta 3</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta3-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 8003198841</div>
         </div>
     </div>
 
     <!-- CUENTAS FILA 2 -->
     <div class="level-4">
         <div class="counter-card">
-            <div class="card-title">Cuenta #</div>
+            <div class="card-title">Cuenta ?</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta4-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 000000000</div>
         </div>
         <div class="counter-card">
-            <div class="card-title">Cuenta #</div>
+            <div class="card-title">Cuenta ?</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta5-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 000000000</div>
         </div>
         <div class="counter-card">
-            <div class="card-title">Cuenta #</div>
+            <div class="card-title">Cuenta ?</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta6-display">
                     <!-- Los números se insertarán dinámicamente con JS -->
                 </div>
             </div>
-            <div class="card-id">ID ######</div>
+            <div class="card-id">ID 000000000</div>
         </div>
     </div>
 
@@ -379,6 +379,41 @@ const startDates = {
    VARIABLES GLOBALES
 ========================= */
 let previousValues = {};
+let wakeLock = null; // <-- Añadido aquí
+
+/* =========================
+   WAKELOCK - EVITAR APAGADO DE PANTALLA
+========================= */
+async function requestWakeLock() {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('Wake Lock activado - Pantalla no se apagará');
+            
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        } else {
+            console.warn('Wake Lock API no soportada en este navegador');
+        }
+    } catch (err) {
+        console.error(`Error al activar Wake Lock: ${err.message}`);
+    }
+}
+
+function handleVisibilityChange() {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        requestWakeLock();
+    }
+}
+
+function releaseWakeLock() {
+    if (wakeLock !== null) {
+        wakeLock.release()
+            .then(() => {
+                wakeLock = null;
+                console.log('Wake Lock liberado');
+            });
+    }
+}
 
 /* =========================
    INICIALIZAR ESTRUCTURAS
@@ -394,7 +429,6 @@ function initializeDisplays() {
         const displayElement = document.getElementById(displayId);
         if (!displayElement) return;
         
-        // Extraer el ID del contador del ID del display
         const counterId = displayId.replace('-display', '');
         previousValues[counterId] = {
             days: '00',
@@ -403,7 +437,6 @@ function initializeDisplays() {
             seconds: '00'
         };
         
-        // Crear estructura de números
         const units = [
             { value: '00', label: 'D' },
             { value: '00', label: 'H' },
@@ -412,16 +445,13 @@ function initializeDisplays() {
         ];
         
         units.forEach((unit, index) => {
-            // Crear contenedor de unidad
             const unitContainer = document.createElement('div');
             unitContainer.className = 'number-unit';
             
-            // Crear display del número
             const numberDisplay = document.createElement('div');
             numberDisplay.className = 'number-display';
             numberDisplay.id = `${counterId}-${['days', 'hours', 'minutes', 'seconds'][index]}`;
             
-            // Crear dígito actual
             const currentDigit = document.createElement('div');
             currentDigit.className = 'number-digit current-digit';
             currentDigit.textContent = unit.value;
@@ -429,7 +459,6 @@ function initializeDisplays() {
             numberDisplay.appendChild(currentDigit);
             unitContainer.appendChild(numberDisplay);
             
-            // Crear etiqueta
             const label = document.createElement('div');
             label.className = 'unit-label';
             label.textContent = unit.label;
@@ -437,7 +466,6 @@ function initializeDisplays() {
             
             displayElement.appendChild(unitContainer);
             
-            // Agregar separador (excepto después del último)
             if (index < units.length - 1) {
                 const separator = document.createElement('div');
                 separator.className = 'separator';
@@ -455,7 +483,6 @@ function calculateTimeDifference(startDate) {
     const now = new Date();
     const diff = now - startDate;
     
-    // Si la fecha es futura, retornar ceros
     if (diff < 0) {
         return { days: 0, hours: 0, minutes: 0, seconds: 0 };
     }
@@ -475,32 +502,24 @@ function animateNumberChange(containerId, newValue) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
-    // Obtener el dígito actual
     const currentDigit = container.querySelector('.current-digit');
     if (!currentDigit) return;
     
-    // Crear nuevo dígito
     const newDigit = document.createElement('div');
     newDigit.className = 'number-digit new-digit';
     newDigit.textContent = newValue;
     
-    // Agregar nuevo dígito al contenedor
     container.appendChild(newDigit);
     
-    // Iniciar animaciones
     currentDigit.classList.add('rising');
     newDigit.classList.add('emerging');
     
-    // Limpiar después de la animación
     setTimeout(() => {
-        // Remover clases de animación
         currentDigit.classList.remove('rising');
         newDigit.classList.remove('emerging');
         
-        // Actualizar el dígito actual con el nuevo valor
         currentDigit.textContent = newValue;
         
-        // Remover el nuevo dígito (ya no se necesita)
         if (newDigit.parentNode === container) {
             container.removeChild(newDigit);
         }
@@ -514,7 +533,6 @@ function updateAllCounters() {
     for (const counterId in startDates) {
         const timeDiff = calculateTimeDifference(startDates[counterId]);
         
-        // Formatear valores a 2 dígitos
         const formattedValues = {
             days: String(timeDiff.days).padStart(2, '0'),
             hours: String(timeDiff.hours).padStart(2, '0'),
@@ -522,7 +540,6 @@ function updateAllCounters() {
             seconds: String(timeDiff.seconds).padStart(2, '0')
         };
         
-        // Actualizar cada unidad si cambió
         ['days', 'hours', 'minutes', 'seconds'].forEach(unit => {
             const elementId = `${counterId}-${unit}`;
             const currentValue = formattedValues[unit];
@@ -547,32 +564,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Actualizar cada segundo
     setInterval(updateAllCounters, 1000);
+    
+    // Activar Wake Lock para evitar que se apague la pantalla
+    requestWakeLock();
+    
+    // También activar cuando el usuario interactúe
+    document.addEventListener('click', requestWakeLock);
+    document.addEventListener('touchstart', requestWakeLock);
+    document.addEventListener('keydown', requestWakeLock);
 });
 
-/* =========================
-   NOTAS SOBRE COLORES:
-========================= */
-/*
-1. COLOR DE FONDO DE LAS BOX (CONTENEDORES):
-   - Modificar: .counter-box { background: #000; }
-   - Actualmente: Negro (#000)
-
-2. COLOR DE FONDO DETRÁS DE LAS BOX (FONDO GENERAL):
-   - Modificar: body { background: #000 !important; }
-   - Actualmente: Verde (#008000)
-
-3. COLOR DEL BORDE DE LAS BOX:
-   - Modificar: .counter-box { border: 2px solid #ff0000; }
-   - Actualmente: Rojo (#ff0000)
-
-4. COLOR DE LOS NÚMEROS DENTRO DE LAS BOX:
-   - Modificar: .number-digit { color: #fff; }
-   - Actualmente: Blanco (#fff)
-
-5. COLOR DEL TEXTO FUERA DE LAS BOX (TÍTULOS E IDs):
-   - Modificar: .card-title, .card-id { color: #fff; }
-   - Actualmente: Blanco (#fff)
-*/
+window.addEventListener('beforeunload', () => {
+    releaseWakeLock();
+});
 </script>
 
 </body>
