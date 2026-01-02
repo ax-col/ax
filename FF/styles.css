@@ -1,0 +1,240 @@
+/* =========================
+   RESET + BASE
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 16px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+.hierarchy-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding-bottom: 40px;
+    transform: scale(0.9);
+    transform-origin: top center;
+}
+
+/* =========================
+   NIVELES
+========================= */
+.level-1,
+.level-2,
+.level-3,
+.level-4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.level-1 { margin-bottom: 32px; }
+.level-2 { gap: 70px; margin-bottom: 36px; }
+.level-3,
+.level-4 { gap: 50px; margin-bottom: 36px; }
+
+/* =========================
+   TARJETAS
+========================= */
+.counter-card {
+    text-align: center;
+    min-width: 380px; /* Aumentado para más unidades */
+}
+
+.card-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.card-id {
+    font-size: 11px;
+    margin-top: 6px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* =========================
+   CONTENEDOR DEL TEMPORIZADOR
+========================= */
+.counter-box {
+    width: 380px; /* Aumentado para más unidades */
+    height: 95px;
+    background: #000;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 2px solid #fff; /*Borde blanco*/
+}
+
+/* Fondo verde detrás de las box - COLOR DE FONDO DETRÁS DE LAS BOX */
+body {
+    background: #ff0000 !important; /* Rojo - COLOR DE FONDO GENERAL */
+}
+
+/* =========================
+   CONTENEDOR DE NÚMEROS ANIMADOS
+========================= */
+.numbers-container {
+    display: flex;
+    gap: 10px; /* Reducido para que quepan 5 unidades */
+    align-items: center;
+}
+
+.number-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.number-display {
+    position: relative;
+    width: 40px; /* Reducido para que quepan 5 */
+    height: 55px; /* Reducido */
+    overflow: hidden;
+    margin-bottom: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.number-digit {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    font-size: 18px; /* Reducido */
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.current-digit {
+    z-index: 2;
+}
+
+.new-digit {
+    z-index: 1;
+    transform: translateY(55px); /* Ajustado a la nueva altura */
+}
+
+/* =========================
+   ANIMACIONES
+========================= */
+@keyframes riseUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-55px); opacity: 0; } /* Ajustado */
+}
+
+@keyframes emergeFromBottom {
+    0% { transform: translateY(55px); opacity: 0; } /* Ajustado */
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.rising {
+    animation: riseUp 0.6s ease-out forwards;
+}
+
+.emerging {
+    animation: emergeFromBottom 0.6s ease-out forwards;
+}
+
+/* =========================
+   ETIQUETAS Y SEPARADORES
+========================= */
+.unit-label {
+    font-size: 9px; /* Reducido */
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.separator {
+    font-size: 16px; /* Reducido */
+    color: #fff;
+    font-weight: bold;
+    margin: 0 2px; /* Reducido */
+}
+
+/* =========================
+   RESPONSIVE (MÓVIL)
+========================= */
+@media (max-width: 900px) {
+    .hierarchy-container {
+        transform: none;
+        padding: 10px;
+    }
+
+    .level-2,
+    .level-3,
+    .level-4 {
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .counter-card {
+        min-width: 340px;
+    }
+    
+    .counter-box {
+        width: 340px;
+    }
+    
+    .numbers-container {
+        gap: 8px;
+    }
+    
+    .number-display {
+        width: 35px;
+        height: 50px;
+    }
+    
+    .number-digit {
+        font-size: 16px;
+    }
+    
+    .separator {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .counter-card {
+        min-width: 300px;
+    }
+    
+    .counter-box {
+        width: 300px;
+        height: 85px;
+    }
+    
+    .number-display {
+        width: 30px;
+        height: 45px;
+    }
+    
+    .number-digit {
+        font-size: 14px;
+    }
+    
+    .separator {
+        font-size: 12px;
+    }
+}
