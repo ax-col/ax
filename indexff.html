@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jerarquía de Temporizadores</title>
+
+<!-- ============================= -->
+<!-- ESTILOS CSS -->
+<!-- ============================= -->
+<style>
+/* =========================
+   RESET + BASE
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 16px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+.hierarchy-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding-bottom: 40px;
+    transform: scale(0.9);
+    transform-origin: top center;
+}
+
+/* =========================
+   NIVELES
+========================= */
+.level-1,
+.level-2,
+.level-3,
+.level-4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.level-1 { margin-bottom: 32px; }
+.level-2 { gap: 70px; margin-bottom: 36px; }
+.level-3,
+.level-4 { gap: 50px; margin-bottom: 36px; }
+
+/* =========================
+   TARJETAS
+========================= */
+.counter-card {
+    text-align: center;
+    min-width: 340px;
+}
+
+.card-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: bold; /* Negrilla */
+    color: #fff; /* Blanco */
+}
+
+.card-id {
+    font-size: 11px;
+    margin-top: 6px;
+    font-weight: bold; /* Negrilla */
+    color: #fff; /* Blanco */
+}
+
+/* =========================
+   CONTENEDOR DEL TEMPORIZADOR
+========================= */
+.counter-box {
+    width: 340px;
+    height: 95px;
+    background: #000; /* Negro - COLOR DE FONDO DE LA BOX */
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 2px solid #fff; /* Borde rojo */
+    /* NOTA: Para cambiar el color de fondo de las box, modifica la propiedad 'background' arriba */
+}
+
+/* Fondo verde detrás de las box - COLOR DE FONDO DETRÁS DE LAS BOX */
+body {
+    background: #ff0000 !important; /* Verde - COLOR DE FONDO GENERAL */
+}
+
+/* =========================
+   CONTENEDOR DE NÚMEROS ANIMADOS
+========================= */
+.numbers-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.number-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.number-display {
+    position: relative;
+    width: 45px;
+    height: 65px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.number-digit {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff; /* Color de los números */
+    text-transform: uppercase; /* MAYÚSCULAS */
+}
+
+.current-digit {
+    z-index: 2;
+}
+
+.new-digit {
+    z-index: 1;
+    transform: translateY(65px); /* Empieza abajo */
+}
+
+/* =========================
+   ANIMACIONES
+========================= */
+@keyframes riseUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-65px); opacity: 0; }
+}
+
+@keyframes emergeFromBottom {
+    0% { transform: translateY(65px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.rising {
+    animation: riseUp 0.6s ease-out forwards;
+}
+
+.emerging {
+    animation: emergeFromBottom 0.6s ease-out forwards;
+}
+
+/* =========================
+   ETIQUETAS Y SEPARADORES
+========================= */
+.unit-label {
+    font-size: 10px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase; /* MAYÚSCULAS */
+}
+
+.separator {
+    font-size: 20px;
+    color: #fff;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+/* =========================
+   RESPONSIVE (MÓVIL)
+========================= */
+@media (max-width: 900px) {
+    .hierarchy-container {
+        transform: none;
+        padding: 10px;
+    }
+
+    .level-2,
+    .level-3,
+    .level-4 {
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .counter-card {
+        min-width: 300px;
+    }
+    
+    .counter-box {
+        width: 300px;
+    }
+    
+    .numbers-container {
+        gap: 10px;
+    }
+    
+    .number-display {
+        width: 40px;
+        height: 55px;
+    }
+    
+    .number-digit {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    .counter-card {
+        min-width: 280px;
+    }
+    
+    .counter-box {
+        width: 280px;
+        height: 85px;
+    }
+    
+    .number-display {
+        width: 35px;
+        height: 50px;
+    }
+    
+    .number-digit {
+        font-size: 16px;
+    }
+    
+    .separator {
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================= -->
+<!-- ESTRUCTURA HTML -->
+<!-- ============================= -->
+<div class="hierarchy-container">
+
+    <!-- CREADOR -->
+    <div class="level-1">
+        <div class="counter-card">
+            <div class="card-title">Creador</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="creador-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+    </div>
+
+    <!-- MODERADORES -->
+    <div class="level-2">
+        <div class="counter-card">
+            <div class="card-title">Moderador BR</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="mod-br-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+
+        <div class="counter-card">
+            <div class="card-title">Moderador US</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="mod-us-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+    </div>
+
+    <!-- CUENTAS FILA 1 -->
+    <div class="level-3">
+        <div class="counter-card">
+            <div class="card-title">Cuenta #</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta1-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta #</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta2-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta #</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta3-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+    </div>
+
+    <!-- CUENTAS FILA 2 -->
+    <div class="level-4">
+        <div class="counter-card">
+            <div class="card-title">Cuenta #</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta4-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta #</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta5-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta #</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta6-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID ######</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============================= -->
+<!-- JAVASCRIPT -->
+<!-- ============================= -->
+<script>
+/* =========================
+   CONFIGURACIÓN DE FECHAS
+========================= */
+const startDates = {
+    creador: new Date(2017, 12, 03, 21, 37, 23), // dia(1/31) de mes(1/12) de 20## a las 14:07:27
+    "mod-br": new Date(2018, 05, 20, 00, 58, 10),
+    "mod-us": new Date(2018, 05, 21, 19, 39, 36),
+    cuenta1: new Date(2021, 03, 19, 20, 35, 57),
+    cuenta2: new Date(2023, 06, 29, 22, 01, 12),
+    cuenta3: new Date(2023, 07, 13, 15, 07, 37),
+    cuenta4: new Date(2000, 12, 31),
+    cuenta5: new Date(2000, 12, 31),
+    cuenta6: new Date(2000, 12, 31)
+};
+
+/* =========================
+   VARIABLES GLOBALES
+========================= */
+let previousValues = {};
+
+/* =========================
+   INICIALIZAR ESTRUCTURAS
+========================= */
+function initializeDisplays() {
+    const displays = [
+        'creador-display', 'mod-br-display', 'mod-us-display',
+        'cuenta1-display', 'cuenta2-display', 'cuenta3-display',
+        'cuenta4-display', 'cuenta5-display', 'cuenta6-display'
+    ];
+    
+    displays.forEach(displayId => {
+        const displayElement = document.getElementById(displayId);
+        if (!displayElement) return;
+        
+        // Extraer el ID del contador del ID del display
+        const counterId = displayId.replace('-display', '');
+        previousValues[counterId] = {
+            days: '00',
+            hours: '00',
+            minutes: '00',
+            seconds: '00'
+        };
+        
+        // Crear estructura de números
+        const units = [
+            { value: '00', label: 'D' },
+            { value: '00', label: 'H' },
+            { value: '00', label: 'M' },
+            { value: '00', label: 'S' }
+        ];
+        
+        units.forEach((unit, index) => {
+            // Crear contenedor de unidad
+            const unitContainer = document.createElement('div');
+            unitContainer.className = 'number-unit';
+            
+            // Crear display del número
+            const numberDisplay = document.createElement('div');
+            numberDisplay.className = 'number-display';
+            numberDisplay.id = `${counterId}-${['days', 'hours', 'minutes', 'seconds'][index]}`;
+            
+            // Crear dígito actual
+            const currentDigit = document.createElement('div');
+            currentDigit.className = 'number-digit current-digit';
+            currentDigit.textContent = unit.value;
+            
+            numberDisplay.appendChild(currentDigit);
+            unitContainer.appendChild(numberDisplay);
+            
+            // Crear etiqueta
+            const label = document.createElement('div');
+            label.className = 'unit-label';
+            label.textContent = unit.label;
+            unitContainer.appendChild(label);
+            
+            displayElement.appendChild(unitContainer);
+            
+            // Agregar separador (excepto después del último)
+            if (index < units.length - 1) {
+                const separator = document.createElement('div');
+                separator.className = 'separator';
+                separator.textContent = ':';
+                displayElement.appendChild(separator);
+            }
+        });
+    });
+}
+
+/* =========================
+   CALCULAR DIFERENCIA DE TIEMPO
+========================= */
+function calculateTimeDifference(startDate) {
+    const now = new Date();
+    const diff = now - startDate;
+    
+    // Si la fecha es futura, retornar ceros
+    if (diff < 0) {
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+    
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff / 3600000) % 24;
+    const minutes = Math.floor(diff / 60000) % 60;
+    const seconds = Math.floor(diff / 1000) % 60;
+    
+    return { days, hours, minutes, seconds };
+}
+
+/* =========================
+   ANIMAR TRANSICIÓN DE NÚMEROS
+========================= */
+function animateNumberChange(containerId, newValue) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    // Obtener el dígito actual
+    const currentDigit = container.querySelector('.current-digit');
+    if (!currentDigit) return;
+    
+    // Crear nuevo dígito
+    const newDigit = document.createElement('div');
+    newDigit.className = 'number-digit new-digit';
+    newDigit.textContent = newValue;
+    
+    // Agregar nuevo dígito al contenedor
+    container.appendChild(newDigit);
+    
+    // Iniciar animaciones
+    currentDigit.classList.add('rising');
+    newDigit.classList.add('emerging');
+    
+    // Limpiar después de la animación
+    setTimeout(() => {
+        // Remover clases de animación
+        currentDigit.classList.remove('rising');
+        newDigit.classList.remove('emerging');
+        
+        // Actualizar el dígito actual con el nuevo valor
+        currentDigit.textContent = newValue;
+        
+        // Remover el nuevo dígito (ya no se necesita)
+        if (newDigit.parentNode === container) {
+            container.removeChild(newDigit);
+        }
+    }, 600);
+}
+
+/* =========================
+   ACTUALIZAR TODOS LOS CONTADORES
+========================= */
+function updateAllCounters() {
+    for (const counterId in startDates) {
+        const timeDiff = calculateTimeDifference(startDates[counterId]);
+        
+        // Formatear valores a 2 dígitos
+        const formattedValues = {
+            days: String(timeDiff.days).padStart(2, '0'),
+            hours: String(timeDiff.hours).padStart(2, '0'),
+            minutes: String(timeDiff.minutes).padStart(2, '0'),
+            seconds: String(timeDiff.seconds).padStart(2, '0')
+        };
+        
+        // Actualizar cada unidad si cambió
+        ['days', 'hours', 'minutes', 'seconds'].forEach(unit => {
+            const elementId = `${counterId}-${unit}`;
+            const currentValue = formattedValues[unit];
+            
+            if (previousValues[counterId] && previousValues[counterId][unit] !== currentValue) {
+                animateNumberChange(elementId, currentValue);
+                previousValues[counterId][unit] = currentValue;
+            }
+        });
+    }
+}
+
+/* =========================
+   INICIALIZAR Y EJECUTAR
+========================= */
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar estructuras de visualización
+    initializeDisplays();
+    
+    // Actualizar inmediatamente
+    updateAllCounters();
+    
+    // Actualizar cada segundo
+    setInterval(updateAllCounters, 1000);
+});
+
+/* =========================
+   NOTAS SOBRE COLORES:
+========================= */
+/*
+1. COLOR DE FONDO DE LAS BOX (CONTENEDORES):
+   - Modificar: .counter-box { background: #000; }
+   - Actualmente: Negro (#000)
+
+2. COLOR DE FONDO DETRÁS DE LAS BOX (FONDO GENERAL):
+   - Modificar: body { background: #000 !important; }
+   - Actualmente: Verde (#008000)
+
+3. COLOR DEL BORDE DE LAS BOX:
+   - Modificar: .counter-box { border: 2px solid #ff0000; }
+   - Actualmente: Rojo (#ff0000)
+
+4. COLOR DE LOS NÚMEROS DENTRO DE LAS BOX:
+   - Modificar: .number-digit { color: #fff; }
+   - Actualmente: Blanco (#fff)
+
+5. COLOR DEL TEXTO FUERA DE LAS BOX (TÍTULOS E IDs):
+   - Modificar: .card-title, .card-id { color: #fff; }
+   - Actualmente: Blanco (#fff)
+*/
+</script>
+
+</body>
+</html>
