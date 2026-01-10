@@ -77,10 +77,14 @@ window.cambiarVideo = function(rutaVideo, indice) {
 }
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('SW registrado:', reg.scope))
-      .catch(err => console.error('SW error:', err));
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    if (regs.length > 0) {
+      console.log('✅ Service Worker ACTIVO:', regs);
+      alert('Service Worker ACTIVO');
+    } else {
+      console.log('❌ No hay Service Worker');
+      alert('NO hay Service Worker');
+    }
   });
 }
 
@@ -159,7 +163,7 @@ let previousTimerValues = {
 };
 
 function updateTimer() {
-    const targetDate = new Date('2027-01-01T00:00:00').getTime();
+    const targetDate = new Date('2026-04-24T10:00:00').getTime();
     const now = new Date().getTime();
     const difference = targetDate - now;
 
