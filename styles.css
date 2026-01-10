@@ -67,7 +67,7 @@ body {
   display: block;
   width: 100%;
   padding: 20px;
-  color: black;
+  color: white;
   background-color: transparent;
   border: 3px solid red;
   border-radius: 12px;
@@ -80,7 +80,7 @@ body {
 
 .button:hover {
   background-color: rebeccapurple;
-  color: white;
+  color: red;
   cursor: pointer;
 }
 
@@ -403,4 +403,3 @@ body {
     .time-value-inner { font-size: 36px; }
     .timer-separator { font-size: 20px; }
 }
-
