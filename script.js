@@ -77,14 +77,10 @@ window.cambiarVideo = function(rutaVideo, indice) {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(regs => {
-    if (regs.length > 0) {
-      console.log('✅ Service Worker ACTIVO:', regs);
-      alert('Service Worker ACTIVO');
-    } else {
-      console.log('❌ No hay Service Worker');
-      alert('NO hay Service Worker');
-    }
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registrado:', reg.scope))
+      .catch(err => console.error('SW error:', err));
   });
 }
 
