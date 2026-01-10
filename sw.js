@@ -85,6 +85,28 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+self.addEventListener('fetch', event => {
+  const req = event.request;
+
+  // Cache dinámico para videos
+  if (req.destination === 'video') {
+    event.respondWith(
+      caches.open('AX NAVEGADOR').then(cache =>
+        cache.match(req).then(res => {
+          return (
+            res ||
+            fetch(req).then(networkRes => {
+              cache.put(req, networkRes.clone());
+              return networkRes;
+            })
+          );
+        })
+      )
+    );
+    return;
+  }
+});
+
   // Recursos normales (CSS, JS, imágenes)
   event.respondWith(
     caches.match(req).then(res => res || fetch(req))
