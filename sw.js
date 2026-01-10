@@ -1,57 +1,89 @@
-const CACHE_NAME = 'ax-pwa-v1';
+const CACHE_NAME = 'ax-offline-v4';
 
-// Archivos esenciales (precarga)
-const PRECACHE_ASSETS = [
+const PRECACHE_URLS = [
   './',
   './index.html',
-  './offline.html',
   './styles.css',
   './script.js',
   './manifest.json',
+  './play.html',
 
-  // Íconos PWA
+  // iconos
   './png-principal/icon-192x192.png',
-  './png-principal/icon-512x512.png'
+  './png-principal/icon-512x512.png',
+
+  // carpetas (index internos)
+  './raspa/index.html',
+  './viwnet/index.html',
+  './web-apks/index.html',
+  './CPWEB/index.html',
+  './Windows/index.html',
+  './FF/index.html'
 ];
 
-// INSTALACIÓN
+// ---------- INSTALL ----------
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
   );
   self.skipWaiting();
 });
 
-// ACTIVACIÓN → limpia cachés viejos
+// ---------- ACTIVATE ----------
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
+        keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null))
       )
     )
   );
   self.clients.claim();
 });
 
-// FETCH → online primero, fallback offline
+// ---------- FETCH ----------
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
+  const req = event.request;
+  const url = new URL(req.url);
 
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // Guarda en caché lo que sí cargó
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        return response;
+  // 🧭 Navegación (HTML)
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      caches.match(req).then(res => {
+        if (res) return res;
+
+        // /carpeta → /carpeta/index.html
+        const path = url.pathname.endsWith('/')
+          ? `${url.pathname}index.html`
+          : `${url.pathname}/index.html`;
+
+        return caches.match(path)
+          .then(r => r || caches.match('./index.html'));
       })
-      .catch(() =>
-        caches.match(event.request).then(res => res || caches.match('./offline.html'))
+    );
+    return;
+  }
+
+  // 🎬 Videos (cache dinámico)
+  if (req.destination === 'video') {
+    event.respondWith(
+      caches.open('AX-NAVEGADOR').then(cache =>
+        cache.match(req).then(res => {
+          return (
+            res ||
+            fetch(req).then(net => {
+              cache.put(req, net.clone());
+              return net;
+            })
+          );
+        })
       )
+    );
+    return;
+  }
+
+  // 📦 Recursos normales
+  event.respondWith(
+    caches.match(req).then(res => res || fetch(req))
   );
 });
