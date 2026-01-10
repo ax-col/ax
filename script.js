@@ -76,6 +76,18 @@ window.cambiarVideo = function(rutaVideo, indice) {
   currentVideoIndex = indice;
 }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    if (regs.length > 0) {
+      console.log('✅ Service Worker ACTIVO:', regs);
+      alert('Service Worker ACTIVO');
+    } else {
+      console.log('❌ No hay Service Worker');
+      alert('NO hay Service Worker');
+    }
+  });
+}
+
 // Animación de texto
 function animarTexto() {
   const textElement = document.getElementById('animated-text');
@@ -151,7 +163,7 @@ let previousTimerValues = {
 };
 
 function updateTimer() {
-    const targetDate = new Date('2026-06-11T14:01:01').getTime();
+    const targetDate = new Date('2027-01-01T00:00:00').getTime();
     const now = new Date().getTime();
     const difference = targetDate - now;
 
