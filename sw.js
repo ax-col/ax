@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v4';
+const CACHE_NAME = 'ax-offline-v7'; // Incrementamos la versión para forzar actualización
 
 const PRECACHE_URLS = [
   './',
@@ -24,7 +24,10 @@ const PRECACHE_URLS = [
 // ---------- INSTALL ----------
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('[SW] Pre-cacheando recursos...');
+      return cache.addAll(PRECACHE_URLS);
+    })
   );
   self.skipWaiting();
 });
@@ -34,7 +37,12 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null))
+        keys.map(k => {
+          if (k !== CACHE_NAME && k !== 'AX-NAVEGADOR') {
+            console.log('[SW] Borrando caché antiguo:', k);
+            return caches.delete(k);
+          }
+        })
       )
     )
   );
@@ -49,41 +57,50 @@ self.addEventListener('fetch', event => {
   // 🧭 Navegación (HTML)
   if (req.mode === 'navigate') {
     event.respondWith(
-      caches.match(req).then(res => {
-        if (res) return res;
+      fetch(req).catch(() => {
+        // Si falla la red (offline), buscamos en el caché
+        return caches.match(req).then(res => {
+          if (res) return res;
 
-        // /carpeta → /carpeta/index.html
-        const path = url.pathname.endsWith('/')
-          ? `${url.pathname}index.html`
-          : `${url.pathname}/index.html`;
+          // Lógica para manejar rutas de carpetas /ax/raspa/ -> /ax/raspa/index.html
+          let path = url.pathname;
+          if (path.endsWith('/')) {
+            path += 'index.html';
+          } else if (!path.split('/').pop().includes('.')) {
+            path += '/index.html';
+          }
 
-        return caches.match(path)
-          .then(r => r || caches.match('./index.html'));
+          return caches.match(path).then(r => r || caches.match('./index.html'));
+        });
       })
     );
     return;
   }
 
-  // 🎬 Videos (cache dinámico)
+  // 🎬 Videos (cache dinámico - Network First para evitar problemas de rango)
   if (req.destination === 'video') {
     event.respondWith(
-      caches.open('AX-NAVEGADOR').then(cache =>
-        cache.match(req).then(res => {
-          return (
-            res ||
-            fetch(req).then(net => {
-              cache.put(req, net.clone());
-              return net;
-            })
-          );
-        })
-      )
+      fetch(req).then(net => {
+        const copy = net.clone();
+        caches.open('AX-NAVEGADOR').then(cache => cache.put(req, copy));
+        return net;
+      }).catch(() => {
+        return caches.match(req);
+      })
     );
     return;
   }
 
-  // 📦 Recursos normales
+  // 📦 Recursos normales (Cache First, fallback to Network)
   event.respondWith(
-    caches.match(req).then(res => res || fetch(req))
+    caches.match(req).then(res => {
+      return res || fetch(req).then(net => {
+        // Opcional: podrías guardar en caché dinámico aquí también
+        return net;
+      }).catch(err => {
+        console.error('[SW] Error en fetch:', req.url, err);
+        // Podrías devolver una imagen offline genérica aquí si fuera necesario
+      });
+    })
   );
 });
