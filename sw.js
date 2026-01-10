@@ -1,80 +1,57 @@
-const CACHE_NAME = 'ax-offline-v5';
+const CACHE_NAME = 'ax-pwa-v1';
 
-const PRECACHE_URLS = [
+// Archivos esenciales (precarga)
+const PRECACHE_ASSETS = [
   './',
   './index.html',
+  './offline.html',
   './styles.css',
   './script.js',
   './manifest.json',
-  './play.html',
 
-  // iconos
+  // Íconos PWA
   './png-principal/icon-192x192.png',
-  './png-principal/icon-512x512.png',
-
-  // carpetas (index internos)
-  './raspa/index.html',
-  './viwnet/index.html',
-  './web-apks/index.html',
-  './CPWEB/index.html',
-  './Windows/index.html',
-  './FF/index.html'
+  './png-principal/icon-512x512.png'
 ];
 
-// ---------- INSTALL ----------
+// INSTALACIÓN
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_ASSETS))
   );
   self.skipWaiting();
 });
 
-// ---------- ACTIVATE ----------
+// ACTIVACIÓN → limpia cachés viejos
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null))
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
       )
     )
   );
   self.clients.claim();
 });
 
-// ---------- FETCH ----------
+// FETCH → online primero, fallback offline
 self.addEventListener('fetch', event => {
-  const req = event.request;
-  const url = new URL(req.url);
+  if (event.request.method !== 'GET') return;
 
-  // 🧭 Navegación (APP, raíz, carpetas, con parámetros)
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      caches.match('./index.html', { ignoreSearch: true })
-        .then(res => res || fetch(req))
-    );
-    return;
-  }
-
-  // 🎬 Videos (cache dinámico)
-  if (req.destination === 'video') {
-    event.respondWith(
-      caches.open('AX-NAVEGADOR').then(cache =>
-        cache.match(req).then(res => {
-          return (
-            res ||
-            fetch(req).then(net => {
-              cache.put(req, net.clone());
-              return net;
-            })
-          );
-        })
-      )
-    );
-    return;
-  }
-
-  // 📦 Recursos normales
   event.respondWith(
-    caches.match(req).then(res => res || fetch(req))
+    fetch(event.request)
+      .then(response => {
+        // Guarda en caché lo que sí cargó
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request).then(res => res || caches.match('./offline.html'))
+      )
   );
 });
