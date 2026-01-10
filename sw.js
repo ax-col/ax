@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v7'; // Incrementamos la versión para forzar actualización
+const CACHE_NAME = 'ax-offline-v8';
 
 const PRECACHE_URLS = [
   './',
@@ -7,12 +7,9 @@ const PRECACHE_URLS = [
   './script.js',
   './manifest.json',
   './play.html',
-
-  // iconos
+  './offline.html',
   './png-principal/icon-192x192.png',
   './png-principal/icon-512x512.png',
-
-  // carpetas (index internos)
   './raspa/index.html',
   './viwnet/index.html',
   './web-apks/index.html',
@@ -39,7 +36,6 @@ self.addEventListener('activate', event => {
       Promise.all(
         keys.map(k => {
           if (k !== CACHE_NAME && k !== 'AX-NAVEGADOR') {
-            console.log('[SW] Borrando caché antiguo:', k);
             return caches.delete(k);
           }
         })
@@ -54,15 +50,17 @@ self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
+  // Solo manejar peticiones del mismo origen
+  if (url.origin !== self.location.origin) return;
+
   // 🧭 Navegación (HTML)
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req).catch(() => {
-        // Si falla la red (offline), buscamos en el caché
         return caches.match(req).then(res => {
           if (res) return res;
 
-          // Lógica para manejar rutas de carpetas /ax/raspa/ -> /ax/raspa/index.html
+          // Lógica de rutas para GitHub Pages (/ax/carpeta/ -> /ax/carpeta/index.html)
           let path = url.pathname;
           if (path.endsWith('/')) {
             path += 'index.html';
@@ -70,37 +68,27 @@ self.addEventListener('fetch', event => {
             path += '/index.html';
           }
 
-          return caches.match(path).then(r => r || caches.match('./index.html'));
+          return caches.match(path).then(r => r || caches.match('./offline.html') || caches.match('./index.html'));
         });
       })
     );
     return;
   }
 
-  // 🎬 Videos (cache dinámico - Network First para evitar problemas de rango)
+  // 🎬 Videos (Network First)
   if (req.destination === 'video') {
     event.respondWith(
       fetch(req).then(net => {
         const copy = net.clone();
         caches.open('AX-NAVEGADOR').then(cache => cache.put(req, copy));
         return net;
-      }).catch(() => {
-        return caches.match(req);
-      })
+      }).catch(() => caches.match(req))
     );
     return;
   }
 
-  // 📦 Recursos normales (Cache First, fallback to Network)
+  // 📦 Recursos normales (Cache First)
   event.respondWith(
-    caches.match(req).then(res => {
-      return res || fetch(req).then(net => {
-        // Opcional: podrías guardar en caché dinámico aquí también
-        return net;
-      }).catch(err => {
-        console.error('[SW] Error en fetch:', req.url, err);
-        // Podrías devolver una imagen offline genérica aquí si fuera necesario
-      });
-    })
+    caches.match(req).then(res => res || fetch(req))
   );
 });
