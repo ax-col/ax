@@ -1,8 +1,8 @@
 {
   "name": "Λ̷χ PROYECT",
   "short_name": "AX 01/09",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/ax/",
+  "scope": "/ax/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
