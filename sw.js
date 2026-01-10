@@ -1,14 +1,17 @@
 const CACHE_NAME = 'ax-offline-v1';
+const VIDEO_CACHE = 'ax-videos';
 
-// RUTAS PRINCIPALES (raíz + carpetas)
+// ===================
+// PRECACHE (instalación)
+// ===================
 const PRECACHE_URLS = [
-  '/',               // raíz
+  '/',
   '/index.html',
   '/styles.css',
   '/script.js',
   '/manifest.json',
 
-  // carpetas principales (index internos)
+  // carpetas principales
   '/raspa/',
   '/raspa/index.html',
 
@@ -27,29 +30,25 @@ const PRECACHE_URLS = [
   '/FF/',
   '/FF/index.html',
 
-  // iconos PWA
+  // iconos
   '/png-principal/icon-192x192.png',
   '/png-principal/icon-512x512.png'
 ];
 
-// INSTALACIÓN → descarga todo al agregar a pantalla principal
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(PRECACHE_URLS);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
   );
   self.skipWaiting();
 });
 
-// ACTIVACIÓN → limpia cachés viejos
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
+        keys.map(k => {
+          if (k !== CACHE_NAME && k !== VIDEO_CACHE) {
+            return caches.delete(k);
           }
         })
       )
@@ -58,43 +57,20 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// FETCH → navegación tipo dominio / subdominio
+// ===================
+// FETCH (todo en UNO)
+// ===================
 self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // SOLO navegación HTML
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      caches.match(req).then(response => {
-        if (response) return response;
-
-        // Si entra a /carpeta → /carpeta/index.html
-        if (!url.pathname.endsWith('.html')) {
-          const indexPath = url.pathname.endsWith('/')
-            ? `${url.pathname}index.html`
-            : `${url.pathname}/index.html`;
-
-          return caches.match(indexPath)
-            .then(res => res || caches.match('/index.html'));
-        }
-
-        return caches.match('/index.html');
-      })
-    );
-    return;
-  }
-
-self.addEventListener('fetch', event => {
-  const req = event.request;
-
-  // Cache dinámico para videos
+  // 🎥 VIDEOS → cache dinámico
   if (req.destination === 'video') {
     event.respondWith(
-      caches.open('AX NAVEGADOR').then(cache =>
-        cache.match(req).then(res => {
+      caches.open(VIDEO_CACHE).then(cache =>
+        cache.match(req).then(cached => {
           return (
-            res ||
+            cached ||
             fetch(req).then(networkRes => {
               cache.put(req, networkRes.clone());
               return networkRes;
@@ -105,9 +81,29 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-});
 
-  // Recursos normales (CSS, JS, imágenes)
+  // 🌐 NAVEGACIÓN HTML (raíz y carpetas)
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      caches.match(req).then(res => {
+        if (res) return res;
+
+        if (!url.pathname.endsWith('.html')) {
+          const indexPath = url.pathname.endsWith('/')
+            ? `${url.pathname}index.html`
+            : `${url.pathname}/index.html`;
+
+          return caches.match(indexPath)
+            .then(r => r || caches.match('/index.html'));
+        }
+
+        return caches.match('/index.html');
+      })
+    );
+    return;
+  }
+
+  // 📦 RECURSOS NORMALES
   event.respondWith(
     caches.match(req).then(res => res || fetch(req))
   );
