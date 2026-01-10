@@ -24,6 +24,9 @@ const PRECACHE_URLS = [
   '/Windows/',
   '/Windows/index.html',
 
+  '/ffbeta/',
+  '/ffbeta/ffbeta.html',
+
   // iconos PWA
   '/png-principal/icon-192x192.png',
   '/png-principal/icon-512x512.png'
