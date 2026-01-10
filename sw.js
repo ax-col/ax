@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v1';
+const CACHE_NAME = 'ax-offline-v4';
 
 const PRECACHE_URLS = [
   './',
@@ -6,24 +6,22 @@ const PRECACHE_URLS = [
   './styles.css',
   './script.js',
   './manifest.json',
+  './play.html',
 
-  './raspa/',
-  './raspa/index.html',
-  './viwnet/',
-  './viwnet/index.html',
-  './web-apks/',
-  './web-apks/index.html',
-  './CPWEB/',
-  './CPWEB/index.html',
-  './Windows/',
-  './Windows/index.html',
-  './FF/',
-  './FF/index.html',
-
+  // iconos
   './png-principal/icon-192x192.png',
-  './png-principal/icon-512x512.png'
+  './png-principal/icon-512x512.png',
+
+  // carpetas (index internos)
+  './raspa/index.html',
+  './viwnet/index.html',
+  './web-apks/index.html',
+  './CPWEB/index.html',
+  './Windows/index.html',
+  './FF/index.html'
 ];
 
+// ---------- INSTALL ----------
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
@@ -31,54 +29,60 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
+// ---------- ACTIVATE ----------
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(key => key !== CACHE_NAME && caches.delete(key))
+        keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null))
       )
     )
   );
   self.clients.claim();
 });
 
+// ---------- FETCH ----------
 self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Navegación HTML
+  // 🧭 Navegación (HTML)
   if (req.mode === 'navigate') {
     event.respondWith(
       caches.match(req).then(res => {
         if (res) return res;
 
-        const indexPath = url.pathname.endsWith('/')
+        // /carpeta → /carpeta/index.html
+        const path = url.pathname.endsWith('/')
           ? `${url.pathname}index.html`
           : `${url.pathname}/index.html`;
 
-        return caches.match(indexPath) || caches.match('./index.html');
+        return caches.match(path)
+          .then(r => r || caches.match('./index.html'));
       })
     );
     return;
   }
 
-  // Videos (cache dinámico)
+  // 🎬 Videos (cache dinámico)
   if (req.destination === 'video') {
     event.respondWith(
       caches.open('AX-NAVEGADOR').then(cache =>
-        cache.match(req).then(res =>
-          res ||
-          fetch(req).then(net => {
-            cache.put(req, net.clone());
-            return net;
-          })
-        )
+        cache.match(req).then(res => {
+          return (
+            res ||
+            fetch(req).then(net => {
+              cache.put(req, net.clone());
+              return net;
+            })
+          );
+        })
       )
     );
     return;
   }
 
-  // Recursos normales
+  // 📦 Recursos normales
   event.respondWith(
     caches.match(req).then(res => res || fetch(req))
   );
