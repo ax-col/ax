@@ -46,20 +46,11 @@ self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // 🧭 Navegación (HTML)
+  // 🧭 Navegación (APP, raíz, carpetas, con parámetros)
   if (req.mode === 'navigate') {
     event.respondWith(
-      caches.match(req).then(res => {
-        if (res) return res;
-
-        // /carpeta → /carpeta/index.html
-        const path = url.pathname.endsWith('/')
-          ? `${url.pathname}index.html`
-          : `${url.pathname}/index.html`;
-
-        return caches.match(path)
-          .then(r => r || caches.match('./index.html'));
-      })
+      caches.match('./index.html', { ignoreSearch: true })
+        .then(res => res || fetch(req))
     );
     return;
   }
