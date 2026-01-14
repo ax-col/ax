@@ -2,15 +2,15 @@
    CONFIGURACIÓN DE FECHAS
 ========================= */
 const startDates = {
-    creador: new Date(2017, 11, 3, 21, 37, 23),     // 3 DIC 2017
-    "mod-br": new Date(2018, 4, 20, 0, 58, 10),    // 20 MAY 2018
-    "mod-us": new Date(2018, 4, 21, 19, 39, 36),   // 21 MAY 2018
-    cuenta1: new Date(2021, 3, 19, 20, 35, 57),    // 19 ABR 2021
-    cuenta2: new Date(2023, 6, 29, 22, 1, 12),     // 29 JUL 2023
-    cuenta3: new Date(2023, 7, 13, 15, 7, 37),     // 13 AGO 2023
-    cuenta4: new Date(2026, 0, 2, 13, 13, 0),     // 2 ENE 2026
-    cuenta5: new Date(2026, 0, 2, 13, 14, 0),     // 2 ENE 2026
-    cuenta6: new Date(2026, 0, 2, 13, 15, 0)      // 2 ENE 2026
+    creador: new Date(2017, 11, 3, 21, 37, 23),    // 03 DIC 2017 Harold Teo
+    "mod-br": new Date(2018, 4, 20, 0, 58, 10),    // 20 MAY 2018 Moderador Luu
+    "mod-us": new Date(2018, 4, 21, 19, 39, 36),   // 21 MAY 2018 Moderador Vantay
+    cuenta1: new Date(2021, 3, 19, 20, 35, 57),    // 19 ABR 2021 2928340222
+    cuenta2: new Date(2023, 6, 29, 22, 1, 12),     // 29 JUL 2023 7945458224 BAN
+    cuenta3: new Date(2023, 7, 13, 15, 7, 37),     // 13 AGO 2023 8003198841
+    cuenta4: new Date(2026, 0, 1, 0, 0, 0),        // 01 ENE 2026 0000000000
+    cuenta5: new Date(2026, 0, 1, 0, 1, 0),        // 03 ENE 2025 0000000000
+    cuenta6: new Date(2024, 8, 16, 12, 12, 12)     // 16 SEP 2024 7945458224 BAN
 };
 
 /* =========================
