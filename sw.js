@@ -15,8 +15,14 @@ const PRECACHE_URLS = [
   './web-apks/index.html',
   './CPWEB/index.html',
   './Windows/index.html',
-  './FF/index.html'
+  './FF/index.html',
+  // AÑADE TUS VÍDEOS AQUÍ (ejemplos)
+  './videos/CN4.mp4',
+  './videos/CN3.mp4',
+  './videos/CN2.mp4',
+  // ... añade todos los vídeos que uses
 ];
+
 
 // ---------- INSTALL ----------
 self.addEventListener('install', event => {
