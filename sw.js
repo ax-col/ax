@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v8';
+const CACHE_NAME = 'ax-offline-v10';
 
 const PRECACHE_URLS = [
   './',
