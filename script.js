@@ -1,18 +1,15 @@
-const videosDesktop = [
+// VIDEO PARA TODOS LOS DISPOSITIVOS
+const todosLosVideos = [
   "AX NAVEGADOR/CN1.mp4",
   "AX NAVEGADOR/CN2.mp4", 
   "AX NAVEGADOR/CN3.mp4",
   "AX NAVEGADOR/CN4.mp4",
   "AX NAVEGADOR/CN5.mp4",
   "AX NAVEGADOR/CN6.mp4", 
-  "AX NAVEGADOR/CN7.mp4"
+  "AX NAVEGADOR/CN7.mp4",
+  "AX NAVEGADOR/BG.mp4"  // Incluimos también el BG
 ];
 
-const videosMobile = [
-  "AX NAVEGADOR/BG.mp4"
-];
-
-const isDesktop = window.innerWidth >= 768;
 let videoElement, videoSource;
 let currentVideoIndex = 0;
 let botonesVideo = [];
@@ -20,36 +17,40 @@ let botonesVideo = [];
 // Inicializar los botones CN
 function inicializarBotonesCN() {
   botonesVideo = document.querySelectorAll('.btn-video');
-  
+
   botonesVideo.forEach(btn => btn.classList.remove('activo'));
   if (botonesVideo.length > 0 && botonesVideo[currentVideoIndex]) {
     botonesVideo[currentVideoIndex].classList.add('activo');
   }
 }
 
-// Configurar video según dispositivo
+// Configurar video PARA TODOS LOS DISPOSITIVOS
 function configurarVideo() {
-  if (isDesktop) {
-    videoElement = document.getElementById("videoDesktop");
-    videoSource = document.getElementById("videoSourceDesktop");
-    currentVideoIndex = Math.floor(Math.random() * videosDesktop.length);
-    videoSource.src = videosDesktop[currentVideoIndex];
-    document.getElementById('infoVideo').textContent = `Video actual: CN${currentVideoIndex + 1}.mp4`;
-  } else {
-    videoElement = document.getElementById("videoMobile");
-    videoSource = document.getElementById("videoSourceMobile");
-    videoSource.src = videosMobile[Math.floor(Math.random() * videosMobile.length)];
-    document.getElementById('infoVideo').textContent = `Video actual: BG.mp4`;
-  }
+  // USAR SIEMPRE EL VIDEO DESKTOP (EL MISMO PARA TODOS)
+  videoElement = document.getElementById("videoDesktop");
+  videoSource = document.getElementById("videoSourceDesktop");
+  
+  // Elegir un video al azar de TODA la lista
+  currentVideoIndex = Math.floor(Math.random() * todosLosVideos.length);
+  videoSource.src = todosLosVideos[currentVideoIndex];
+  
+  // Actualizar información
+  const nombreVideo = todosLosVideos[currentVideoIndex].split('/').pop();
+  document.getElementById('infoVideo').textContent = `Video actual: ${nombreVideo}`;
+  
+  // Mostrar siempre el video
   videoElement.style.display = "block";
   videoElement.load();
+  
+  // OCULTAR EL MENSAJE DE "solo escritorio" en móviles
+  document.querySelector('.mensaje-movil').style.display = "none";
 }
 
-// Función de mute toggle
+// Función de mute toggle (igual que antes)
 window.toggleMute = function() {
   const btn = document.querySelector('.mute-toggle');
   videoElement.muted = !videoElement.muted;
-  
+
   if (videoElement.muted) {
     btn.textContent = 'ACTIVAR SONIDO';
     btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
@@ -59,20 +60,21 @@ window.toggleMute = function() {
   }
 }
 
-// Cambiar video (solo escritorio)
+// Cambiar video - FUNCIONA EN TODOS LOS DISPOSITIVOS AHORA
 window.cambiarVideo = function(rutaVideo, indice) {
-  if (!isDesktop) return;
+  // ELIMINAMOS LA RESTRICCIÓN "if (!isDesktop) return;"
   videoSource.src = rutaVideo;
   videoElement.load();
   videoElement.play();
-  
-  document.getElementById('infoVideo').textContent = `Video actual: CN${indice + 1}.mp4`;
-  
+
+  const nombreVideo = rutaVideo.split('/').pop();
+  document.getElementById('infoVideo').textContent = `Video actual: ${nombreVideo}`;
+
   botonesVideo.forEach(btn => btn.classList.remove('activo'));
   if (botonesVideo[indice]) {
     botonesVideo[indice].classList.add('activo');
   }
-  
+
   currentVideoIndex = indice;
 }
 
@@ -185,10 +187,10 @@ function updateTimer() {
 
 function updateTimerDisplay(elementId, value) {
     const formattedValue = String(value).padStart(2, '0');
-    
+
     if (previousTimerValues[elementId] !== formattedValue) {
         const containers = document.querySelectorAll(`[id="${elementId}-container"]`);
-        
+
         containers.forEach(container => {
             // Solo animar si el contenedor es visible (no está comentado)
             if (container.offsetParent !== null) {
@@ -196,16 +198,16 @@ function updateTimerDisplay(elementId, value) {
                 fallingNumber.className = 'time-value-inner current-number';
                 fallingNumber.textContent = previousTimerValues[elementId];
                 fallingNumber.style.zIndex = '2';
-                
+
                 const incomingNumber = document.createElement('div');
                 incomingNumber.className = 'time-value-inner next-number';
                 incomingNumber.textContent = formattedValue;
                 incomingNumber.style.zIndex = '1';
-                
+
                 container.innerHTML = '';
                 container.appendChild(fallingNumber);
                 container.appendChild(incomingNumber);
-                
+
                 setTimeout(() => {
                     container.innerHTML = '';
                     const finalNumber = document.createElement('div');
@@ -218,7 +220,7 @@ function updateTimerDisplay(elementId, value) {
                 container.innerHTML = `<div class="time-value-inner">${formattedValue}</div>`;
             }
         });
-        
+
         previousTimerValues[elementId] = formattedValue;
     }
 }
