@@ -17,9 +17,14 @@ const PRECACHE_URLS = [
   './Windows/index.html',
   './FF/index.html',
   // AÑADE TUS VÍDEOS AQUÍ (ejemplos)
-  './videos/CN4.mp4',
-  './videos/CN3.mp4',
-  './videos/CN2.mp4',
+  './AX NAVEGADOR/BG.mp4',
+  './AX NAVEGADOR/CN1.mp4',
+  './AX NAVEGADOR/CN2.mp4',
+  './AX NAVEGADOR/CN3.mp4',
+  './AX NAVEGADOR/CN4.mp4',
+  './AX NAVEGADOR/CN5.mp4',
+  './AX NAVEGADOR/CN6.mp4',
+  './AX NAVEGADOR/CN7.mp4',
   // ... añade todos los vídeos que uses
 ];
 
