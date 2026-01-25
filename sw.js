@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v10';
+const CACHE_NAME = 'ax-offline-v11';
 
 const PRECACHE_URLS = [
   './',
@@ -86,8 +86,8 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 🎬 Videos (Network First)
-  if (req.destination === 'video') {
+  // 🎬 Videos (Network First) - Detección mejorada
+  if (req.destination === 'video' || req.url.match(/\.(mp4|webm|ogg)$/i)) {
     event.respondWith(
       fetch(req).then(net => {
         const copy = net.clone();
