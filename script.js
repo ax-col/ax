@@ -386,7 +386,7 @@ function updateTimerDisplay(elementId, value) {
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW v27.1] Pre-cacheando recursos...');
+      console.log('[SW v26.3] Pre-cacheando recursos...');
       
       // Añadir con manejo de errores para cada archivo
       return Promise.all(
