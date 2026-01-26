@@ -2,21 +2,20 @@
 // VIDEOS POR ORIENTACIÓN - NUEVA ESTRUCTURA
 // ======================================================
 
-// Videos para PC/TV (horizontal)
-const videosHorizontal = [
-  "AX NAVEGADOR/AX1.mp4",
-  "AX NAVEGADOR/AX2.mp4", 
-  "AX NAVEGADOR/AX3.mp4",
-  "AX NAVEGADOR/AX4.mp4",
-  "AX NAVEGADOR/AX5.mp4"
+// VIDEOS QUE REALMENTE TIENES
+const videosDesktop = [
+  "AX-Files/AX-C1.mp4",
+  "AX-Files/AX-C2.mp4", 
+  "AX-Files/AX-C3.mp4",
+  "AX-Files/AX-C4.mp4",
+  "AX-Files/AX-C5.mp4",
+  "AX-Files/AX-C6.mp4"  // ¡Añade este!
 ];
 
-// Videos para móviles (vertical)
-const videosVertical = [
-  "AX NAVEGADOR/VERT1.mp4",   // Video vertical 1
-  "AX NAVEGADOR/VERT2.mp4",   // Video vertical 2
-  "AX NAVEGADOR/VERT3.mp4"    // Video vertical 3
-  // Agrega más videos verticales si necesitas
+const videosMobile = [
+  "AX-Files/AX-M1.mp4",
+  "AX-Files/AX-M2.mp4"
+  // NO incluir AX-M3.mp4, AX-M4.mp4, AX-M5.mp4 si no existen
 ];
 
 // ======================================================
