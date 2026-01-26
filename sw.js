@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v26.1';  // Incrementamos a v11
+const CACHE_NAME = 'ax-offline-v26.2';  // Incrementamos a v11
 
 const PRECACHE_URLS = [
   './',
@@ -23,16 +23,17 @@ const PRECACHE_URLS = [
   './AX-Files/AX-C3.mp4',
   './AX-Files/AX-C4.mp4',
   './AX-Files/AX-C5.mp4',
+ // './AX-Files/AX-C6.mp4',
   
   // VIDEOS VERTICALES (MÓVIL)
   './AX-Files/AX-M1.mp4',
   './AX-Files/AX-M2.mp4', 
-  './AX-Files/AX-M3.mp4',
-  './AX-Files/AX-M4.mp4',
-  './AX-Files/AX-M5.mp4',
+ // './AX-Files/AX-M3.mp4',
+ // './AX-Files/AX-M4.mp4',
+ // './AX-Files/AX-M5.mp4',
   
   // VIDEO BACKGROUND
-  './AX-Files/AX-U0.mp4'
+ // './AX-Files/AX-U0.mp4'
 ];
 
 // ---------- INSTALL ----------
