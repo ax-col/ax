@@ -17,6 +17,8 @@ const videosMobile = [
   "AX-Files/AX-M2.mp4"
   // NO incluir AX-M3.mp4, AX-M4.mp4, AX-M5.mp4 si no existen
 ];
+const videosHorizontal = videosDesktop;
+const videosVertical = videosMobile;
 
 // ======================================================
 // FUNCIONES DE DETECCIÓN
