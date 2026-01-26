@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v11';
+const CACHE_NAME = 'ax-offline-v26.1';  // Incrementamos a v11
 
 const PRECACHE_URLS = [
   './',
@@ -16,24 +16,30 @@ const PRECACHE_URLS = [
   './CPWEB/index.html',
   './Windows/index.html',
   './FF/index.html',
-  // AÑADE TUS VÍDEOS AQUÍ (ejemplos)
-  './AX NAVEGADOR/BG.mp4',
-  './AX NAVEGADOR/CN1.mp4',
-  './AX NAVEGADOR/CN2.mp4',
-  './AX NAVEGADOR/CN3.mp4',
-  './AX NAVEGADOR/CN4.mp4',
-  './AX NAVEGADOR/CN5.mp4',
-  './AX NAVEGADOR/CN6.mp4',
-  './AX NAVEGADOR/CN7.mp4',
-  // ... añade todos los vídeos que uses
+  
+  // VIDEOS HORIZONTALES (PC/TV)
+  './AX-Files/AX-C1.mp4',
+  './AX-Files/AX-C2.mp4',
+  './AX-Files/AX-C3.mp4',
+  './AX-Files/AX-C4.mp4',
+  './AX-Files/AX-C5.mp4',
+  
+  // VIDEOS VERTICALES (MÓVIL)
+  './AX-Files/AX-M1.mp4',
+  './AX-Files/AX-M2.mp4', 
+  './AX-Files/AX-M3.mp4',
+  './AX-Files/AX-M4.mp4',
+  './AX-Files/AX-M5.mp4',
+  
+  // VIDEO BACKGROUND
+  './AX-Files/AX-U0.mp4'
 ];
-
 
 // ---------- INSTALL ----------
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW] Pre-cacheando recursos...');
+      console.log('[SW v11] Pre-cacheando recursos con videos por orientación...');
       return cache.addAll(PRECACHE_URLS);
     })
   );
@@ -47,6 +53,7 @@ self.addEventListener('activate', event => {
       Promise.all(
         keys.map(k => {
           if (k !== CACHE_NAME && k !== 'AX-NAVEGADOR') {
+            console.log('[SW v11] Eliminando cache antiguo:', k);
             return caches.delete(k);
           }
         })
@@ -54,6 +61,7 @@ self.addEventListener('activate', event => {
     )
   );
   self.clients.claim();
+  console.log('[SW v11] Activado y listo para todos dispositivos');
 });
 
 // ---------- FETCH ----------
