@@ -115,18 +115,21 @@
   <div class="titulo-segmentos">SEGMENTOS DE VIDEO</div>
   <div class="mensaje-movil">Los segmentos de video solo están disponibles en versión de escritorio</div>
   <div class="botones-video">
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN1.mp4', 0)">CN1</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN2.mp4', 1)">CN2</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN3.mp4', 2)">CN3</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN4.mp4', 3)">CN4</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN5.mp4', 4)">CN5</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN6.mp4', 5)">CN6</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN7.mp4', 6)">CN7</button>
-   <!-- <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN8.mp4', 7)">CN8</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN9.mp4', 8)">CN9</button>
-    <button class="btn-video" onclick="cambiarVideo('AX NAVEGADOR/CN10.mp4', 9)">CN10</button> -->
+    <!-- Botones para videos horizontales -->
+    <button class="btn-video" data-video="AX-Files/AX-M1.mp4">AX-1</button>
+    <button class="btn-video" data-video="AX-Files/AX-M2.mp4">AX-2</button>
+    <button class="btn-video" data-video="AX-Files/AX-M3.mp4">AX-3</button>
+    <button class="btn-video" data-video="AX-Files/AX-M4.mp4">AX-4</button>
+    <button class="btn-video" data-video="AX-Files/AX-M5.mp4">AX-5</button>
+    
+    <!-- Botones para videos verticales -->
+    <button class="btn-video" data-video="AX-Files/AX-C1.mp4">AX-1</button>
+    <button class="btn-video" data-video="AX-Files/AX-C2.mp4">AX-2</button>
+    <button class="btn-video" data-video="AX-Files/AX-C3.mp4">AX-3</button>
+    <button class="btn-video" data-video="AX-Files/AX-C4.mp4">AX-4</button>
+    <button class="btn-video" data-video="AX-Files/AX-C5.mp4">AX-5</button>
   </div>
-  <div class="info-video" id="infoVideo">Video actual: CN7.mp4</div>
+  <div class="info-video" id="infoVideo">Video actual: AX-X0.mp4</div>
 </div>
 <video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto" style="display:none;">
   <source id="videoSourceDesktop" src="" type="video/mp4" />
