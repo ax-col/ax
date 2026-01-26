@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v26.2';  // Incrementamos a v11
+const CACHE_NAME = 'ax-offline-v26.3';  // Nueva versión URGENTE
 
 const PRECACHE_URLS = [
   './',
@@ -17,23 +17,16 @@ const PRECACHE_URLS = [
   './Windows/index.html',
   './FF/index.html',
   
-  // VIDEOS HORIZONTALES (PC/TV)
+  // VIDEOS QUE SÍ EXISTEN (8 videos):
   './AX-Files/AX-C1.mp4',
   './AX-Files/AX-C2.mp4',
   './AX-Files/AX-C3.mp4',
   './AX-Files/AX-C4.mp4',
   './AX-Files/AX-C5.mp4',
- // './AX-Files/AX-C6.mp4',
-  
-  // VIDEOS VERTICALES (MÓVIL)
+  './AX-Files/AX-C6.mp4',
   './AX-Files/AX-M1.mp4',
-  './AX-Files/AX-M2.mp4', 
- // './AX-Files/AX-M3.mp4',
- // './AX-Files/AX-M4.mp4',
- // './AX-Files/AX-M5.mp4',
-  
-  // VIDEO BACKGROUND
- // './AX-Files/AX-U0.mp4'
+  './AX-Files/AX-M2.mp4'
+  // NO incluir AX-M3, AX-M4, AX-M5, AX-U0 (no existen)
 ];
 
 // ---------- INSTALL ----------
