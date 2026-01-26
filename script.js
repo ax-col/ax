@@ -382,26 +382,6 @@ function updateTimerDisplay(elementId, value) {
     }
 }
 
-// ---------- INSTALL ----------
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW v26.3] Pre-cacheando recursos...');
-      
-      // Añadir con manejo de errores para cada archivo
-      return Promise.all(
-        PRECACHE_URLS.map(url => {
-          return cache.add(url).catch(err => {
-            console.warn(`[SW] No se pudo cachear ${url}:`, err.message);
-            // Continuar aunque falle uno
-          });
-        })
-      );
-    })
-  );
-  self.skipWaiting();
-});
-
 // Iniciar temporizador si existen los elementos
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('seconds-container')) {
