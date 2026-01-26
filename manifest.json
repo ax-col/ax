@@ -1,11 +1,10 @@
 {
-  "name": "Λ̷X PROYECT",
-  "short_name": "AX V-01.25",
+  "name": "AX PRINCIPAL",
+  "short_name": "AX",
   "start_url": "/ax/",
-  "scope": "/ax/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "display": "standalone",  // Cambia de "fullscreen" si es necesario
+  "background_color": "#000000",
+  "theme_color": "#ff0000",
   "icons": [
     {
       "src": "png-principal/icon-192x192.png",
@@ -17,5 +16,7 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "scope": "/ax/",
+  "description": "AX en todos los dispositivos"
 }
