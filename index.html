@@ -15,7 +15,7 @@
 <link rel="manifest" href="manifest.json">
 
 <!-- Enlace CSS corregido con versión (sin duplicar) -->
-<link rel="stylesheet" href="styles.css?v=20260126">
+<link rel="stylesheet" href="styles.css?v=20260127">
 
 <meta property="og:title" content="AX – PROYECT">
 <meta property="og:description"
@@ -115,33 +115,34 @@
   <div class="titulo-segmentos">SEGMENTOS DE VIDEO</div>
   <div class="mensaje-movil">Los segmentos de video solo están disponibles en versión de escritorio</div>
   <div class="botones-video">
-    <!-- Botones para videos verticales -->
-    <button class="btn-video" data-video="AX-Files/AX-M1.mp4">AX-1</button>
-    <button class="btn-video" data-video="AX-Files/AX-M2.mp4">AX-2</button>
-   <!-- <button class="btn-video" data-video="AX-Files/AX-M3.mp4">AX-3</button>
-    <button class="btn-video" data-video="AX-Files/AX-M4.mp4">AX-4</button>
-    <button class="btn-video" data-video="AX-Files/AX-M5.mp4">AX-5</button>
-    <button class="btn-video" data-video="AX-Files/AX-M6.mp4">AX-6</button>
-    -->
-    <!-- Botones para videos horizontal-->
-    <button class="btn-video" data-video="AX-Files/AX-C1.mp4">AX-1</button>
-    <button class="btn-video" data-video="AX-Files/AX-C2.mp4">AX-2</button>
-    <button class="btn-video" data-video="AX-Files/AX-C3.mp4">AX-3</button>
-    <button class="btn-video" data-video="AX-Files/AX-C4.mp4">AX-4</button>
-    <button class="btn-video" data-video="AX-Files/AX-C5.mp4">AX-5</button>
-    <button class="btn-video" data-video="AX-Files/AX-C6.mp4">AX-6</button>
-  </div>
-  <div class="info-video" id="infoVideo">Video actual: AX-X0.mp4</div>
-</div>
-<video class="video-desktop" id="videoDesktop" autoplay muted loop playsinline preload="auto" style="display:none;">
-  <source id="videoSourceDesktop" src="" type="video/mp4" />
-</video>
-<video class="video-mobile" id="videoMobile" autoplay muted loop playsinline preload="auto" style="display:none;">
-  <source id="videoSourceMobile" src="" type="video/mp4" />
+  <video class="video-fondo" id="videoFondo" autoplay muted loop playsinline preload="auto">
+  <!-- El src se establecerá por JavaScript -->
 </video>
 
+  <!-- Solo 6 botones totales -->
+  <button class="btn-video" data-video="AX-Files/AX-C1.mp4">AX-1</button>
+  <button class="btn-video" data-video="AX-Files/AX-C2.mp4">AX-2</button>
+  <button class="btn-video" data-video="AX-Files/AX-C3.mp4">AX-3</button>
+  <button class="btn-video" data-video="AX-Files/AX-C4.mp4">AX-4</button>
+  <button class="btn-video" data-video="AX-Files/AX-C5.mp4">AX-5</button>
+  <button class="btn-video" data-video="AX-Files/AX-C6.mp4">AX-6</button>
+</div>
+  <div class="info-video" id="infoVideo">Video actual: AX-X0.mp4</div>
+</div>
+<!-- Video de fondo (siempre visible) -->
+<video class="video-fondo" id="videoFondo" autoplay muted loop playsinline preload="auto">
+  <source src="AX-Files/AX-C1.mp4" type="video/mp4" />
+</video>
+
+<!-- Video reproductor (para segmentos, inicialmente oculto) -->
+<div class="video-reproductor" id="videoReproductor">
+  <video id="videoSegmento" autoplay muted loop playsinline preload="auto">
+    <source id="videoSourceSegmento" src="" type="video/mp4" />
+  </video>
+</div>
+
 <!-- Script JS corregido con versión (sin duplicar) -->
-<script src="script.js?v=20260126"></script>
+<script src="script.js?v=20260127"></script>
 
 </body>
 </html>
