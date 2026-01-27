@@ -1,37 +1,31 @@
 // ======================================================
-// VIDEOS DISPONIBLES SEGÚN DISPOSITIVO
+// VIDEOS DISPONIBLES - DEFINIDOS POR TIPO
 // ======================================================
 
-const videosPC = [
-  "AX-Files/AX-C1.mp4",
-  "AX-Files/AX-C2.mp4", 
-  "AX-Files/AX-C3.mp4",
-  "AX-Files/AX-C4.mp4",
-  "AX-Files/AX-C5.mp4",
-  "AX-Files/AX-C6.mp4"
-];
-
-const videosMovil = [
-  "AX-Files/AX-M1.mp4",
-  "AX-Files/AX-M2.mp4"
-  // Solo los que existen: M1 y M2
-];
+const videosPorTipo = {
+  'PC': [
+    "AX-Files/AX-C1.mp4",
+    "AX-Files/AX-C2.mp4", 
+    "AX-Files/AX-C3.mp4",
+    "AX-Files/AX-C4.mp4",
+    "AX-Files/AX-C5.mp4",
+    "AX-Files/AX-C6.mp4"
+  ],
+  'MOVIL': [
+    "AX-Files/AX-M1.mp4",
+    "AX-Files/AX-M2.mp4"
+    // Solo M1 y M2 porque son los que existen
+  ]
+};
 
 // ======================================================
 // DETECCIÓN DE DISPOSITIVO
 // ======================================================
 
-function esMovil() {
-  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-         window.innerWidth <= 768;
-}
-
-function obtenerVideosSegunDispositivo() {
-  return esMovil() ? videosMovil : videosPC;
-}
-
-function obtenerTipoDispositivo() {
-  return esMovil() ? 'móvil' : 'PC';
+function detectarDispositivo() {
+  const esMovil = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+                  window.innerWidth <= 768;
+  return esMovil ? 'MOVIL' : 'PC';
 }
 
 // ======================================================
@@ -40,93 +34,155 @@ function obtenerTipoDispositivo() {
 
 let videoFondo = null;
 let botonesVideo = [];
-let listaVideosActual = [];
-let tipoActual = '';
+let tipoDispositivo = '';
+let videosDisponibles = [];
+let videoActualIndex = 0;
 
 // ======================================================
 // FUNCIONES PRINCIPALES
 // ======================================================
 
-// Inicializar el video de fondo
-function inicializarVideoFondo() {
+function inicializarSistema() {
+  // 1. Obtener video de fondo
   videoFondo = document.getElementById("videoFondo");
   
-  // Determinar qué videos usar según dispositivo
-  listaVideosActual = obtenerVideosSegunDispositivo();
-  tipoActual = obtenerTipoDispositivo();
+  // 2. Detectar dispositivo
+  tipoDispositivo = detectarDispositivo();
+  console.log(`📱 Dispositivo detectado: ${tipoDispositivo}`);
   
-  // Elegir un video al azar
-  const indiceAleatorio = Math.floor(Math.random() * listaVideosActual.length);
-  const videoAleatorio = listaVideosActual[indiceAleatorio];
+  // 3. Obtener lista de videos para este dispositivo
+  videosDisponibles = videosPorTipo[tipoDispositivo];
+  console.log(`🎬 Videos disponibles: ${videosDisponibles.length}`);
   
-  // Establecer el video de fondo
+  // 4. Elegir un video ALEATORIO al inicio
+  videoActualIndex = Math.floor(Math.random() * videosDisponibles.length);
+  const videoAleatorio = videosDisponibles[videoActualIndex];
+  
+  // 5. Establecer el video de fondo
   videoFondo.src = videoAleatorio;
   videoFondo.load();
-  videoFondo.play().catch(() => console.log('Autoplay bloqueado, haz clic en la página'));
   
-  // Actualizar información
+  // 6. Reproducir (con manejo de autoplay)
+  const promesaReproduccion = videoFondo.play();
+  if (promesaReproduccion !== undefined) {
+    promesaReproduccion.catch(error => {
+      console.log('⚠️ Autoplay bloqueado, requiere interacción del usuario');
+      // Mostrar mensaje si es necesario
+    });
+  }
+  
+  // 7. Actualizar información
   actualizarInfoVideo(videoAleatorio);
+  
+  // 8. Configurar botones
+  configurarBotones();
+  
+  // 9. Añadir evento para permitir reproducción con clic en cualquier lugar
+  document.addEventListener('click', permitirReproduccion, { once: true });
 }
 
-// Inicializar botones
-function inicializarBotones() {
+function permitirReproduccion() {
+  if (videoFondo.paused) {
+    videoFondo.play().then(() => {
+      console.log('▶️ Reproducción iniciada después de interacción del usuario');
+    }).catch(e => {
+      console.log('❌ Error al reproducir:', e);
+    });
+  }
+}
+
+function configurarBotones() {
   botonesVideo = document.querySelectorAll('.btn-video');
   
-  // Ocultar botones que no tienen video
+  // Mostrar/ocultar botones según videos disponibles
   botonesVideo.forEach((btn, index) => {
-    if (index < listaVideosActual.length) {
+    if (index < videosDisponibles.length) {
+      // MOSTRAR botón (tiene video disponible)
       btn.style.display = 'inline-block';
-      const rutaVideo = listaVideosActual[index];
-      btn.onclick = () => cambiarVideoFondo(rutaVideo, index);
+      btn.dataset.videoIndex = index;
+      
+      // Asignar evento de clic
+      btn.onclick = () => {
+        cambiarVideo(index);
+      };
+      
+      // Marcar como activo si es el video actual
+      if (index === videoActualIndex) {
+        btn.classList.add('activo');
+      } else {
+        btn.classList.remove('activo');
+      }
     } else {
-      btn.style.display = 'none'; // Ocultar botones sin video
+      // OCULTAR botón (no hay video para este índice)
+      btn.style.display = 'none';
     }
   });
 }
 
-// Cambiar el video de fondo
-function cambiarVideoFondo(rutaVideo, indice) {
-  if (!videoFondo) return;
+function cambiarVideo(nuevoIndex) {
+  if (nuevoIndex >= videosDisponibles.length) {
+    console.log('❌ Índice de video no válido');
+    return;
+  }
   
-  videoFondo.src = rutaVideo;
+  const nuevoVideo = videosDisponibles[nuevoIndex];
+  console.log(`🔄 Cambiando a video: ${nuevoVideo}`);
+  
+  // Cambiar el video
+  videoFondo.src = nuevoVideo;
   videoFondo.load();
-  videoFondo.play().catch(e => console.log('Error al reproducir:', e));
+  videoFondo.play().catch(e => {
+    console.log('Error al reproducir nuevo video:', e);
+  });
+  
+  // Actualizar índice actual
+  videoActualIndex = nuevoIndex;
   
   // Actualizar información
-  actualizarInfoVideo(rutaVideo);
+  actualizarInfoVideo(nuevoVideo);
   
-  // Activar botón correspondiente
-  botonesVideo.forEach(btn => btn.classList.remove('activo'));
-  if (botonesVideo[indice]) {
-    botonesVideo[indice].classList.add('activo');
+  // Actualizar botones activos
+  botonesVideo.forEach((btn, index) => {
+    if (index === nuevoIndex) {
+      btn.classList.add('activo');
+    } else {
+      btn.classList.remove('activo');
+    }
+  });
+}
+
+function actualizarInfoVideo(rutaVideo) {
+  const nombreVideo = rutaVideo.split('/').pop();
+  const elementoInfo = document.getElementById('infoVideo');
+  if (elementoInfo) {
+    elementoInfo.textContent = `Video actual (${tipoDispositivo}): ${nombreVideo}`;
   }
 }
 
-// Actualizar texto informativo
-function actualizarInfoVideo(rutaVideo) {
-  const nombreVideo = rutaVideo.split('/').pop();
-  document.getElementById('infoVideo').textContent = 
-    `Video actual (${tipoActual}): ${nombreVideo}`;
-}
+// ======================================================
+// TOGGLE MUTE (CONTROL DE SONIDO)
+// ======================================================
 
-// Función de mute toggle
 window.toggleMute = function() {
   if (!videoFondo) return;
 
   const btn = document.querySelector('.mute-toggle');
+  
+  // Alternar mute
   videoFondo.muted = !videoFondo.muted;
-
+  
+  // Actualizar texto del botón
   if (videoFondo.muted) {
     btn.textContent = 'ACTIVAR SONIDO';
     btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
   } else {
     btn.textContent = 'SILENCIAR';
-    btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
+    btn.style.background = 'linear-gradient(135deg, #FF0000 0%, #FF8800 100%)';
   }
 }
 
 // ======================================================
-// ANIMACIÓN DE TEXTO
+// ANIMACIÓN DE TEXTO (MANTENER)
 // ======================================================
 
 function animarTexto() {
@@ -155,7 +211,7 @@ function animarTexto() {
 }
 
 // ======================================================
-// TEMPORIZADOR (ANIMACIÓN DE CAÍDA)
+// TEMPORIZADOR (MANTENER)
 // ======================================================
 
 let previousTimerValues = {
@@ -225,35 +281,7 @@ function updateTimerDisplay(elementId, value) {
 }
 
 // ======================================================
-// INICIALIZACIÓN GENERAL
-// ======================================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. Inicializar video de fondo
-  inicializarVideoFondo();
-  
-  // 2. Inicializar botones
-  inicializarBotones();
-  
-  // 3. Iniciar animación de texto
-  animarTexto();
-  
-  // 4. Iniciar temporizador
-  if (document.getElementById('seconds-container')) {
-    updateTimer();
-    setInterval(updateTimer, 1000);
-  }
-  
-  // 5. Permitir autoplay al hacer clic en la página
-  document.body.addEventListener('click', () => {
-    if (videoFondo && videoFondo.paused) {
-      videoFondo.play();
-    }
-  });
-});
-
-// ======================================================
-// SERVICE WORKER
+// SERVICE WORKER (OPCIONAL)
 // ======================================================
 
 if ('serviceWorker' in navigator) {
@@ -268,7 +296,49 @@ if ('serviceWorker' in navigator) {
         reg.update();
       })
       .catch(err => {
-        console.log('❌ Error:', err);
+        console.log('❌ Error al registrar SW:', err);
       });
   });
 }
+
+// ======================================================
+// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// ======================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 Iniciando sistema de video...');
+  
+  // 1. Inicializar sistema de video
+  inicializarSistema();
+  
+  // 2. Iniciar animación de texto
+  animarTexto();
+  
+  // 3. Iniciar temporizador
+  if (document.getElementById('seconds-container')) {
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  }
+  
+  // 4. Añadir botón de mute si existe
+  const muteBtn = document.querySelector('.mute-toggle');
+  if (muteBtn && videoFondo) {
+    // Configurar estado inicial del botón
+    muteBtn.textContent = videoFondo.muted ? 'ACTIVAR SONIDO' : 'SILENCIAR';
+  }
+});
+
+// ======================================================
+// MANEJO DE RECARGA/REDIMENSIONAMIENTO
+// ======================================================
+
+// Recargar video si cambia el tamaño de ventana (cambio de dispositivo simulado)
+window.addEventListener('resize', () => {
+  const nuevoTipo = detectarDispositivo();
+  if (nuevoTipo !== tipoDispositivo) {
+    console.log('🔄 Cambio de dispositivo detectado, recargando...');
+    setTimeout(() => {
+      location.reload();
+    }, 500);
+  }
+});
