@@ -1,21 +1,11 @@
 // ======================================================
-// VIDEOS DISPONIBLES - DEFINIDOS POR TIPO
+// VIDEOS DISPONIBLES SEGÚN DISPOSITIVO
 // ======================================================
 
-const videosPorTipo = {
-  'PC': [
-    "AX-Files/AX-C1.mp4",
-    "AX-Files/AX-C2.mp4", 
-    "AX-Files/AX-C3.mp4",
-    "AX-Files/AX-C4.mp4",
-    "AX-Files/AX-C5.mp4",
-    "AX-Files/AX-C6.mp4"
-  ],
-  'MOVIL': [
-    "AX-Files/AX-M1.mp4",
-    "AX-Files/AX-M2.mp4"
-    // Solo M1 y M2 porque son los que existen
-  ]
+const videosPorDispositivo = {
+  PC: ["AX-Files/AX-C1.mp4", "AX-Files/AX-C2.mp4", "AX-Files/AX-C3.mp4", 
+       "AX-Files/AX-C4.mp4", "AX-Files/AX-C5.mp4", "AX-Files/AX-C6.mp4"],
+  MOVIL: ["AX-Files/AX-M1.mp4", "AX-Files/AX-M2.mp4"]
 };
 
 // ======================================================
@@ -23,9 +13,9 @@ const videosPorTipo = {
 // ======================================================
 
 function detectarDispositivo() {
-  const esMovil = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-                  window.innerWidth <= 768;
-  return esMovil ? 'MOVIL' : 'PC';
+  return (window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) 
+    ? 'MOVIL' 
+    : 'PC';
 }
 
 // ======================================================
@@ -34,77 +24,56 @@ function detectarDispositivo() {
 
 let videoFondo = null;
 let botonesVideo = [];
-let tipoDispositivo = '';
-let videosDisponibles = [];
+let videosActuales = [];
+let dispositivoActual = '';
 let videoActualIndex = 0;
 
 // ======================================================
-// FUNCIONES PRINCIPALES
+// INICIALIZACIÓN
 // ======================================================
 
-function inicializarSistema() {
-  // 1. Obtener video de fondo
-  videoFondo = document.getElementById("videoFondo");
+function inicializarVideo() {
+  console.log('🎬 Inicializando sistema de video...');
+  
+  // 1. Obtener elementos
+  videoFondo = document.getElementById('videoFondo');
   
   // 2. Detectar dispositivo
-  tipoDispositivo = detectarDispositivo();
-  console.log(`📱 Dispositivo detectado: ${tipoDispositivo}`);
+  dispositivoActual = detectarDispositivo();
+  console.log(`📱 Dispositivo: ${dispositivoActual}`);
   
-  // 3. Obtener lista de videos para este dispositivo
-  videosDisponibles = videosPorTipo[tipoDispositivo];
-  console.log(`🎬 Videos disponibles: ${videosDisponibles.length}`);
+  // 3. Obtener videos para este dispositivo
+  videosActuales = videosPorDispositivo[dispositivoActual];
+  console.log(`🎥 Videos disponibles: ${videosActuales.length}`);
   
-  // 4. Elegir un video ALEATORIO al inicio
-  videoActualIndex = Math.floor(Math.random() * videosDisponibles.length);
-  const videoAleatorio = videosDisponibles[videoActualIndex];
+  // 4. Elegir video aleatorio
+  videoActualIndex = Math.floor(Math.random() * videosActuales.length);
+  const videoAleatorio = videosActuales[videoActualIndex];
   
-  // 5. Establecer el video de fondo
+  // 5. Establecer video de fondo
   videoFondo.src = videoAleatorio;
-  videoFondo.load();
   
-  // 6. Reproducir (con manejo de autoplay)
-  const promesaReproduccion = videoFondo.play();
-  if (promesaReproduccion !== undefined) {
-    promesaReproduccion.catch(error => {
-      console.log('⚠️ Autoplay bloqueado, requiere interacción del usuario');
-      // Mostrar mensaje si es necesario
-    });
-  }
+  // 6. Intentar reproducir
+  videoFondo.play().catch(e => {
+    console.log('⚠️ Autoplay bloqueado:', e);
+  });
   
   // 7. Actualizar información
   actualizarInfoVideo(videoAleatorio);
   
   // 8. Configurar botones
   configurarBotones();
-  
-  // 9. Añadir evento para permitir reproducción con clic en cualquier lugar
-  document.addEventListener('click', permitirReproduccion, { once: true });
-}
-
-function permitirReproduccion() {
-  if (videoFondo.paused) {
-    videoFondo.play().then(() => {
-      console.log('▶️ Reproducción iniciada después de interacción del usuario');
-    }).catch(e => {
-      console.log('❌ Error al reproducir:', e);
-    });
-  }
 }
 
 function configurarBotones() {
   botonesVideo = document.querySelectorAll('.btn-video');
+  console.log(`🔄 Configurando ${botonesVideo.length} botones...`);
   
-  // Mostrar/ocultar botones según videos disponibles
   botonesVideo.forEach((btn, index) => {
-    if (index < videosDisponibles.length) {
-      // MOSTRAR botón (tiene video disponible)
+    if (index < videosActuales.length) {
+      // MOSTRAR y configurar botón
       btn.style.display = 'inline-block';
-      btn.dataset.videoIndex = index;
-      
-      // Asignar evento de clic
-      btn.onclick = () => {
-        cambiarVideo(index);
-      };
+      btn.onclick = () => cambiarVideo(index);
       
       // Marcar como activo si es el video actual
       if (index === videoActualIndex) {
@@ -113,29 +82,23 @@ function configurarBotones() {
         btn.classList.remove('activo');
       }
     } else {
-      // OCULTAR botón (no hay video para este índice)
+      // OCULTAR botón (no hay video)
       btn.style.display = 'none';
     }
   });
 }
 
 function cambiarVideo(nuevoIndex) {
-  if (nuevoIndex >= videosDisponibles.length) {
-    console.log('❌ Índice de video no válido');
-    return;
-  }
+  if (nuevoIndex >= videosActuales.length) return;
   
-  const nuevoVideo = videosDisponibles[nuevoIndex];
-  console.log(`🔄 Cambiando a video: ${nuevoVideo}`);
+  const nuevoVideo = videosActuales[nuevoIndex];
+  console.log(`🔄 Cambiando a: ${nuevoVideo}`);
   
-  // Cambiar el video
+  // Cambiar video
   videoFondo.src = nuevoVideo;
-  videoFondo.load();
-  videoFondo.play().catch(e => {
-    console.log('Error al reproducir nuevo video:', e);
-  });
+  videoFondo.play().catch(e => console.log('Error:', e));
   
-  // Actualizar índice actual
+  // Actualizar índice
   videoActualIndex = nuevoIndex;
   
   // Actualizar información
@@ -153,25 +116,22 @@ function cambiarVideo(nuevoIndex) {
 
 function actualizarInfoVideo(rutaVideo) {
   const nombreVideo = rutaVideo.split('/').pop();
-  const elementoInfo = document.getElementById('infoVideo');
-  if (elementoInfo) {
-    elementoInfo.textContent = `Video actual (${tipoDispositivo}): ${nombreVideo}`;
+  const infoElement = document.getElementById('infoVideo');
+  if (infoElement) {
+    infoElement.textContent = `Video actual (${dispositivoActual}): ${nombreVideo}`;
   }
 }
 
 // ======================================================
-// TOGGLE MUTE (CONTROL DE SONIDO)
+// CONTROL DE SONIDO
 // ======================================================
 
 window.toggleMute = function() {
   if (!videoFondo) return;
-
+  
+  videoFondo.muted = !videoFondo.muted;
   const btn = document.querySelector('.mute-toggle');
   
-  // Alternar mute
-  videoFondo.muted = !videoFondo.muted;
-  
-  // Actualizar texto del botón
   if (videoFondo.muted) {
     btn.textContent = 'ACTIVAR SONIDO';
     btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
@@ -182,7 +142,7 @@ window.toggleMute = function() {
 }
 
 // ======================================================
-// ANIMACIÓN DE TEXTO (MANTENER)
+// ANIMACIÓN DE TEXTO
 // ======================================================
 
 function animarTexto() {
@@ -211,134 +171,91 @@ function animarTexto() {
 }
 
 // ======================================================
-// TEMPORIZADOR (MANTENER)
+// TEMPORIZADOR
 // ======================================================
 
-let previousTimerValues = {
-    days: '00',
-    hours: '00',
-    minutes: '00',
-    seconds: '00'
-};
+let previousTimerValues = { days: '00', hours: '00', minutes: '00', seconds: '00' };
 
 function updateTimer() {
-    const targetDate = new Date('2026-04-24T10:00:00').getTime();
-    const now = new Date().getTime();
-    const difference = targetDate - now;
+  const targetDate = new Date('2026-04-24T10:00:00').getTime();
+  const now = new Date().getTime();
+  const difference = targetDate - now;
 
-    if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+  if (difference > 0) {
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        updateTimerDisplay('days', days);
-        updateTimerDisplay('hours', hours);
-        updateTimerDisplay('minutes', minutes);
-        updateTimerDisplay('seconds', seconds);
-    } else {
-        const titles = document.querySelectorAll('.timer-title');
-        titles.forEach(t => t.textContent = '¡BIENVENIDO 2026!');
-    }
+    updateTimerDisplay('days', days);
+    updateTimerDisplay('hours', hours);
+    updateTimerDisplay('minutes', minutes);
+    updateTimerDisplay('seconds', seconds);
+  } else {
+    const titles = document.querySelectorAll('.timer-title');
+    titles.forEach(t => t.textContent = '¡BIENVENIDO 2026!');
+  }
 }
 
 function updateTimerDisplay(elementId, value) {
-    const formattedValue = String(value).padStart(2, '0');
+  const formattedValue = String(value).padStart(2, '0');
+  if (previousTimerValues[elementId] !== formattedValue) {
+    const containers = document.querySelectorAll(`[id="${elementId}-container"]`);
+    containers.forEach(container => {
+      if (container.offsetParent !== null) {
+        const fallingNumber = document.createElement('div');
+        fallingNumber.className = 'time-value-inner current-number';
+        fallingNumber.textContent = previousTimerValues[elementId];
+        fallingNumber.style.zIndex = '2';
 
-    if (previousTimerValues[elementId] !== formattedValue) {
-        const containers = document.querySelectorAll(`[id="${elementId}-container"]`);
+        const incomingNumber = document.createElement('div');
+        incomingNumber.className = 'time-value-inner next-number';
+        incomingNumber.textContent = formattedValue;
+        incomingNumber.style.zIndex = '1';
 
-        containers.forEach(container => {
-            if (container.offsetParent !== null) {
-                const fallingNumber = document.createElement('div');
-                fallingNumber.className = 'time-value-inner current-number';
-                fallingNumber.textContent = previousTimerValues[elementId];
-                fallingNumber.style.zIndex = '2';
+        container.innerHTML = '';
+        container.appendChild(fallingNumber);
+        container.appendChild(incomingNumber);
 
-                const incomingNumber = document.createElement('div');
-                incomingNumber.className = 'time-value-inner next-number';
-                incomingNumber.textContent = formattedValue;
-                incomingNumber.style.zIndex = '1';
-
-                container.innerHTML = '';
-                container.appendChild(fallingNumber);
-                container.appendChild(incomingNumber);
-
-                setTimeout(() => {
-                    container.innerHTML = '';
-                    const finalNumber = document.createElement('div');
-                    finalNumber.className = 'time-value-inner';
-                    finalNumber.textContent = formattedValue;
-                    container.appendChild(finalNumber);
-                }, 800);
-            } else {
-                container.innerHTML = `<div class="time-value-inner">${formattedValue}</div>`;
-            }
-        });
-
-        previousTimerValues[elementId] = formattedValue;
-    }
+        setTimeout(() => {
+          container.innerHTML = '';
+          const finalNumber = document.createElement('div');
+          finalNumber.className = 'time-value-inner';
+          finalNumber.textContent = formattedValue;
+          container.appendChild(finalNumber);
+        }, 800);
+      } else {
+        container.innerHTML = `<div class="time-value-inner">${formattedValue}</div>`;
+      }
+    });
+    previousTimerValues[elementId] = formattedValue;
+  }
 }
 
 // ======================================================
-// SERVICE WORKER (OPCIONAL)
-// ======================================================
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    const swPath = window.location.pathname.includes('/ax/') 
-      ? '/ax/sw.js' 
-      : '/sw.js';
-
-    navigator.serviceWorker.register(swPath)
-      .then(reg => {
-        console.log('✅ ServiceWorker registrado');
-        reg.update();
-      })
-      .catch(err => {
-        console.log('❌ Error al registrar SW:', err);
-      });
-  });
-}
-
-// ======================================================
-// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// INICIALIZACIÓN GENERAL
 // ======================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 Iniciando sistema de video...');
+  console.log('🚀 Página cargada, iniciando...');
   
-  // 1. Inicializar sistema de video
-  inicializarSistema();
+  // 1. Inicializar video
+  inicializarVideo();
   
-  // 2. Iniciar animación de texto
+  // 2. Animación de texto
   animarTexto();
   
-  // 3. Iniciar temporizador
+  // 3. Temporizador
   if (document.getElementById('seconds-container')) {
     updateTimer();
     setInterval(updateTimer, 1000);
   }
   
-  // 4. Añadir botón de mute si existe
-  const muteBtn = document.querySelector('.mute-toggle');
-  if (muteBtn && videoFondo) {
-    // Configurar estado inicial del botón
-    muteBtn.textContent = videoFondo.muted ? 'ACTIVAR SONIDO' : 'SILENCIAR';
-  }
-});
-
-// ======================================================
-// MANEJO DE RECARGA/REDIMENSIONAMIENTO
-// ======================================================
-
-// Recargar video si cambia el tamaño de ventana (cambio de dispositivo simulado)
-window.addEventListener('resize', () => {
-  const nuevoTipo = detectarDispositivo();
-  if (nuevoTipo !== tipoDispositivo) {
-    console.log('🔄 Cambio de dispositivo detectado, recargando...');
-    setTimeout(() => {
-      location.reload();
-    }, 500);
-  }
+  // 4. Permitir reproducción al hacer clic
+  document.addEventListener('click', function iniciarAudio() {
+    if (videoFondo && videoFondo.paused) {
+      videoFondo.play();
+    }
+    document.removeEventListener('click', iniciarAudio);
+  });
 });
