@@ -1,242 +1,128 @@
 // ======================================================
-// VIDEOS POR ORIENTACIÓN - NUEVA ESTRUCTURA
+// VIDEOS DISPONIBLES SEGÚN DISPOSITIVO
 // ======================================================
 
-// VIDEOS QUE REALMENTE TIENES
-const videosDesktop = [
+const videosPC = [
   "AX-Files/AX-C1.mp4",
   "AX-Files/AX-C2.mp4", 
   "AX-Files/AX-C3.mp4",
   "AX-Files/AX-C4.mp4",
   "AX-Files/AX-C5.mp4",
-  "AX-Files/AX-C6.mp4"  // ¡Añade este!
+  "AX-Files/AX-C6.mp4"
 ];
 
-const videosMobile = [
+const videosMovil = [
   "AX-Files/AX-M1.mp4",
   "AX-Files/AX-M2.mp4"
-  // NO incluir AX-M3.mp4, AX-M4.mp4, AX-M5.mp4 si no existen
+  // Solo los que existen: M1 y M2
 ];
-const videosHorizontal = videosDesktop;
-const videosVertical = videosMobile;
 
 // ======================================================
-// FUNCIONES DE DETECCIÓN
+// DETECCIÓN DE DISPOSITIVO
 // ======================================================
 
-// Detectar si es dispositivo móvil
-function esDispositivoMovil() {
+function esMovil() {
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
          window.innerWidth <= 768;
 }
 
-// Detectar si está en orientación vertical
-function esOrientacionVertical() {
-  return window.innerHeight > window.innerWidth;
+function obtenerVideosSegunDispositivo() {
+  return esMovil() ? videosMovil : videosPC;
 }
 
-// Obtener lista de videos según orientación
-function obtenerVideosSegunOrientacion() {
-  // Si es móvil Y está en vertical, usar videos verticales
-  if (esDispositivoMovil() && esOrientacionVertical()) {
-    return {
-      lista: videosVertical,
-      tipo: 'vertical'
-    };
-  }
-  
-  // Para todo lo demás (PC, TV, móvil horizontal): videos horizontales
-  return {
-    lista: videosHorizontal,
-    tipo: 'horizontal'
-  };
+function obtenerTipoDispositivo() {
+  return esMovil() ? 'móvil' : 'PC';
 }
 
 // ======================================================
 // VARIABLES GLOBALES
 // ======================================================
 
-let videoElement, videoSource;
-let currentVideoIndex = 0;
+let videoFondo = null;
 let botonesVideo = [];
-let listaVideosActual = videosHorizontal;
-let tipoVideoActual = 'horizontal';
-let orientacionAnterior = esOrientacionVertical() ? 'vertical' : 'horizontal';
+let listaVideosActual = [];
+let tipoActual = '';
 
 // ======================================================
 // FUNCIONES PRINCIPALES
 // ======================================================
 
-// Inicializar los botones según la lista actual
+// Inicializar el video de fondo
+function inicializarVideoFondo() {
+  videoFondo = document.getElementById("videoFondo");
+  
+  // Determinar qué videos usar según dispositivo
+  listaVideosActual = obtenerVideosSegunDispositivo();
+  tipoActual = obtenerTipoDispositivo();
+  
+  // Elegir un video al azar
+  const indiceAleatorio = Math.floor(Math.random() * listaVideosActual.length);
+  const videoAleatorio = listaVideosActual[indiceAleatorio];
+  
+  // Establecer el video de fondo
+  videoFondo.src = videoAleatorio;
+  videoFondo.load();
+  videoFondo.play().catch(() => console.log('Autoplay bloqueado, haz clic en la página'));
+  
+  // Actualizar información
+  actualizarInfoVideo(videoAleatorio);
+}
+
+// Inicializar botones
 function inicializarBotones() {
   botonesVideo = document.querySelectorAll('.btn-video');
   
-  // Mostrar/ocultar botones según cantidad de videos
+  // Ocultar botones que no tienen video
   botonesVideo.forEach((btn, index) => {
     if (index < listaVideosActual.length) {
       btn.style.display = 'inline-block';
-      // Actualizar el onclick con el índice correcto
       const rutaVideo = listaVideosActual[index];
-      btn.onclick = () => cambiarVideo(rutaVideo, index);
+      btn.onclick = () => cambiarVideoFondo(rutaVideo, index);
     } else {
-      btn.style.display = 'none';
+      btn.style.display = 'none'; // Ocultar botones sin video
     }
   });
-  
-  // Activar el botón actual
-  botonesVideo.forEach(btn => btn.classList.remove('activo'));
-  if (botonesVideo.length > 0 && botonesVideo[currentVideoIndex] && currentVideoIndex < listaVideosActual.length) {
-    botonesVideo[currentVideoIndex].classList.add('activo');
-  }
 }
 
-// Configurar video según orientación
-function configurarVideo() {
-  const seleccion = obtenerVideosSegunOrientacion();
-  listaVideosActual = seleccion.lista;
-  tipoVideoActual = seleccion.tipo;
+// Cambiar el video de fondo
+function cambiarVideoFondo(rutaVideo, indice) {
+  if (!videoFondo) return;
   
-  // USAR SIEMPRE EL VIDEO DESKTOP (EL MISMO PARA TODOS)
-  videoElement = document.getElementById("videoDesktop");
-  videoSource = document.getElementById("videoSourceDesktop");
-  
-  // Elegir un video al azar de la lista apropiada
-  currentVideoIndex = Math.floor(Math.random() * listaVideosActual.length);
-  videoSource.src = listaVideosActual[currentVideoIndex];
+  videoFondo.src = rutaVideo;
+  videoFondo.load();
+  videoFondo.play().catch(e => console.log('Error al reproducir:', e));
   
   // Actualizar información
-  const nombreVideo = listaVideosActual[currentVideoIndex].split('/').pop();
-  document.getElementById('infoVideo').textContent = 
-    `Video ${tipoVideoActual}: ${nombreVideo}`;
+  actualizarInfoVideo(rutaVideo);
   
-  // Mostrar siempre el video
-  videoElement.style.display = "block";
-  videoElement.load();
-  
-  // OCULTAR EL MENSAJE DE "solo escritorio" en móviles
-  const mensajeMovil = document.querySelector('.mensaje-movil');
-  if (mensajeMovil) {
-    mensajeMovil.style.display = "none";
+  // Activar botón correspondiente
+  botonesVideo.forEach(btn => btn.classList.remove('activo'));
+  if (botonesVideo[indice]) {
+    botonesVideo[indice].classList.add('activo');
   }
-  
-  // Inicializar botones apropiados
-  inicializarBotones();
-  
-  // Ajustar CSS según orientación
-  ajustarVideoPorOrientacion();
 }
 
-// Ajustar estilos del video según orientación
-function ajustarVideoPorOrientacion() {
-  if (!videoElement) return;
-  
-  if (tipoVideoActual === 'vertical') {
-    // Para videos verticales en móvil
-    videoElement.style.objectFit = 'contain'; // Mostrar completo sin recortar
-    videoElement.style.backgroundColor = '#000'; // Fondo negro para bordes
-    videoElement.style.maxHeight = '80vh'; // Limitar altura
-  } else {
-    // Para videos horizontales
-    videoElement.style.objectFit = 'cover'; // Cubrir toda el área
-    videoElement.style.backgroundColor = 'transparent';
-    videoElement.style.maxHeight = '100vh';
-  }
+// Actualizar texto informativo
+function actualizarInfoVideo(rutaVideo) {
+  const nombreVideo = rutaVideo.split('/').pop();
+  document.getElementById('infoVideo').textContent = 
+    `Video actual (${tipoActual}): ${nombreVideo}`;
 }
 
 // Función de mute toggle
 window.toggleMute = function() {
-  if (!videoElement) return;
-  
-  const btn = document.querySelector('.mute-toggle');
-  videoElement.muted = !videoElement.muted;
+  if (!videoFondo) return;
 
-  if (videoElement.muted) {
+  const btn = document.querySelector('.mute-toggle');
+  videoFondo.muted = !videoFondo.muted;
+
+  if (videoFondo.muted) {
     btn.textContent = 'ACTIVAR SONIDO';
     btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
   } else {
     btn.textContent = 'SILENCIAR';
     btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
   }
-}
-
-// Cambiar video según lista actual
-window.cambiarVideo = function(rutaVideo, indice) {
-  if (!videoElement || !videoSource) return;
-  
-  // Verificar que el índice esté en la lista actual
-  if (indice >= listaVideosActual.length) {
-    console.log('Índice fuera de rango:', indice);
-    return;
-  }
-  
-  videoSource.src = rutaVideo;
-  videoElement.load();
-  videoElement.play().catch(e => console.log('Error al reproducir:', e));
-
-  const nombreVideo = rutaVideo.split('/').pop();
-  document.getElementById('infoVideo').textContent = 
-    `Video ${tipoVideoActual}: ${nombreVideo}`;
-
-  // Activar botón correspondiente
-  botonesVideo.forEach(btn => btn.classList.remove('activo'));
-  if (botonesVideo[indice]) {
-    botonesVideo[indice].classList.add('activo');
-  }
-
-  currentVideoIndex = indice;
-  ajustarVideoPorOrientacion();
-}
-
-// ======================================================
-// DETECCIÓN DE CAMBIO DE ORIENTACIÓN
-// ======================================================
-
-// Detectar cambios de orientación (girar el móvil)
-function verificarCambioOrientacion() {
-  const nuevaOrientacion = esOrientacionVertical() ? 'vertical' : 'horizontal';
-  
-  if (nuevaOrientacion !== orientacionAnterior && esDispositivoMovil()) {
-    console.log(`🔄 Cambio de orientación: ${orientacionAnterior} → ${nuevaOrientacion}`);
-    orientacionAnterior = nuevaOrientacion;
-    
-    // Recargar video con nueva orientación
-    configurarVideo();
-    videoElement.play().catch(() => console.log('Autoplay bloqueado'));
-  }
-}
-
-// ======================================================
-// SERVICE WORKER
-// ======================================================
-
-// Registrar service worker PARA TODOS LOS DISPOSITIVOS
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // IMPORTANTE: Usar ruta absoluta para GitHub Pages
-    const swPath = window.location.pathname.includes('/ax/') 
-      ? '/ax/sw.js' 
-      : '/sw.js';
-    
-    navigator.serviceWorker.register(swPath)
-      .then(reg => {
-        console.log('✅ ServiceWorker registrado con éxito en:', reg.scope);
-        
-        // Forzar actualización inmediata en todos los dispositivos
-        reg.update();
-        
-        // Detectar y mostrar estado
-        if (reg.active) {
-          console.log('🟢 Service Worker ACTIVO en este dispositivo');
-        }
-      })
-      .catch(err => {
-        console.log('❌ Error al registrar ServiceWorker: ', err);
-        // Intentar ruta alternativa
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('✅ SW registrado con ruta alternativa'))
-          .catch(e => console.log('❌ Falló también la ruta alternativa'));
-      });
-  });
 }
 
 // ======================================================
@@ -267,50 +153,6 @@ function animarTexto() {
     currentIndex = (currentIndex + 1) % spans.length;
   }, 150);
 }
-
-// ======================================================
-// RECARGA AUTOMÁTICA
-// ======================================================
-
-(function autoReloadOnChange() {
-  let lastVersion = null;
-
-  async function checkVersion() {
-    try {
-      const res = await fetch("version.txt", { cache: "no-store" });
-      const currentVersion = (await res.text()).trim();
-      if (!lastVersion) lastVersion = currentVersion;
-      else if (lastVersion !== currentVersion) location.reload();
-    } catch (err) {
-      console.error("Error comprobando cambios:", err);
-    }
-  }
-
-  setInterval(checkVersion, 5000);
-})();
-
-// ======================================================
-// INICIALIZACIÓN GENERAL
-// ======================================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Configurar video
-  configurarVideo();
-  
-  // Iniciar animación de texto
-  animarTexto();
-  
-  // Intentar reproducir automáticamente
-  if (videoElement) {
-    videoElement.play().catch(() => console.log('Autoplay bloqueado'));
-  }
-  
-  // Iniciar verificación de cambio de orientación
-  setInterval(verificarCambioOrientacion, 500);
-  
-  // Forzar primer ajuste de orientación
-  setTimeout(ajustarVideoPorOrientacion, 100);
-});
 
 // ======================================================
 // TEMPORIZADOR (ANIMACIÓN DE CAÍDA)
@@ -351,7 +193,6 @@ function updateTimerDisplay(elementId, value) {
         const containers = document.querySelectorAll(`[id="${elementId}-container"]`);
 
         containers.forEach(container => {
-            // Solo animar si el contenedor es visible (no está comentado)
             if (container.offsetParent !== null) {
                 const fallingNumber = document.createElement('div');
                 fallingNumber.className = 'time-value-inner current-number';
@@ -375,7 +216,6 @@ function updateTimerDisplay(elementId, value) {
                     container.appendChild(finalNumber);
                 }, 800);
             } else {
-                // Si está oculto/comentado, solo actualizar el texto sin animación compleja
                 container.innerHTML = `<div class="time-value-inner">${formattedValue}</div>`;
             }
         });
@@ -384,10 +224,51 @@ function updateTimerDisplay(elementId, value) {
     }
 }
 
-// Iniciar temporizador si existen los elementos
+// ======================================================
+// INICIALIZACIÓN GENERAL
+// ======================================================
+
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('seconds-container')) {
-        updateTimer();
-        setInterval(updateTimer, 1000);
+  // 1. Inicializar video de fondo
+  inicializarVideoFondo();
+  
+  // 2. Inicializar botones
+  inicializarBotones();
+  
+  // 3. Iniciar animación de texto
+  animarTexto();
+  
+  // 4. Iniciar temporizador
+  if (document.getElementById('seconds-container')) {
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  }
+  
+  // 5. Permitir autoplay al hacer clic en la página
+  document.body.addEventListener('click', () => {
+    if (videoFondo && videoFondo.paused) {
+      videoFondo.play();
     }
+  });
 });
+
+// ======================================================
+// SERVICE WORKER
+// ======================================================
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swPath = window.location.pathname.includes('/ax/') 
+      ? '/ax/sw.js' 
+      : '/sw.js';
+
+    navigator.serviceWorker.register(swPath)
+      .then(reg => {
+        console.log('✅ ServiceWorker registrado');
+        reg.update();
+      })
+      .catch(err => {
+        console.log('❌ Error:', err);
+      });
+  });
+}
