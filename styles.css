@@ -85,12 +85,11 @@ body {
 }
 
 /* ====================================================== */
-/* VIDEO COMO FONDO (POSICIÓN ORIGINAL RESTAURADA)        */
+/* VIDEO COMO FONDO (SOLO PARA PÁGINA PRINCIPAL)         */
 /* ====================================================== */
 
-/* Video Desktop - FONDO COMPLETO para todos los dispositivos */
-.video-desktop {
-  display: block !important;
+/* Video de fondo fijo - USADO SOLO COMO FONDO */
+.video-fondo {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -101,9 +100,27 @@ body {
   margin: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  display: block !important;
 }
 
-/* Video Mobile - OCULTAR completamente (usamos desktop para todos) */
+/* Video reproductor - PARA MOSTRAR SEGMENTOS */
+.video-reproductor {
+  max-width: 800px;
+  margin: 30px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  display: none; /* Inicialmente oculto */
+}
+
+.video-reproductor video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+/* Ocultar video-mobile (no se usa) */
 .video-mobile {
   display: none !important;
 }
@@ -259,38 +276,38 @@ body {
     justify-content: center;
     gap: 10px;
   }
-  
+
   /* MOSTRAR el título de segmentos */
   .titulo-segmentos { 
     display: block !important; 
     font-size: 1.8em !important;
   }
-  
+
   /* OCULTAR el mensaje "solo escritorio" */
   .mensaje-movil { 
     display: none !important; 
   }
-  
+
   /* Ajustar contenedor de botones */
   .botones-video-container { 
     padding: 15px !important; 
     margin: 20px 10px !important;
     max-width: 95% !important;
   }
-  
+
   /* Ajustar botones CN individuales */
   .btn-video {
     padding: 12px 16px !important;
     font-size: 1.1em !important;
     min-width: 70px !important;
   }
-  
+
   /* Ajustar info del video */
   .info-video {
     font-size: 1.5em !important;
     margin-top: 15px !important;
   }
-  
+
   /* Ajustar botón mute para móvil */
   .mute-toggle { 
     padding: 15px 25px !important; 
@@ -301,7 +318,7 @@ body {
     right: auto !important;
     margin: 20px auto !important; 
   }
-  
+
   /* Video sigue siendo fondo completo en móviles */
   .video-desktop {
     max-height: 100vh !important; /* Restauramos altura completa */
@@ -309,24 +326,24 @@ body {
     position: fixed !important; /* Fondo fijo */
     margin: 0 !important; /* Sin márgenes */
   }
-  
+
   /* Ocultar video-mobile ya que usamos el desktop para todos */
   .video-mobile {
     display: none !important;
   }
-  
+
   /* Ajustar animación de texto */
   #animated-text {
     font-size: 35px;
     letter-spacing: 3px;
   }
-  
+
   /* Corrección para iframes en móviles */
   iframe {
     width: 280px !important;
     height: 70px !important;
   }
-  
+
   h3 {
     font-size: 1.2em;
     margin: 15px 0;
@@ -350,7 +367,7 @@ body {
   .botones-video-container {
     max-width: 90% !important;
   }
-  
+
   .btn-video {
     padding: 15px 20px !important;
     min-width: 85px !important;
@@ -363,7 +380,7 @@ body {
     max-width: 1200px !important;
     padding: 30px !important;
   }
-  
+
   .btn-video {
     padding: 25px 30px !important;
     font-size: 1.6em !important;
@@ -377,26 +394,26 @@ body {
     padding: 15px !important; 
     margin: 20px 10px !important;
   }
-  
+
   .time-value { 
     width: 55px !important; 
     height: 70px !important; 
   }
-  
+
   .time-value-inner { 
     font-size: 32px !important; 
   }
-  
+
   .button-container {
     margin: 30px auto !important;
     max-width: 95% !important;
   }
-  
+
   .button {
     padding: 15px !important;
     font-size: 1em !important;
   }
-  
+
   .timer-container { padding: 20px; }
   .timer-display { gap: 10px; }
   .time-value { width: 60px; height: 80px; }
