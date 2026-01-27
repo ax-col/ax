@@ -53,14 +53,15 @@ body {
     0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
 }
 
-/* Contenedor de botones principal (AX, VIWNET, etc.) */
+/* Contenedores de botones principales */
 .button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   margin: 50px auto;
-  max-width: 400px;
+  width: 90%;
+  max-width: 400px; /* PC/TV */
 }
 
 .button {
@@ -75,13 +76,35 @@ body {
   font-weight: bold;
   font-size: 1.1em;
   transition: all 0.3s ease;
-  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9); /* sombra blanca */
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .button:hover {
   background-color: rebeccapurple;
   color: red;
   cursor: pointer;
+}
+
+/* Solo móviles */
+@media (max-width: 768px) {
+  .button-container {
+    max-width: 300px; /* 25% más pequeño en móviles */
+    margin: 30px auto;
+  }
+  
+  .button {
+    padding: 15px;
+    font-size: 1em;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
+  .button-container {
+    max-width: 280px; /* Aún más pequeño */
+  }
 }
 
 /* ====================================================== */
