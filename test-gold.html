@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prueba Widget Oro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: white;
+      font-family: "Roboto", sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .console-log {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #666;
+      padding-left: 10px;
+    }
+
+    .log-entry.error {
+      border-left-color: #ff4444;
+      color: #ff8888;
+    }
+
+    .log-entry.success {
+      border-left-color: #44ff44;
+      color: #88ff88;
+    }
+
+    .log-entry.info {
+      border-left-color: #4488ff;
+      color: #88bbff;
+    }
+
+    /* Estilos del widget */
+    .gold-widget-container {
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      position: relative;
+    }
+
+    .gold-widget {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 16px 24px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .gold-widget-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .gold-widget-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gold-widget-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .gold-widget-row:last-child {
+      border-bottom: none;
+    }
+
+    .gold-widget-label {
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+      text-align: left;
+    }
+
+    .gold-widget-value {
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+      text-align: right;
+    }
+
+    .gold-widget-update .gold-widget-label {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 11px;
+    }
+
+    .gold-widget-update .gold-widget-value {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+    }
+
+    @keyframes gold-pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .gold-widget.loading {
+      animation: gold-pulse 1.5s ease-in-out infinite;
+    }
+
+    .gold-widget.error {
+      border-color: rgba(255, 100, 100, 0.3);
+      background: rgba(255, 100, 100, 0.05);
+    }
+
+    .gold-widget.error .gold-widget-title {
+      color: rgba(255, 150, 150, 0.9);
+    }
+
+    .button {
+      background: #0066ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 14px;
+    }
+
+    .button:hover {
+      background: #0052cc;
+    }
+
+    .button-group {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🥇 Prueba del Widget Contador de Oro</h1>
+
+  <div class="button-group">
+    <button class="button" onclick="clearLogs()">Limpiar Logs</button>
+    <button class="button" onclick="testAPIs()">Probar APIs</button>
+    <button class="button" onclick="getStats()">Ver Estadísticas</button>
+  </div>
+
+  <div class="console-log" id="console-log"></div>
+
+  <!-- WIDGET CONTADOR DE ORO -->
+  <div id="gold-counter-widget" class="gold-widget-container">
+    <div class="gold-widget">
+      <div class="gold-widget-title">Precio del Oro</div>
+      <div class="gold-widget-content">
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Por Onza:</span>
+          <span class="gold-widget-value" id="gold-price-oz">$--</span>
+        </div>
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Por Gramo:</span>
+          <span class="gold-widget-value" id="gold-price-gram">$--</span>
+        </div>
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Cambio USD/COP:</span>
+          <span class="gold-widget-value" id="gold-exchange-rate">--</span>
+        </div>
+        <div class="gold-widget-row gold-widget-update">
+          <span class="gold-widget-label">Actualizado:</span>
+          <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script del widget -->
+  <script src="gold-counter.js"></script>
+
+  <!-- Script de prueba -->
+  <script>
+    // Interceptar console.log
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+
+    function addLog(message, type = 'info') {
+      const logDiv = document.getElementById('console-log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = message;
+      logDiv.appendChild(entry);
+      logDiv.scrollTop = logDiv.scrollHeight;
+      originalLog(message);
+    }
+
+    console.log = function(...args) {
+      addLog(args.join(' '), 'info');
+    };
+
+    console.error = function(...args) {
+      addLog('❌ ' + args.join(' '), 'error');
+    };
+
+    console.warn = function(...args) {
+      addLog('⚠️ ' + args.join(' '), 'info');
+    };
+
+    function clearLogs() {
+      document.getElementById('console-log').innerHTML = '';
+      addLog('📋 Logs limpiados', 'success');
+    }
+
+    async function testAPIs() {
+      addLog('🔄 Probando APIs...', 'info');
+      try {
+        const goldRes = await fetch('https://api.gold-api.com/price/XAU');
+        const goldData = await goldRes.json();
+        addLog('✅ API Oro: $' + goldData.price, 'success');
+
+        const exchangeRes = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const exchangeData = await exchangeRes.json();
+        addLog('✅ API Cambio: 1 USD = ' + exchangeData.rates.COP + ' COP', 'success');
+      } catch (e) {
+        addLog('❌ Error en APIs: ' + e.message, 'error');
+      }
+    }
+
+    function getStats() {
+      if (window.getGoldStats) {
+        const stats = window.getGoldStats();
+        addLog('📊 Estadísticas: ' + JSON.stringify(stats), 'success');
+      } else {
+        addLog('❌ Widget no inicializado', 'error');
+      }
+    }
+
+    addLog('✅ Página de prueba cargada', 'success');
+  </script>
+</body>
+</html>
