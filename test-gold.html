@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prueba Widget Oro</title>
+  <title>Test Contador Oro - Completo</title>
+  
   <style>
+    /* ===== ESTILOS GLOBALES ===== */
     * {
       margin: 0;
       padding: 0;
@@ -21,43 +23,10 @@
     h1 {
       margin-bottom: 20px;
       font-size: 24px;
+      text-align: center;
     }
 
-    .console-log {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-    }
-
-    .log-entry {
-      margin: 5px 0;
-      padding: 5px;
-      border-left: 3px solid #666;
-      padding-left: 10px;
-    }
-
-    .log-entry.error {
-      border-left-color: #ff4444;
-      color: #ff8888;
-    }
-
-    .log-entry.success {
-      border-left-color: #44ff44;
-      color: #88ff88;
-    }
-
-    .log-entry.info {
-      border-left-color: #4488ff;
-      color: #88bbff;
-    }
-
-    /* Estilos del widget */
+    /* ===== ESTILOS DEL WIDGET DE ORO ===== */
     .gold-widget-container {
       margin: 20px auto;
       display: flex;
@@ -152,6 +121,80 @@
       color: rgba(255, 150, 150, 0.9);
     }
 
+    /* ===== ESTILOS DEL TEMPORIZADOR ===== */
+    .timer-wrapper {
+      margin: 40px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .timer-container {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 25px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      display: inline-block;
+    }
+
+    .timer-display {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .time-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .time-value {
+      position: relative;
+      width: 80px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(0, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .time-value-inner {
+      font-size: 42px;
+      font-weight: bold;
+      color: rgba(0, 255, 255, 0.8);
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    }
+
+    .time-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .timer-separator {
+      font-size: 24px;
+      color: rgba(0, 255, 255, 0.6);
+    }
+
+    .timer-title {
+      text-align: center;
+      color: rgba(0, 255, 255, 0.6);
+      font-size: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ===== ESTILOS DE BOTONES ===== */
     .button {
       background: #0066ff;
       color: white;
@@ -169,11 +212,80 @@
 
     .button-group {
       margin: 20px 0;
+      text-align: center;
+    }
+
+    /* ===== ESTILOS DE CONSOLA ===== */
+    .console-log {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px auto;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-width: 800px;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #666;
+      padding-left: 10px;
+    }
+
+    .log-entry.error {
+      border-left-color: #ff4444;
+      color: #ff8888;
+    }
+
+    .log-entry.success {
+      border-left-color: #44ff44;
+      color: #88ff88;
+    }
+
+    .log-entry.info {
+      border-left-color: #4488ff;
+      color: #88bbff;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .gold-widget {
+        padding: 12px 16px;
+        max-width: 95%;
+      }
+
+      .gold-widget-title {
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .gold-widget-row {
+        font-size: 11px;
+        padding: 5px 0;
+      }
+
+      .timer-container {
+        padding: 20px 30px;
+      }
+
+      .time-value {
+        width: 60px;
+        height: 80px;
+      }
+
+      .time-value-inner {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <h1>🥇 Prueba del Widget Contador de Oro</h1>
+  <h1>🥇 Test Contador de Oro - Completo</h1>
 
   <div class="button-group">
     <button class="button" onclick="clearLogs()">Limpiar Logs</button>
@@ -183,7 +295,7 @@
 
   <div class="console-log" id="console-log"></div>
 
-  <!-- WIDGET CONTADOR DE ORO -->
+  <!-- ===== WIDGET CONTADOR DE ORO ===== -->
   <div id="gold-counter-widget" class="gold-widget-container">
     <div class="gold-widget">
       <div class="gold-widget-title">Precio del Oro</div>
@@ -208,12 +320,37 @@
     </div>
   </div>
 
-  <!-- Script del widget -->
-  <script src="gold-counter.js"></script>
+  <!-- ===== TEMPORIZADOR ===== -->
+  <div class="timer-wrapper">
+    <div class="timer-container">
+      <div class="timer-title">MUNDIAL 2026</div>
+      <div class="timer-display">
+        <div class="time-unit">
+          <div class="time-value" id="days-container"><div class="time-value-inner">00</div></div>
+          <div class="time-label">Días</div>
+        </div>
+        <div class="timer-separator">:</div>
+        <div class="time-unit">
+          <div class="time-value" id="hours-container"><div class="time-value-inner">00</div></div>
+          <div class="time-label">Horas</div>
+        </div>
+        <div class="timer-separator">:</div>
+        <div class="time-unit">
+          <div class="time-value" id="minutes-container"><div class="time-value-inner">00</div></div>
+          <div class="time-label">Minutos</div>
+        </div>
+        <div class="timer-separator">:</div>
+        <div class="time-unit">
+          <div class="time-value" id="seconds-container"><div class="time-value-inner">00</div></div>
+          <div class="time-label">Segundos</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- Script de prueba -->
+  <!-- ===== JAVASCRIPT ===== -->
   <script>
-    // Interceptar console.log
+    // ===== INTERCEPTAR CONSOLE.LOG =====
     const originalLog = console.log;
     const originalError = console.error;
     const originalWarn = console.warn;
@@ -240,6 +377,195 @@
       addLog('⚠️ ' + args.join(' '), 'info');
     };
 
+    // ===== CLASE CONTADOR DE ORO =====
+    class GoldCounterWidget {
+      constructor() {
+        console.log('🥇 Inicializando GoldCounterWidget...');
+        
+        this.widget = document.getElementById('gold-counter-widget');
+        this.priceOzElement = document.getElementById('gold-price-oz');
+        this.priceGramElement = document.getElementById('gold-price-gram');
+        this.exchangeRateElement = document.getElementById('gold-exchange-rate');
+        this.updateTimeElement = document.getElementById('gold-update-time');
+        
+        if (!this.widget || !this.priceOzElement) {
+          console.error('❌ No se encontraron elementos del widget en el DOM');
+          return;
+        }
+        
+        this.updateInterval = 10000;
+        this.isLoading = false;
+        this.updateCount = 0;
+        this.lastError = null;
+        
+        console.log('✅ Elementos del widget encontrados');
+        this.init();
+      }
+
+      init() {
+        console.log('🥇 Inicializando widget de contador de oro...');
+        console.log('⏱️ Intervalo de actualización: 10 segundos (24/7)');
+        
+        this.fetchGoldPrice();
+        
+        this.intervalId = setInterval(() => {
+          this.fetchGoldPrice();
+        }, this.updateInterval);
+        
+        setInterval(() => {
+          console.log(`📊 Widget activo - Actualizaciones: ${this.updateCount}`);
+        }, 60000);
+      }
+
+      async fetchGoldPrice() {
+        if (this.isLoading) {
+          console.warn('⚠️ Solicitud anterior aún en progreso, saltando...');
+          return;
+        }
+        
+        this.isLoading = true;
+        this.setLoading(true);
+
+        try {
+          console.log('🔄 Obteniendo datos de APIs...');
+          
+          const goldUrl = `https://api.gold-api.com/price/XAU?t=${Date.now()}`;
+          const goldResponse = await fetch(goldUrl, {
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache'
+            }
+          });
+          
+          if (!goldResponse.ok) throw new Error(`Gold API error: ${goldResponse.status}`);
+          const goldData = await goldResponse.json();
+          console.log('✅ Datos de oro recibidos:', goldData);
+
+          const exchangeUrl = `https://api.exchangerate-api.com/v4/latest/USD?t=${Date.now()}`;
+          const exchangeResponse = await fetch(exchangeUrl, {
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache'
+            }
+          });
+          
+          if (!exchangeResponse.ok) throw new Error(`Exchange API error: ${exchangeResponse.status}`);
+          const exchangeData = await exchangeResponse.json();
+          console.log('✅ Datos de cambio recibidos:', exchangeData.rates.COP);
+
+          const usdPerOz = goldData.price;
+          const exchangeRate = exchangeData.rates.COP;
+          const copPerOz = usdPerOz * exchangeRate;
+          const copPerGram = copPerOz / 31.1035;
+
+          this.updateUI(copPerOz, copPerGram, exchangeRate);
+          this.setLoading(false);
+          this.setError(false);
+          this.lastError = null;
+          this.updateCount++;
+          
+          console.log(`✅ Actualización #${this.updateCount} - Oro: $${copPerOz.toLocaleString('es-CO', { maximumFractionDigits: 0 })} COP`);
+
+        } catch (error) {
+          console.error('❌ Error en widget de oro:', error);
+          this.setError(true);
+          this.setLoading(false);
+          this.lastError = error.message;
+          this.showError(error.message);
+          
+          setTimeout(() => {
+            console.log('🔄 Reintentando conexión...');
+            this.isLoading = false;
+            this.fetchGoldPrice();
+          }, 5000);
+        }
+      }
+
+      updateUI(copPerOz, copPerGram, exchangeRate) {
+        console.log('🎨 Actualizando UI...');
+        
+        const ozText = '$' + copPerOz.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+        this.priceOzElement.textContent = ozText;
+        this.priceOzElement.style.color = 'rgba(255, 255, 255, 0.95)';
+
+        const gramText = '$' + copPerGram.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+        this.priceGramElement.textContent = gramText;
+        this.priceGramElement.style.color = 'rgba(255, 255, 255, 0.95)';
+
+        const rateText = exchangeRate.toLocaleString('es-CO', { maximumFractionDigits: 2 });
+        this.exchangeRateElement.textContent = rateText;
+        this.exchangeRateElement.style.color = 'rgba(255, 255, 255, 0.95)';
+
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('es-CO', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        this.updateTimeElement.textContent = timeString;
+        this.updateTimeElement.style.color = 'rgba(255, 255, 255, 0.7)';
+        
+        console.log('✅ UI actualizada correctamente');
+      }
+
+      showError(errorMessage) {
+        this.priceOzElement.textContent = '⚠️ Error';
+        this.priceGramElement.textContent = '⚠️ Error';
+        this.exchangeRateElement.textContent = '⚠️ Error';
+        this.updateTimeElement.textContent = 'Error';
+      }
+
+      setLoading(isLoading) {
+        const goldWidget = this.widget.querySelector('.gold-widget');
+        if (isLoading) {
+          goldWidget.classList.add('loading');
+        } else {
+          goldWidget.classList.remove('loading');
+        }
+      }
+
+      setError(hasError) {
+        const goldWidget = this.widget.querySelector('.gold-widget');
+        if (hasError) {
+          goldWidget.classList.add('error');
+        } else {
+          goldWidget.classList.remove('error');
+        }
+      }
+
+      getStats() {
+        return {
+          actualizaciones: this.updateCount,
+          ultimoError: this.lastError,
+          intervalo: this.updateInterval + 'ms',
+          estado: this.isLoading ? 'cargando' : 'activo'
+        };
+      }
+    }
+
+    // ===== TEMPORIZADOR MUNDIAL 2026 =====
+    function updateCountdown() {
+      const targetDate = new Date('2026-06-21T00:00:00').getTime();
+      
+      setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.querySelector('#days-container .time-value-inner').textContent = String(days).padStart(2, '0');
+        document.querySelector('#hours-container .time-value-inner').textContent = String(hours).padStart(2, '0');
+        document.querySelector('#minutes-container .time-value-inner').textContent = String(minutes).padStart(2, '0');
+        document.querySelector('#seconds-container .time-value-inner').textContent = String(seconds).padStart(2, '0');
+      }, 1000);
+    }
+
+    // ===== FUNCIONES DE PRUEBA =====
     function clearLogs() {
       document.getElementById('console-log').innerHTML = '';
       addLog('📋 Logs limpiados', 'success');
@@ -261,15 +587,29 @@
     }
 
     function getStats() {
-      if (window.getGoldStats) {
-        const stats = window.getGoldStats();
+      if (window.goldWidget) {
+        const stats = window.goldWidget.getStats();
         addLog('📊 Estadísticas: ' + JSON.stringify(stats), 'success');
       } else {
         addLog('❌ Widget no inicializado', 'error');
       }
     }
 
-    addLog('✅ Página de prueba cargada', 'success');
+    // ===== INICIALIZACIÓN =====
+    document.addEventListener('DOMContentLoaded', () => {
+      addLog('✅ Página cargada', 'success');
+      window.goldWidget = new GoldCounterWidget();
+      updateCountdown();
+    });
+
+    window.getGoldStats = () => {
+      if (window.goldWidget) {
+        return window.goldWidget.getStats();
+      }
+      return 'Widget no inicializado';
+    };
+
+    console.log('🥇 Script cargado correctamente');
   </script>
 </body>
 </html>
