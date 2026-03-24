@@ -218,9 +218,8 @@ body {
   transform: scale(1.05) !important;
   box-shadow: 0 0 10px #002fff !important;
   /* El background del nuevo código se ignora a favor del original */
-  background-color: transparent; 
+    background-color: transparent; 
 }
-
 
 /* Contenedor de botones CN */
 .botones-video-container {
@@ -458,13 +457,19 @@ body {
 }
 
 .timer-container {
-    background: rgba(0, 0, 0, 0.85);
+    /* Cambia el 0.85 (muy opaco) por algo más bajo como 0.1 o 0.3 */
+    background: rgba(0, 0, 0, 0.2); 
+    
+    /* El blur ayuda a que el texto se lea bien sobre fondos complejos */
+    backdrop-filter: blur(10px); 
+    
+    /* Opcional: baja la intensidad del borde si se ve muy marcado */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Mantén el resto igual */
     border-radius: 25px;
     padding: 30px 40px;
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.15),
-                0 0 20px rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(0, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     display: inline-block;
 }
 
@@ -487,8 +492,8 @@ body {
     position: relative;
     width: 80px;
     height: 100px;
-    background: rgba(0, 255, 255, 0.03);
-    border: 1.5px solid rgba(0, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid rgba(0, 255, 255, 0.1);
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -557,4 +562,265 @@ body {
     margin-bottom: 20px;
     letter-spacing: 2px;
     text-transform: uppercase;
+}
+
+/*
+|======================================================|
+| ESTILOS DEL WIDGET CONTADOR DE ORO (AISLADO)        |
+|======================================================|
+*/
+
+/* Contenedor principal del widget */
+.gold-widget-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+
+/* Widget compacto */
+.gold-widget {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Título del widget */
+.gold-widget-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Contenido del widget */
+.gold-widget-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Fila de información */
+.gold-widget-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Última fila sin borde */
+.gold-widget-row:last-child {
+  border-bottom: none;
+}
+
+/* Etiqueta de información */
+.gold-widget-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Valor de información */
+.gold-widget-value {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+}
+
+/* Fila de actualización con estilo especial */
+.gold-widget-update .gold-widget-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+}
+
+.gold-widget-update .gold-widget-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .gold-widget {
+    padding: 12px 16px;
+    max-width: 95%;
+  }
+
+  .gold-widget-title {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .gold-widget-row {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+
+  .gold-widget-label {
+    font-size: 10px;
+  }
+
+  .gold-widget-value {
+    font-size: 11px;
+  }
+}
+
+/* Animación de carga */
+@keyframes gold-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.gold-widget.loading {
+  animation: gold-pulse 1.5s ease-in-out infinite;
+}
+
+/* Estado de error */
+.gold-widget.error {
+  border-color: rgba(255, 100, 100, 0.3);
+  background: rgba(255, 100, 100, 0.05);
+}
+
+.gold-widget.error .gold-widget-title {
+  color: rgba(255, 150, 150, 0.9);
+}
+
+
+/*
+|======================================================|
+| ESTILOS DEL WIDGET DE ORO (INTEGRADO)               |
+|======================================================|
+*/
+
+.gold-widget-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+
+.gold-widget {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gold-widget-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.gold-widget-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gold-widget-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gold-widget-row:last-child {
+  border-bottom: none;
+}
+
+.gold-widget-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  text-align: left;
+}
+
+.gold-widget-value {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+  min-width: 120px;
+}
+
+.gold-widget-update .gold-widget-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+}
+
+.gold-widget-update .gold-widget-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+@keyframes gold-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.gold-widget.loading {
+  animation: gold-pulse 1.5s ease-in-out infinite;
+}
+
+.gold-widget.error {
+  border-color: rgba(255, 100, 100, 0.3);
+  background: rgba(255, 100, 100, 0.05);
+}
+
+.gold-widget.error .gold-widget-title {
+  color: rgba(255, 150, 150, 0.9);
+}
+
+/* Responsive para el widget de oro */
+@media (max-width: 600px) {
+  .gold-widget {
+    padding: 12px 16px;
+    max-width: 95%;
+  }
+
+  .gold-widget-title {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .gold-widget-row {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+
+  .gold-widget-value {
+    min-width: 80px;
+  }
 }

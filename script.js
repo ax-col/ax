@@ -128,13 +128,16 @@ function actualizarInfoVideo(rutaVideo) {
 window.toggleMute = function() {
   if (!videoFondo) return;
   
+  // Invierte el estado actual
   videoFondo.muted = !videoFondo.muted;
   const btn = document.querySelector('.mute-toggle');
   
   if (videoFondo.muted) {
+    // Cuando ESTÁ silenciado
     btn.textContent = 'ACTIVAR SONIDO';
     btn.style.background = 'linear-gradient(135deg, #00FF00 0%, #4169E1 100%)';
   } else {
+    // Cuando TIENE sonido
     btn.textContent = 'SILENCIAR';
     btn.style.background = 'linear-gradient(135deg, #FF0000 0%, #FF8800 100%)';
   }
@@ -257,4 +260,156 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.removeEventListener('click', iniciarAudio);
   });
+});
+
+
+// ======================================================
+// CONTADOR DE ORO EN TIEMPO REAL
+// ======================================================
+
+class GoldCounterWidget {
+  constructor() {
+    this.widget = document.getElementById('gold-counter-widget');
+    this.priceOzElement = document.getElementById('gold-price-oz');
+    this.priceGramElement = document.getElementById('gold-price-gram');
+    this.exchangeRateElement = document.getElementById('gold-exchange-rate');
+    this.updateTimeElement = document.getElementById('gold-update-time');
+    
+    if (!this.widget || !this.priceOzElement) {
+      console.error('❌ Elementos del widget no encontrados');
+      return;
+    }
+    
+    this.updateInterval = 10000; // Exactamente 10 segundos
+    this.isLoading = false;
+    this.updateCount = 0;
+    
+    this.init();
+  }
+
+  init() {
+    // Primera carga inmediata
+    this.fetchGoldPrice();
+    
+    // Actualizar exactamente cada 10 segundos
+    this.intervalId = setInterval(() => {
+      this.fetchGoldPrice();
+    }, this.updateInterval);
+  }
+
+  async fetchGoldPrice() {
+    if (this.isLoading) {
+      return;
+    }
+    
+    this.isLoading = true;
+    this.setLoading(true);
+    
+    // Timeout de 8 segundos
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Timeout')), 8000)
+    );
+
+    try {
+      // Obtener precio del oro
+      const goldResponse = await Promise.race([
+        fetch('https://api.gold-api.com/price/XAU', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        }),
+        timeoutPromise
+      ]);
+      
+      if (!goldResponse.ok) throw new Error(`Error: ${goldResponse.status}`);
+      const goldData = await goldResponse.json();
+
+      // Obtener tasa de cambio USD/COP
+      const exchangeResponse = await Promise.race([
+        fetch('https://api.exchangerate-api.com/v4/latest/USD', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        }),
+        timeoutPromise
+      ]);
+      
+      if (!exchangeResponse.ok) throw new Error(`Error: ${exchangeResponse.status}`);
+      const exchangeData = await exchangeResponse.json();
+
+      // Calcular valores
+      const usdPerOz = goldData.price;
+      const exchangeRate = exchangeData.rates.COP;
+      const copPerOz = usdPerOz * exchangeRate;
+      const copPerGram = copPerOz / 31.1035;
+
+      // Actualizar UI
+      this.updateUI(copPerOz, copPerGram, exchangeRate);
+      this.setLoading(false);
+      this.setError(false);
+      this.updateCount++;
+
+    } catch (error) {
+      this.setError(true);
+      this.setLoading(false);
+      this.showError();
+      
+      // Reintentar en 3 segundos
+      setTimeout(() => {
+        this.isLoading = false;
+        this.fetchGoldPrice();
+      }, 3000);
+    }
+  }
+
+  updateUI(copPerOz, copPerGram, exchangeRate) {
+    const ozText = '$' + copPerOz.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+    this.priceOzElement.textContent = ozText;
+    this.priceOzElement.style.color = 'rgba(255, 255, 255, 0.95)';
+
+    const gramText = '$' + copPerGram.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+    this.priceGramElement.textContent = gramText;
+    this.priceGramElement.style.color = 'rgba(255, 255, 255, 0.95)';
+
+    const rateText = exchangeRate.toLocaleString('es-CO', { maximumFractionDigits: 2 });
+    this.exchangeRateElement.textContent = rateText;
+    this.exchangeRateElement.style.color = 'rgba(255, 255, 255, 0.95)';
+
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('es-CO', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    this.updateTimeElement.textContent = timeString;
+    this.updateTimeElement.style.color = 'rgba(255, 255, 255, 0.7)';
+  }
+
+  showError() {
+    this.priceOzElement.textContent = '⚠️ Error';
+    this.priceGramElement.textContent = '⚠️ Error';
+    this.exchangeRateElement.textContent = '⚠️ Error';
+    this.updateTimeElement.textContent = 'Error';
+  }
+
+  setLoading(isLoading) {
+    const goldWidget = this.widget.querySelector('.gold-widget');
+    if (isLoading) {
+      goldWidget.classList.add('loading');
+    } else {
+      goldWidget.classList.remove('loading');
+    }
+  }
+
+  setError(hasError) {
+    const goldWidget = this.widget.querySelector('.gold-widget');
+    if (hasError) {
+      goldWidget.classList.add('error');
+    } else {
+      goldWidget.classList.remove('error');
+    }
+  }
+}
+
+// Inicializar widget de oro cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  window.goldWidget = new GoldCounterWidget();
 });

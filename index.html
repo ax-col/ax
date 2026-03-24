@@ -15,7 +15,7 @@
 <link rel="manifest" href="manifest.json">
 
 <!-- Enlace CSS corregido con versión (sin duplicar) -->
-<link rel="stylesheet" href="styles.css?v=M3V2">
+<link rel="stylesheet" href="styles.css?v=M3V3">
 
 <meta property="og:title" content="AX – PROYECT">
 <meta property="og:description"
@@ -63,34 +63,31 @@
     </div>
   </div>
 
-  <!-- TEMPORIZADOR COMENTADO (OCULTO)
-  <div class="timer-wrapper">
-    <div class="timer-container">
-      <div class="timer-title">Temporizador de Reserva</div>
-      <div class="timer-display">
-        <div class="time-unit">
-          <div class="time-value"><div class="time-value-inner">00</div></div>
-          <div class="time-label">Días</div>
+  <!-- ===== WIDGET CONTADOR DE ORO ===== -->
+  <div id="gold-counter-widget" class="gold-widget-container">
+    <div class="gold-widget">
+      <div class="gold-widget-title">Precio del Oro</div>
+      <div class="gold-widget-content">
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Por Onza:</span>
+          <span class="gold-widget-value" id="gold-price-oz">$--</span>
         </div>
-        <div class="timer-separator">:</div>
-        <div class="time-unit">
-          <div class="time-value"><div class="time-value-inner">00</div></div>
-          <div class="time-label">Horas</div>
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Por Gramo:</span>
+          <span class="gold-widget-value" id="gold-price-gram">$--</span>
         </div>
-        <div class="timer-separator">:</div>
-        <div class="time-unit">
-          <div class="time-value"><div class="time-value-inner">00</div></div>
-          <div class="time-label">Minutos</div>
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Cambio USD/COP:</span>
+          <span class="gold-widget-value" id="gold-exchange-rate">--</span>
         </div>
-        <div class="timer-separator">:</div>
-        <div class="time-unit">
-          <div class="time-value"><div class="time-value-inner">00</div></div>
-          <div class="time-label">Segundos</div>
+        <div class="gold-widget-row gold-widget-update">
+          <span class="gold-widget-label">Actualizado:</span>
+          <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
         </div>
       </div>
     </div>
   </div>
-  -->
+
   <div class="button-container">
     <a href="raspa/" class="button">¿ R A S P A ?</a>
     <a href="viwnet/" class="button">ANTIGUO VIWNET</a>
@@ -98,36 +95,17 @@
     <a href="web-apks/" class="button">ApHacks (INAPKS)</a>
     <a href="IA/" class="button">IA - Experimental (BETA)</a>
     <a href="FF/" class="button">Countdown FF</a> 
-<!--   <a href="https://mailamericas.com/tracking?tracking=ML614859192MH" class="button">Aliexpress</a> -->
     <a href="https://github.com/ax-col/ax" class="button">Repositorio AX</a>
   <!--  <a href="CPWEB/" class="button">CP WEB (Colaboración) Para curiosos</a> -->
     </div>
 
-<iframe height="80px" width="300px" frameborder="0" src=https://livecounts.io/embed/youtube-live-subscriber-counter/UCX6OQ3DkcsbYNE6H8uQQuVA style="border: 10; width:300px; height:80px;"></iframe>
-<h3>M R B E A S T</h3>
-<iframe height="80px" width="300px" frameborder="0" src=https://livecounts.io/embed/youtube-live-subscriber-counter/UCtXv3unPu38qzWVu-WhFOYg style="border: 10; width:300px; height:80px;"></iframe>
-<h3>A N D R E S W G</h3> 
-<iframe height="80px" width="300px" frameborder="0" src=https://livecounts.io/embed/youtube-live-subscriber-counter/UCq-Fj5jknLsUf-MWSy4_brA style="border: 10; width:300px; height:80px;"></iframe>
-<h3>T S E R I E S</h3>
+<button class="mute-toggle" onclick="toggleMute()">SILENCIAR</button>
 
-<button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
-<div class="botones-video-container">
-  <div class="titulo-segmentos">SEGMENTOS DE VIDEO</div>
-  <div class="mensaje-movil">Los segmentos de video solo están disponibles en versión de escritorio</div>
-  <div class="botones-video">
-    <!-- Solo 6 botones totales (JavaScript mostrará los disponibles según dispositivo) -->
-    <button class="btn-video" data-id="1">AX-1</button>
-  </div>
-  <div class="info-video" id="infoVideo">Cargando video...</div>
-</div>
-
-<!-- Video de fondo ÚNICO (fuera del contenedor de botones) -->
-<video class="video-fondo" id="videoFondo" autoplay muted loop playsinline preload="auto">
-  <!-- El src se establecerá por JavaScript -->
-</video>
+<video class="video-fondo" id="videoFondo" autoplay loop playsinline preload="auto">
+  </video>
 
 <!-- Script JS corregido con versión (sin duplicar) -->
-<script src="script.js?v=M3V2"></script>
+<script src="script.js?v=M3V3"></script>
 
 </body>
 </html>
