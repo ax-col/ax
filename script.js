@@ -317,67 +317,41 @@ class GoldCounterWidget {
     }, this.updateInterval);
   }
 
-  async fetchGoldPrice() {
-    if (this.isLoading) {
-      return;
-    }
+async fetchGoldPrice() {
+  if (this.isLoading) return;
+  this.isLoading = true;
+  this.setLoading(true);
+
+  try {
+    // 1. Obtener precio del ORO desde BINANCE (Gratis y sin cuenta)
+    const goldRes = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT');
+    const goldData = await goldRes.json();
+    const usdPerOz = parseFloat(goldData.price);
+
+    // 2. Obtener TRM de Colombia (USD/COP)
+    const exRes = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const exData = await exRes.json();
+    const exchangeRate = exData.rates.COP;
+
+    // 3. Cálculos
+    const copPerOz = usdPerOz * exchangeRate;
+    const copPerGram = copPerOz / 31.1035;
+
+    // 4. Actualizar Interfaz
+    this.updateUI(copPerOz, copPerGram, exchangeRate);
+    this.setLoading(false);
+    this.setError(false);
+
+  } catch (error) {
+    console.error("❌ AX Gold Error:", error);
+    this.setError(true);
+    this.setLoading(false);
+    this.showError();
     
-    this.isLoading = true;
-    this.setLoading(true);
-    
-    // Timeout de 8 segundos
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Timeout')), 8000)
-    );
-
-try {
-      const timestamp = new Date().getTime();
-
-      // 1. Nueva URL para el precio del Oro (usando una alternativa más estable)
-      // Esta API devuelve el precio en USD por defecto
-      const goldResponse = await Promise.race([
-        fetch(`https://api.gold-api.com/v1/latest?symbol=XAU&t=${timestamp}`), 
-        timeoutPromise
-      ]);
-      
-      if (!goldResponse.ok) throw new Error(`Error Oro: ${goldResponse.status}`);
-      const goldData = await goldResponse.json(); 
-
-      // 2. Obtener tasa de cambio USD/COP (Esta la mantienes igual)
-      const exchangeResponse = await Promise.race([
-        fetch(`https://api.exchangerate-api.com/v4/latest/USD?t=${timestamp}`),
-        timeoutPromise
-      ]);
-      
-      if (!exchangeResponse.ok) throw new Error(`Error Cambio: ${exchangeResponse.status}`);
-      const exchangeData = await exchangeResponse.json();
-
-      // 3. Calcular valores
-      // Nota: Verifica si la API devuelve el dato en .price o en .gold
-      const usdPerOz = goldData.price || goldData.gold; 
-      const exchangeRate = exchangeData.rates.COP;
-      const copPerOz = usdPerOz * exchangeRate;
-      const copPerGram = copPerOz / 31.1035;
-
-      // 4. Actualizar UI
-      this.updateUI(copPerOz, copPerGram, exchangeRate);
-      this.setLoading(false);
-      this.setError(false);
-      this.updateCount++;
-
-    } catch (error) {
-      console.error("❌ Fallo en el widget:", error);
-      this.setError(true);
-      this.setLoading(false);
-      this.showError();
-      
-      // Reintentar en 3 segundos
-      setTimeout(() => {
-        this.isLoading = false;
-        this.fetchGoldPrice();
-      }, 3000);
-    }
+    // Reintentar en 10 segundos si falla
+    setTimeout(() => { this.isLoading = false; this.fetchGoldPrice(); }, 10000);
   }
+}
 
   updateUI(copPerOz, copPerGram, exchangeRate) {
     const ozText = '$' + copPerOz.toLocaleString('es-CO', { maximumFractionDigits: 0 });
