@@ -333,24 +333,19 @@ class GoldCounterWidget {
 try {
       const timestamp = new Date().getTime();
 
-     // 1. Obtener precio del oro
-    const goldResponse = await Promise.race([
-    fetch(`https://api.gold-api.com/v1/price/XAU?t=${timestamp}`, {
-    method: 'GET',
-    headers: { 'Accept': 'application/json' }
-    }), // Aquí cierra el fetch
-    timeoutPromise
-    ]);
+      // 1. Nueva URL para el precio del Oro (usando una alternativa más estable)
+      // Esta API devuelve el precio en USD por defecto
+      const goldResponse = await Promise.race([
+        fetch(`https://api.gold-api.com/v1/latest?symbol=XAU&t=${timestamp}`), 
+        timeoutPromise
+      ]);
       
       if (!goldResponse.ok) throw new Error(`Error Oro: ${goldResponse.status}`);
       const goldData = await goldResponse.json(); 
 
-      // 2. Obtener tasa de cambio USD/COP
+      // 2. Obtener tasa de cambio USD/COP (Esta la mantienes igual)
       const exchangeResponse = await Promise.race([
-        fetch(`https://api.exchangerate-api.com/v4/latest/USD?t=${timestamp}`, {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
-        }), // <--- Aquí cerramos el fetch correctamente
+        fetch(`https://api.exchangerate-api.com/v4/latest/USD?t=${timestamp}`),
         timeoutPromise
       ]);
       
@@ -358,7 +353,8 @@ try {
       const exchangeData = await exchangeResponse.json();
 
       // 3. Calcular valores
-      const usdPerOz = goldData.price; // Ahora sí funciona porque goldData existe
+      // Nota: Verifica si la API devuelve el dato en .price o en .gold
+      const usdPerOz = goldData.price || goldData.gold; 
       const exchangeRate = exchangeData.rates.COP;
       const copPerOz = usdPerOz * exchangeRate;
       const copPerGram = copPerOz / 31.1035;
@@ -370,6 +366,7 @@ try {
       this.updateCount++;
 
     } catch (error) {
+      console.error("❌ Fallo en el widget:", error);
       this.setError(true);
       this.setLoading(false);
       this.showError();
