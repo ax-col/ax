@@ -262,6 +262,26 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Dentro de inicializarVideo o al final de tu script
+function forzarAutoplay() {
+    const video = document.getElementById('videoFondo');
+    
+    // Intentar reproducir
+    let playPromise = video.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            console.log("✅ Autoplay iniciado correctamente");
+        }).catch(error => {
+            console.log("⚠️ El navegador bloqueó el autoplay con sonido. Iniciando silenciado...");
+            video.muted = false;
+            video.play();
+        });
+    }
+}
+
+// Ejecutar cuando la página cargue
+window.addEventListener('load', forzarAutoplay);
 
 // ======================================================
 // CONTADOR DE ORO EN TIEMPO REAL
@@ -313,24 +333,24 @@ class GoldCounterWidget {
 try {
       const timestamp = new Date().getTime();
 
-      // 1. Obtener precio del oro
-      const goldResponse = await Promise.race([
-        fetch(`https://api.gold-api.com/price/XAU?t=${timestamp}`, {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
-        }),
-        timeoutPromise
-      ]);
+     // 1. Obtener precio del oro
+    const goldResponse = await Promise.race([
+    fetch(`https://api.gold-api.com/v1/price/XAU?t=${timestamp}`, {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+    }), // Aquí cierra el fetch
+    timeoutPromise
+    ]);
       
       if (!goldResponse.ok) throw new Error(`Error Oro: ${goldResponse.status}`);
-      const goldData = await goldResponse.json(); // <--- ESTO ES LO QUE FALTABA
+      const goldData = await goldResponse.json(); 
 
       // 2. Obtener tasa de cambio USD/COP
       const exchangeResponse = await Promise.race([
         fetch(`https://api.exchangerate-api.com/v4/latest/USD?t=${timestamp}`, {
           method: 'GET',
           headers: { 'Accept': 'application/json' }
-        }),
+        }), // <--- Aquí cerramos el fetch correctamente
         timeoutPromise
       ]);
       

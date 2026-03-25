@@ -1,21 +1,14 @@
 {
-  "version": "M3V2A26", 
+  "version": "M3V3A26", 
   "buildDate": "2026-03-24T19:50:00Z",
-  "description": "AX Project & UI Optimization",
-  "files": {
-    "index.html": "M3V1",
-    "styles.css": "M3V1",
-    "script.js": "M3V2" 
-  },
   "changelog": [
     {
-      "version": "M3V2A26",
+      "version": "M3V3A26",
       "date": "2026-03-24",
       "changes": [
-       "M3V2A26" "Implementación de Gold-API con bypass de caché (?t=)",
-       "M3V2A26" "Inversión de lógica de sonido (Mute por defecto)",
-       "M3V2A26" "Optimización de transparencia en timer-container",
-       "M3V2A26" "Intervalo de refresco de oro fijado en 10s"
+       "Implementación de Gold-API con bypass de caché (?t=)",
+       "Inversión de lógica de sonido (Mute por defecto)",
+       "Optimización de transparencia en timer-container"
       ]
     }
   ]
