@@ -10,7 +10,7 @@ class VersionManager {
   constructor() {
     this.versionFile = 'version.json';
     this.localStorageKey = 'app-version-cache';
-    this.checkInterval = 30000; // Verificar cada 30 segundos
+    this.checkInterval = 10000; // Verificar cada 10 segundos
     this.init();
   }
 

@@ -17,15 +17,9 @@ const PRECACHE_URLS = [
   './Windows/index.html',
   './FF/index.html',
   
-  // VIDEOS QUE SÍ EXISTEN (8 videos):
+  // VIDEOS QUE SÍ EXISTEN (2 videos):
   './AX-Files/AX-C1.mp4',
-  './AX-Files/AX-C2.mp4',
-  './AX-Files/AX-C3.mp4',
-  './AX-Files/AX-C4.mp4',
-  './AX-Files/AX-C5.mp4',
-  './AX-Files/AX-C6.mp4',
-  './AX-Files/AX-M1.mp4',
-  './AX-Files/AX-M2.mp4'
+  './AX-Files/AX-M1.mp4'
   // NO incluir AX-M3, AX-M4, AX-M5, AX-U0 (no existen)
 ];
 

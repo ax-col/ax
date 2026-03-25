@@ -310,38 +310,40 @@ class GoldCounterWidget {
       setTimeout(() => reject(new Error('Timeout')), 8000)
     );
 
-    try {
-      // Obtener precio del oro
-      const goldResponse = await Promise.race([
-        fetch('https://api.gold-api.com/price/XAU', {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
-        }),
-        timeoutPromise
-      ]);
-      
-      if (!goldResponse.ok) throw new Error(`Error: ${goldResponse.status}`);
-      const goldData = await goldResponse.json();
+try {
+      const timestamp = new Date().getTime();
 
-      // Obtener tasa de cambio USD/COP
-      const exchangeResponse = await Promise.race([
-        fetch('https://api.exchangerate-api.com/v4/latest/USD', {
+      // 1. Obtener precio del oro
+      const goldResponse = await Promise.race([
+        fetch(`https://api.gold-api.com/price/XAU?t=${timestamp}`, {
           method: 'GET',
           headers: { 'Accept': 'application/json' }
         }),
         timeoutPromise
       ]);
       
-      if (!exchangeResponse.ok) throw new Error(`Error: ${exchangeResponse.status}`);
+      if (!goldResponse.ok) throw new Error(`Error Oro: ${goldResponse.status}`);
+      const goldData = await goldResponse.json(); // <--- ESTO ES LO QUE FALTABA
+
+      // 2. Obtener tasa de cambio USD/COP
+      const exchangeResponse = await Promise.race([
+        fetch(`https://api.exchangerate-api.com/v4/latest/USD?t=${timestamp}`, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        }),
+        timeoutPromise
+      ]);
+      
+      if (!exchangeResponse.ok) throw new Error(`Error Cambio: ${exchangeResponse.status}`);
       const exchangeData = await exchangeResponse.json();
 
-      // Calcular valores
-      const usdPerOz = goldData.price;
+      // 3. Calcular valores
+      const usdPerOz = goldData.price; // Ahora sí funciona porque goldData existe
       const exchangeRate = exchangeData.rates.COP;
       const copPerOz = usdPerOz * exchangeRate;
       const copPerGram = copPerOz / 31.1035;
 
-      // Actualizar UI
+      // 4. Actualizar UI
       this.updateUI(copPerOz, copPerGram, exchangeRate);
       this.setLoading(false);
       this.setError(false);
