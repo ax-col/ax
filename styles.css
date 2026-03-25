@@ -449,49 +449,38 @@ body {
 |======================================================|
 */
 
+/* --- BASE DEL TEMPORIZADOR --- */
 .timer-wrapper {
-    margin: 40px auto;
+    margin: 20px auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .timer-container {
-    /* Cambia el 0.85 (muy opaco) por algo más bajo como 0.1 o 0.3 */
     background: rgba(0, 0, 0, 0.2); 
-    
-    /* El blur ayuda a que el texto se lea bien sobre fondos complejos */
     backdrop-filter: blur(10px); 
-    
-    /* Opcional: baja la intensidad del borde si se ve muy marcado */
     border: 1px solid rgba(255, 255, 255, 0.1);
-    
-    /* Mantén el resto igual */
     border-radius: 25px;
-    padding: 30px 40px;
+    padding: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     display: inline-block;
+    max-width: 95%;
 }
 
 .timer-display {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
 }
 
-.time-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
+/* --- VALORES DE LOS CUADROS (PC POR DEFECTO) --- */
 .time-value {
     position: relative;
-    width: 80px;
-    height: 100px;
+    width: 70px;  
+    height: 90px; 
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px solid rgba(0, 255, 255, 0.1);
     border-radius: 12px;
@@ -499,70 +488,52 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.05);
 }
 
 .time-value-inner {
     position: absolute;
-    font-size: 48px;
+    font-size: 42px; 
     font-weight: bold;
     color: #00ffff;
     text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: 'Courier New', monospace;
 }
 
-.current-number {
-    animation: fallDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+/* --- MEDIA QUERY: AJUSTE PARA CELULARES --- */
+@media (max-width: 480px) {
+    .timer-container {
+        padding: 15px 10px;
+    }
+
+    .time-value {
+        width: 18vw;  /* Un poco más ancho para que no se vea apretado */
+        height: 22vw;
+        max-width: 60px;
+        max-height: 80px;
+    }
+    
+    .time-value-inner {
+        font-size: 8vw; 
+        max-size: 34px;
+    }
+
+    .timer-display {
+        gap: 5px; /* Espacio mínimo entre unidades */
+    }
+
+    /* Ajuste para que el Widget de Oro no tape el Timer */
+    .content-wrapper { 
+        display: flex;
+        flex-direction: column; 
+        gap: 20px;
+    }
 }
 
-.next-number {
-    animation: fallIntoPlace 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes fallDown {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(100px); opacity: 0; }
-}
-
-@keyframes fallIntoPlace {
-    0% { transform: translateY(-100px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-.time-label {
-    font-size: 12px;
-    color: rgba(0, 255, 255, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: bold;
-}
-
-.timer-separator {
-    font-size: 30px;
-    color: rgba(0, 255, 255, 0.3);
-    font-weight: bold;
-    margin-bottom: 25px;
-    animation: timerPulse 1s ease-in-out infinite;
-}
-
-@keyframes timerPulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.8; }
-}
-
-.timer-title {
-    text-align: center;
-    color: rgba(0, 255, 255, 0.6);
-    font-size: 20px;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
+/* --- TUS ANIMACIONES (MANTENER IGUAL) --- */
+.current-number { animation: fallDown 0.8s forwards; }
+.next-number { animation: fallIntoPlace 0.8s forwards; }
+@keyframes fallDown { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(100px); opacity: 0; } }
+@keyframes fallIntoPlace { 0% { transform: translateY(-100px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 
 /*
 |======================================================|
