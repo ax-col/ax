@@ -242,12 +242,12 @@
             loadHistoricalData();
             connectWebSocket();
 
-            // Actualización de la gráfica cada 5 segundos
+            // Actualización de la gráfica cada 2 segundos
             setInterval(() => {
                 if (lastPrice > 0) {
                     addData(lastPrice);
                 }
-            }, 5000);
+            }, 2000);
         };
     </script>
 </body>
