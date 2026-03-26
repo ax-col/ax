@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin - Gráfica en Tiempo Real (CO)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0f0f1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-bottom: 10px;
+            color: #f7931a;
+        }
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .change {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        canvas {
+            max-height: 520px;
+        }
+        .info-box {
+            width: 95%;
+            max-width: 1100px;
+            background: #1a1a2e;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            font-size: 1.05rem;
+        }
+        .positive { color: #00ff9d; }
+        .negative { color: #ff4d4d; }
+        .time {
+            font-family: monospace;
+            font-size: 1.4rem;
+            color: #f7931a;
+        }
+        .footer {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bitcoin (BTC/USDT) - Tiempo Real</h1>
+    <div class="price" id="currentPrice">$ --,--</div>
+    <div class="change" id="priceChange">Cargando...</div>
+
+    <div class="container">
+        <canvas id="btcChart"></canvas>
+    </div>
+
+    <!-- Información debajo de la gráfica -->
+    <div class="info-box">
+        <strong>Hora local Colombia (America/Bogota):</strong> 
+        <span id="localTime" class="time">--:--:--</span><br><br>
+        
+        <strong>Horario de operaciones en Bitcoin:</strong><br>
+        • El mercado de Bitcoin está <span style="color:#00ff9d; font-weight:bold;">ABIERTO 24/7</span> (nunca cierra).<br>
+        • Puedes realizar operaciones de inversión **en cualquier segundo** del día, todos los días del año.<br>
+        • No existe horario de apertura o cierre como en las bolsas tradicionales.
+    </div>
+
+    <div class="footer">
+        Datos vía Binance WebSocket • Actualización de gráfica cada 5 segundos • Hora local Colombia
+    </div>
+
+    <script>
+        const ctx = document.getElementById('btcChart').getContext('2d');
+        let chart;
+
+        let labels = [];
+        let prices = [];
+        let lastPrice = 0;
+        let startPrice = 0;
+
+        function createChart() {
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Precio BTC/USDT (USD)',
+                        data: prices,
+                        borderColor: '#f7931a',
+                        backgroundColor: 'rgba(247, 147, 26, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.1,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#aaa', maxTicksLimit: 20 }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#aaa' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: '#1a1a2e',
+                            titleColor: '#fff',
+                            bodyColor: '#f7931a'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updatePriceDisplay(price) {
+            const priceEl = document.getElementById('currentPrice');
+            const changeEl = document.getElementById('priceChange');
+
+            priceEl.textContent = '$ ' + price.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+            if (startPrice === 0) startPrice = price;
+
+            const change = ((price - startPrice) / startPrice) * 100;
+            const changeText = change >= 0 
+                ? `<span class="positive">▲ +${change.toFixed(2)}%</span>` 
+                : `<span class="negative">▼ ${change.toFixed(2)}%</span>`;
+
+            changeEl.innerHTML = `Cambio desde inicio: ${changeText}`;
+        }
+
+        function addData(price) {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                           now.getMinutes().toString().padStart(2, '0') + ':' + 
+                           now.getSeconds().toString().padStart(2, '0');
+
+            labels.push(timeStr);
+            prices.push(price);
+
+            // Ampliado: mantenemos más puntos para ver mejor la tendencia (eje X más amplio)
+            if (labels.length > 300) {
+                labels.shift();
+                prices.shift();
+            }
+
+            chart.update('none');
+            updatePriceDisplay(price);
+        }
+
+        // Reloj hora local Colombia
+        function startColombiaClock() {
+            const timeEl = document.getElementById('localTime');
+            setInterval(() => {
+                const now = new Date();
+                const formatter = new Intl.DateTimeFormat('es-CO', {
+                    timeZone: 'America/Bogota',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                timeEl.textContent = formatter.format(now);
+            }, 1000);
+        }
+
+        async function loadHistoricalData() {
+            try {
+                const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1&interval=minute');
+                const data = await res.json();
+                const pricesData = data.prices;
+
+                labels = [];
+                prices = [];
+
+                const startIndex = Math.max(0, pricesData.length - 150);
+
+                for (let i = startIndex; i < pricesData.length; i++) {
+                    const date = new Date(pricesData[i][0]);
+                    labels.push(date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0'));
+                    prices.push(pricesData[i][1]);
+                }
+
+                if (prices.length > 0) {
+                    lastPrice = prices[prices.length - 1];
+                    startPrice = prices[0];
+                    updatePriceDisplay(lastPrice);
+                }
+
+                if (!chart) createChart();
+                else chart.update();
+
+            } catch (e) {
+                console.warn("Histórico no disponible", e);
+                if (!chart) createChart();
+            }
+        }
+
+        function connectWebSocket() {
+            const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                lastPrice = parseFloat(data.p);
+                if (!isNaN(lastPrice)) {
+                    updatePriceDisplay(lastPrice);
+                }
+            };
+
+            ws.onclose = () => setTimeout(connectWebSocket, 3000);
+        }
+
+        window.onload = () => {
+            startColombiaClock();
+            loadHistoricalData();
+            connectWebSocket();
+
+            // Actualización de la gráfica cada 2 segundos
+            setInterval(() => {
+                if (lastPrice > 0) {
+                    addData(lastPrice);
+                }
+            }, 2000);
+        };
+    </script>
+</body>
+</html>
