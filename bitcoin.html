@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin - Gráfica en Tiempo Real</title>
+    <title>Bitcoin - Gráfica en Tiempo Real (CO)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         body {
@@ -38,15 +38,30 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         canvas {
-            max-height: 500px;
+            max-height: 520px;
         }
-        .footer {
+        .info-box {
+            width: 95%;
+            max-width: 1100px;
+            background: #1a1a2e;
+            padding: 15px 20px;
+            border-radius: 10px;
             margin-top: 20px;
-            font-size: 0.9rem;
-            opacity: 0.7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            font-size: 1.05rem;
         }
         .positive { color: #00ff9d; }
         .negative { color: #ff4d4d; }
+        .time {
+            font-family: monospace;
+            font-size: 1.4rem;
+            color: #f7931a;
+        }
+        .footer {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -58,16 +73,25 @@
         <canvas id="btcChart"></canvas>
     </div>
 
+    <!-- Información debajo de la gráfica -->
+    <div class="info-box">
+        <strong>Hora local Colombia (America/Bogota):</strong> 
+        <span id="localTime" class="time">--:--:--</span><br><br>
+        
+        <strong>Horario de operaciones en Bitcoin:</strong><br>
+        • El mercado de Bitcoin está <span style="color:#00ff9d; font-weight:bold;">ABIERTO 24/7</span> (nunca cierra).<br>
+        • Puedes realizar operaciones de inversión **en cualquier segundo** del día, todos los días del año.<br>
+        • No existe horario de apertura o cierre como en las bolsas tradicionales.
+    </div>
+
     <div class="footer">
-        Datos en tiempo real vía Binance WebSocket • Gráfica con Chart.js
+        Datos vía Binance WebSocket • Actualización de gráfica cada 5 segundos • Hora local Colombia
     </div>
 
     <script>
-        // Configuración del gráfico
         const ctx = document.getElementById('btcChart').getContext('2d');
         let chart;
 
-        // Datos del gráfico
         let labels = [];
         let prices = [];
         let lastPrice = 0;
@@ -95,7 +119,7 @@
                     scales: {
                         x: {
                             grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#aaa', maxTicksLimit: 12 }
+                            ticks: { color: '#aaa', maxTicksLimit: 20 }
                         },
                         y: {
                             grid: { color: 'rgba(255,255,255,0.05)' },
@@ -111,16 +135,11 @@
                             titleColor: '#fff',
                             bodyColor: '#f7931a'
                         }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'nearest'
                     }
                 }
             });
         }
 
-        // Actualizar precio actual y cambio
         function updatePriceDisplay(price) {
             const priceEl = document.getElementById('currentPrice');
             const changeEl = document.getElementById('priceChange');
@@ -137,7 +156,6 @@
             changeEl.innerHTML = `Cambio desde inicio: ${changeText}`;
         }
 
-        // Añadir nuevo punto al gráfico
         function addData(price) {
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
@@ -147,29 +165,42 @@
             labels.push(timeStr);
             prices.push(price);
 
-            // Mantener solo los últimos 200 puntos (para que no se vuelva lento)
-            if (labels.length > 200) {
+            // Ampliado: mantenemos más puntos para ver mejor la tendencia (eje X más amplio)
+            if (labels.length > 300) {
                 labels.shift();
                 prices.shift();
             }
 
-            chart.update('none'); // Actualización suave sin animación completa
+            chart.update('none');
             updatePriceDisplay(price);
         }
 
-        // Cargar datos históricos iniciales con CoinGecko (últimos 30 días, pero tomamos puntos recientes)
+        // Reloj hora local Colombia
+        function startColombiaClock() {
+            const timeEl = document.getElementById('localTime');
+            setInterval(() => {
+                const now = new Date();
+                const formatter = new Intl.DateTimeFormat('es-CO', {
+                    timeZone: 'America/Bogota',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                timeEl.textContent = formatter.format(now);
+            }, 1000);
+        }
+
         async function loadHistoricalData() {
             try {
                 const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1&interval=minute');
                 const data = await res.json();
-
-                const pricesData = data.prices; // [[timestamp, price], ...]
+                const pricesData = data.prices;
 
                 labels = [];
                 prices = [];
 
-                // Tomar los últimos \~100-150 puntos para no saturar
-                const startIndex = Math.max(0, pricesData.length - 120);
+                const startIndex = Math.max(0, pricesData.length - 150);
 
                 for (let i = startIndex; i < pricesData.length; i++) {
                     const date = new Date(pricesData[i][0]);
@@ -187,46 +218,36 @@
                 else chart.update();
 
             } catch (e) {
-                console.warn("No se pudieron cargar datos históricos. Se usará solo WebSocket.", e);
+                console.warn("Histórico no disponible", e);
                 if (!chart) createChart();
             }
         }
 
-        // Conexión WebSocket de Binance (precio en tiempo real)
         function connectWebSocket() {
             const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                const price = parseFloat(data.p); // precio del trade
-
-                if (!isNaN(price)) {
-                    lastPrice = price;
-                    addData(price);
+                lastPrice = parseFloat(data.p);
+                if (!isNaN(lastPrice)) {
+                    updatePriceDisplay(lastPrice);
                 }
             };
 
-            ws.onclose = () => {
-                console.log("WebSocket cerrado. Reconectando en 3s...");
-                setTimeout(connectWebSocket, 3000);
-            };
-
-            ws.onerror = (err) => {
-                console.error("Error WebSocket:", err);
-            };
+            ws.onclose = () => setTimeout(connectWebSocket, 3000);
         }
 
-        // Iniciar todo
         window.onload = () => {
+            startColombiaClock();
             loadHistoricalData();
             connectWebSocket();
 
-            // Actualización de respaldo cada 10 segundos por si falla el WS
+            // Actualización de la gráfica cada 5 segundos
             setInterval(() => {
                 if (lastPrice > 0) {
-                    addData(lastPrice); // mantiene la gráfica "viva"
+                    addData(lastPrice);
                 }
-            }, 10000);
+            }, 5000);
         };
     </script>
 </body>
