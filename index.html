@@ -15,7 +15,7 @@
 <link rel="manifest" href="manifest.json">
 
 <!-- Enlace CSS corregido con versión (sin duplicar) -->
-<link rel="stylesheet" href="styles.css?v=M4V7">
+<link rel="stylesheet" href="styles.css?v=M4V9">
 
 <meta property="og:title" content="AX – PROYECT">
 <meta property="og:description"
@@ -63,30 +63,35 @@
     </div>
   </div>
 
-  <!-- ===== WIDGET CONTADOR DE ORO ===== -->
   <div id="gold-counter-widget" class="gold-widget-container">
-    <div class="gold-widget">
-      <div class="gold-widget-title">Precio del Oro</div>
-      <div class="gold-widget-content">
-        <div class="gold-widget-row">
-          <span class="gold-widget-label">Por Onza:</span>
-          <span class="gold-widget-value" id="gold-price-oz">$--</span>
-        </div>
-        <div class="gold-widget-row">
-          <span class="gold-widget-label">Por Gramo:</span>
-          <span class="gold-widget-value" id="gold-price-gram">$--</span>
-        </div>
-        <div class="gold-widget-row">
-          <span class="gold-widget-label">Cambio USD/COP:</span>
-          <span class="gold-widget-value" id="gold-exchange-rate">--</span>
-        </div>
-        <div class="gold-widget-row gold-widget-update">
-          <span class="gold-widget-label">Actualizado:</span>
-          <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
-        </div>
+  <div class="gold-widget">
+    <div class="gold-widget-title">Precio del Oro</div>
+    <div class="gold-widget-content">
+      <div class="gold-widget-row">
+        <span class="gold-widget-label">Gramo:</span>
+        <span class="gold-widget-value" id="gold-price-gram">$--</span>
+      </div>
+      <div class="gold-widget-row gold-widget-update">
+        <span class="gold-widget-label">Actualización:</span>
+        <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
+      </div>
+    </div>
+
+    <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 12px 0;"></div>
+
+    <div class="gold-widget-title">Bitcoin (BTC/USDT)</div>
+    <div class="gold-widget-content">
+      <div class="gold-widget-row">
+        <span class="gold-widget-label">Precio:</span>
+        <span class="gold-widget-value" id="btc-price" style="font-size: 1.1em;">$ --,--.--</span>
+      </div>
+      <div class="gold-widget-row">
+        <span class="gold-widget-label">Cambio:</span>
+        <span class="gold-widget-value" id="btc-change" style="font-weight: bold; font-family: monospace;">— 0.00%</span>
       </div>
     </div>
   </div>
+</div>
 
   <div class="button-container">
     <a href="raspa/" class="button">¿ R A S P A ?</a>

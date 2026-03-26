@@ -536,7 +536,7 @@ body {
 
 /*
 |======================================================|
-| ESTILOS DEL WIDGET CONTADOR DE ORO (AISLADO)        |
+| ESTILOS DEL WIDGET (AISLADO)                        |
 |======================================================|
 */
 
@@ -672,6 +672,18 @@ body {
 }
 
 
+/* Ajustes para el widget Oro + Bitcoin */
+.gold-widget-title {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #00ffcc;
+}
+
+#btc-change {
+  font-family: monospace;
+  transition: color 0.3s;
+}
 /*
 |======================================================|
 | ESTILOS DEL WIDGET DE ORO (INTEGRADO)               |
