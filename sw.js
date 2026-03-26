@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v26.7';  // Nueva versión URGENTE
+const CACHE_NAME = 'ax-offline-v26.8';  // Nueva versión URGENTE
 
 const PRECACHE_URLS = [
   './',

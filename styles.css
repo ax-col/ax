@@ -459,12 +459,11 @@ body {
 }
 
 .timer-container {
-    background: rgba(0, 0, 0, 0.2); 
-    backdrop-filter: blur(10px); 
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent; 
+    border: 3px solid rgb(10, 242, 110);
     border-radius: 25px;
     padding: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px transparent;
     display: inline-block;
     max-width: 95%;
 }
@@ -481,7 +480,7 @@ body {
     position: relative;
     width: 70px;  
     height: 90px; 
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
     border: 1.5px solid rgba(0, 255, 255, 0.1);
     border-radius: 12px;
     display: flex;
@@ -553,14 +552,13 @@ body {
 
 /* Widget compacto */
 .gold-widget {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  border: 1px solid rgb(9, 191, 224);
   border-radius: 12px;
   padding: 16px 24px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px transparent;
 }
 
 /* Título del widget */
@@ -598,14 +596,15 @@ body {
 
 /* Etiqueta de información */
 .gold-widget-label {
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 500;
+  color: rgb(110, 255, 197);
+  font-weight: bold;
+  font-size: 12px;
   text-align: left;
 }
 
 /* Valor de información */
 .gold-widget-value {
-  color: rgba(255, 255, 255, 0.95);
+  color: rgb(255, 255, 255);
   font-weight: 600;
   font-family: 'Courier New', monospace;
   text-align: right;
@@ -613,7 +612,7 @@ body {
 
 /* Fila de actualización con estilo especial */
 .gold-widget-update .gold-widget-label {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(255, 0, 0);
   font-size: 11px;
 }
 
@@ -640,7 +639,7 @@ body {
   }
 
   .gold-widget-label {
-    font-size: 10px;
+    font-size: 19px;
   }
 
   .gold-widget-value {
@@ -689,8 +688,7 @@ body {
 }
 
 .gold-widget {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 16px 24px;
@@ -730,7 +728,8 @@ body {
 
 .gold-widget-label {
   color: rgba(255, 255, 255, 0.6);
-  font-weight: 500;
+  font-weight: bold;
+  font-size: 12px;
   text-align: left;
 }
 
