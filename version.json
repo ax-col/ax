@@ -1,9 +1,9 @@
 {
-  "version": "M3V11A28", 
+  "version": "M3V13A26", 
   "buildDate": "2026-03-24T19:50:00Z",
   "changelog": [
     {
-      "version": "M3V11A28",
+      "version": "M3V13A26",
       "date": "2026-03-24",
       "changes": [
        "Implementación de Gold-API con bypass de caché (?t=)",
