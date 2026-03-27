@@ -19,6 +19,7 @@ const PRECACHE_URLS = [
   
   // VIDEOS QUE SÍ EXISTEN (2 videos):
   './AX-Files/AX-C1.mp4',
+  './AX-Files/AX-C2.mp4',
   './AX-Files/AX-M1.mp4'
   // NO incluir AX-M3, AX-M4, AX-M5, AX-U0 (no existen)
 ];

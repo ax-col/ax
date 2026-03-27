@@ -3,7 +3,7 @@
 // ======================================================
 
 const videosPorDispositivo = {
-  PC: ["AX-Files/AX-C1.mp4"],
+  PC: ["AX-Files/AX-C1.mp4", "AX-Files/AX-C2.mp4"],
   MOVIL: ["AX-Files/AX-M1.mp4"]
 };
 
