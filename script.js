@@ -21,16 +21,32 @@ let videoActualIndex = 0;
 
 function inicializarVideo() {
   console.log('🎬 Inicializando sistema de video...');
+  
   videoFondo = document.getElementById('videoFondo');
-  dispositivoActual = detectarDispositivo();
-  videosActuales = videosPorDispositivo[dispositivoActual];
-  videoActualIndex = Math.floor(Math.random() * videosActuales.length);
   
-  const videoAleatorio = videosActuales[videoActualIndex];
+  // Lista de videos disponibles (puedes agregar más fácilmente)
+  const videosDisponibles = [
+    "AX-Files/AX-C1.mp4",
+    "AX-Files/AX-C2.mp4"
+  ];
+
+  // Selecciona uno al azar
+  const videoAleatorio = videosDisponibles[Math.floor(Math.random() * videosDisponibles.length)];
+  
+  console.log(`🎥 Video seleccionado: ${videoAleatorio}`);
+  
+  // Asigna el video seleccionado
   videoFondo.src = videoAleatorio;
-  videoFondo.play().catch(e => console.log('⚠️ Autoplay bloqueado:', e));
   
+  // Intenta reproducir
+  videoFondo.play().catch(e => {
+    console.log('⚠️ Autoplay bloqueado por el navegador:', e);
+  });
+  
+  // Actualizar información si tienes ese elemento
   actualizarInfoVideo(videoAleatorio);
+  
+  // Configurar botones (si los tienes)
   configurarBotones();
 }
 
