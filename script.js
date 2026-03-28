@@ -3,8 +3,8 @@
 // ======================================================
 
 const videosPorDispositivo = {
-  PC: ["AX-Files/AX-C1.mp4", "AX-Files/AX-C2.mp4", "AX-Files/AX-C3.mp4", "AX-Files/AX-C4.mp4"],
-  MOVIL: ["AX-Files/AX-M1.mp4"]
+  PC: ["AX-Files/AX-C1.mp4", "AX-Files/AX-C2.mp4", "AX-Files/AX-C3.mp4",],
+  MOVIL: ["AX-Files/AX-M1.mp4", "AX-Files/AX-M2.mp4", "AX-Files/AX-M3.mp4", "AX-Files/AX-M4.mp4"]
 };
 
 function detectarDispositivo() {
@@ -28,8 +28,7 @@ function inicializarVideo() {
   const videosDisponibles = [
     "AX-Files/AX-C1.mp4",
     "AX-Files/AX-C2.mp4",
-    "AX-Files/AX-C3.mp4",
-    "AX-Files/AX-C4.mp4"
+    "AX-Files/AX-C3.mp4"
   ];
 
   // Selecciona uno al azar

@@ -17,11 +17,10 @@ const PRECACHE_URLS = [
   './Windows/index.html',
   './FF/index.html',
   
-  // VIDEOS QUE SÍ EXISTEN (2 videos):
+  // VIDEOS QUE SÍ EXISTEN:
   './AX-Files/AX-C1.mp4',
   './AX-Files/AX-C2.mp4',
   './AX-Files/AX-C3.mp4',
-  './AX-Files/AX-C4.mp4',
   './AX-Files/AX-M1.mp4',
   './AX-Files/AX-M2.mp4',
   './AX-Files/AX-M3.mp4',
