@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v26.11';  // Nueva versión URGENTE
+const CACHE_NAME = 'ax-offline-v26.12';  // Nueva versión URGENTE
 
 const PRECACHE_URLS = [
   './',
@@ -22,8 +22,11 @@ const PRECACHE_URLS = [
   './AX-Files/AX-C2.mp4',
   './AX-Files/AX-C3.mp4',
   './AX-Files/AX-C4.mp4',
-  './AX-Files/AX-M1.mp4'
-  // NO INCLUYAS VIDEOS QUE NO EXISTEN, SOLO LOS QUE SÍ (4 para PC, 1 para móvil)
+  './AX-Files/AX-M1.mp4',
+  './AX-Files/AX-M2.mp4',
+  './AX-Files/AX-M3.mp4',
+  './AX-Files/AX-M4.mp4',
+  // Agrega más videos aquí según sea necesario
 ];
 
 // ---------- INSTALL ----------
