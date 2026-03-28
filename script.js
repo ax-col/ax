@@ -3,7 +3,7 @@
 // ======================================================
 
 const videosPorDispositivo = {
-  PC: ["AX-Files/AX-C1.mp4", "AX-Files/AX-C2.mp4"],
+  PC: ["AX-Files/AX-C1.mp4", "AX-Files/AX-C2.mp4", "AX-Files/AX-C3.mp4", "AX-Files/AX-C4.mp4"],
   MOVIL: ["AX-Files/AX-M1.mp4"]
 };
 
@@ -27,7 +27,9 @@ function inicializarVideo() {
   // Lista de videos disponibles (puedes agregar más fácilmente)
   const videosDisponibles = [
     "AX-Files/AX-C1.mp4",
-    "AX-Files/AX-C2.mp4"
+    "AX-Files/AX-C2.mp4",
+    "AX-Files/AX-C3.mp4",
+    "AX-Files/AX-C4.mp4"
   ];
 
   // Selecciona uno al azar
@@ -189,7 +191,7 @@ class GoldBitcoinWidget {
 
   init() {
     this.fetchGoldPrice();
-    setInterval(() => this.fetchGoldPrice(), 4000);   // Oro cada 4s
+    setInterval(() => this.fetchGoldPrice(), 2000);   // Oro cada 2s
     
     this.fetchBtcPrice();
     setInterval(() => this.fetchBtcPrice(), 1000);    // Bitcoin cada 1s

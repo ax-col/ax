@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ax-offline-v26.10';  // Nueva versión URGENTE
+const CACHE_NAME = 'ax-offline-v26.11';  // Nueva versión URGENTE
 
 const PRECACHE_URLS = [
   './',
@@ -20,15 +20,17 @@ const PRECACHE_URLS = [
   // VIDEOS QUE SÍ EXISTEN (2 videos):
   './AX-Files/AX-C1.mp4',
   './AX-Files/AX-C2.mp4',
+  './AX-Files/AX-C3.mp4',
+  './AX-Files/AX-C4.mp4',
   './AX-Files/AX-M1.mp4'
-  // NO incluir AX-M3, AX-M4, AX-M5, AX-U0 (no existen)
+  // NO INCLUYAS VIDEOS QUE NO EXISTEN, SOLO LOS QUE SÍ (4 para PC, 1 para móvil)
 ];
 
 // ---------- INSTALL ----------
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW v11] Pre-cacheando recursos con videos por orientación...');
+      console.log('[SW v19] Pre-cacheando recursos con videos por orientación...');
       return cache.addAll(PRECACHE_URLS);
     })
   );
