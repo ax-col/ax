@@ -1,106 +1,45 @@
-const CACHE_NAME = 'ax-offline-v26.12';  // Nueva versión URGENTE
-
-const PRECACHE_URLS = [
+const CACHE_NAME = 'ax-cache-v3'; // Cambia el número cuando hagas un cambio grande
+const assets = [
   './',
   './index.html',
-  './styles.css',
-  './script.js',
+  './styles.css?v=M4V1',
+  './script.js?v=M4V1',
   './manifest.json',
-  './play.html',
-  './offline.html',
-  './png-principal/icon-192x192.png',
-  './png-principal/icon-512x512.png',
-  './raspa/index.html',
-  './viwnet/index.html',
-  './web-apks/index.html',
-  './CPWEB/index.html',
-  './Windows/index.html',
-  './FF/index.html',
-  
-  // VIDEOS QUE SÍ EXISTEN:
-  './AX-Files/AX-C1.mp4',
-  './AX-Files/AX-C2.mp4',
-  './AX-Files/AX-C3.mp4',
-  './AX-Files/AX-M1.mp4',
-  './AX-Files/AX-M2.mp4',
-  './AX-Files/AX-M3.mp4',
-  './AX-Files/AX-M4.mp4',
-  // Agrega más videos aquí según sea necesario
+  './version.json'
 ];
 
-// ---------- INSTALL ----------
-self.addEventListener('install', event => {
-  event.waitUntil(
+// Instalación: Guarda los archivos esenciales
+self.addEventListener('install', e => {
+  e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW v19] Pre-cacheando recursos con videos por orientación...');
-      return cache.addAll(PRECACHE_URLS);
+      console.log('📦 AX Cache: Guardando archivos...');
+      return cache.addAll(assets);
     })
   );
-  self.skipWaiting();
 });
 
-// ---------- ACTIVATE ----------
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.map(k => {
-          if (k !== CACHE_NAME && k !== 'AX-NAVEGADOR') {
-            console.log('[SW v11] Eliminando cache antiguo:', k);
-            return caches.delete(k);
+// Activación: Borra cachés viejos automáticamente
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            console.log('🗑️ AX Cache: Borrando versión antigua:', key);
+            return caches.delete(key);
           }
         })
-      )
-    )
+      );
+    })
   );
-  self.clients.claim();
-  console.log('[SW v11] Activado y listo para todos dispositivos');
 });
 
-// ---------- FETCH ----------
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  const url = new URL(req.url);
-
-  // Solo manejar peticiones del mismo origen
-  if (url.origin !== self.location.origin) return;
-
-  // 🧭 Navegación (HTML)
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).catch(() => {
-        return caches.match(req).then(res => {
-          if (res) return res;
-
-          // Lógica de rutas para GitHub Pages (/ax/carpeta/ -> /ax/carpeta/index.html)
-          let path = url.pathname;
-          if (path.endsWith('/')) {
-            path += 'index.html';
-          } else if (!path.split('/').pop().includes('.')) {
-            path += '/index.html';
-          }
-
-          return caches.match(path).then(r => r || caches.match('./offline.html') || caches.match('./index.html'));
-        });
-      })
-    );
-    return;
-  }
-
-  // 🎬 Videos (Network First) - Detección mejorada
-  if (req.destination === 'video' || req.url.match(/\.(mp4|webm|ogg)$/i)) {
-    event.respondWith(
-      fetch(req).then(net => {
-        const copy = net.clone();
-        caches.open('AX-NAVEGADOR').then(cache => cache.put(req, copy));
-        return net;
-      }).catch(() => caches.match(req))
-    );
-    return;
-  }
-
-  // 📦 Recursos normales (Cache First)
-  event.respondWith(
-    caches.match(req).then(res => res || fetch(req))
+// Estrategia: Primero busca en internet, si falla, usa el caché
+// (Ideal para que los precios de Bitcoin y Oro siempre estén frescos)
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    fetch(e.request).catch(() => {
+      return caches.match(e.request);
+    })
   );
 });

@@ -5,37 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AX PRINCIPAL</title>
-<meta name="description"
-      content="AX alojado en GitHub Pages.">
+<meta name="description" content="AX alojado en GitHub Pages.">
 
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="icon" sizes="192x192" href="png-principal/icon-192x192.png">
 <link rel="icon" sizes="512x512" href="png-principal/icon-512x512.png">
 <link rel="apple-touch-icon" href="png-principal/icon-192x192.png">
 <link rel="manifest" href="manifest.json">
 
-<!-- Enlace CSS corregido con versión (sin duplicar) -->
 <link rel="stylesheet" href="styles.css?v=M3V15">
 
 <meta property="og:title" content="AX – PROYECT">
-<meta property="og:description"
-      content="AX - COL se encuentra alojada en GitHub Pages. (Dominio github.com) </>">
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-<meta property="og:url" content="https://ax-col.github.io/ax/">
+<meta property="og:description" content="AX - COL se encuentra alojada en GitHub Pages. (Dominio github.com) </>">
+<meta property="og:image" content="png-principal/icon-512x512.png">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Devonshire&display=swap" rel="stylesheet">
 
+<style>
+  /* Preloader sutil para que el APK no abra en blanco */
+  #preloader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 9999; display: flex;
+    justify-content: center; align-items: center;
+    transition: opacity 0.5s ease;
+  }
+</style>
 </head>
 
 <body>
+  <div id="preloader">
+    <img src="png-principal/icon-192x192.png" width="80" alt="AX">
+  </div>
+
   <h1 id="animated-text" class="devonshire-regular">AX PRINCIPAL</h1>
 
-  <!-- TEMPORIZADOR ACTIVO -->
   <div class="timer-wrapper">
     <div class="timer-container">
       <div class="timer-title">MUNDIAL 2026</div>
@@ -64,54 +70,73 @@
   </div>
 
   <div id="gold-counter-widget" class="gold-widget-container">
-  <div class="gold-widget">
-    <div class="gold-widget-title">Precio del Oro</div>
-    <div class="gold-widget-content">
-      <div class="gold-widget-row">
-        <span class="gold-widget-label">Gramo:</span>
-        <span class="gold-widget-value" id="gold-price-gram">$--</span>
+    <div class="gold-widget">
+      <div class="gold-widget-title">Precio del Oro</div>
+      <div class="gold-widget-content">
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Gramo:</span>
+          <span class="gold-widget-value" id="gold-price-gram">$--</span>
+        </div>
+        <div class="gold-widget-row gold-widget-update">
+          <span class="gold-widget-label">Actualización:</span>
+          <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
+        </div>
       </div>
-      <div class="gold-widget-row gold-widget-update">
-        <span class="gold-widget-label">Actualización:</span>
-        <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
-      </div>
-    </div>
 
-    <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 12px 0;"></div>
+      <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 12px 0;"></div>
 
-    <div class="gold-widget-title">Bitcoin (BTC/USDT)</div>
-    <div class="gold-widget-content">
-      <div class="gold-widget-row">
-        <span class="gold-widget-label">Precio:</span>
-        <span class="gold-widget-value" id="btc-price" style="font-size: 1.1em;">$ --,--.--</span>
-      </div>
-      <div class="gold-widget-row">
-        <span class="gold-widget-label">Cambio:</span>
-        <span class="gold-widget-value" id="btc-change" style="font-weight: bold; font-family: monospace;">— 0.00%</span>
+      <div class="gold-widget-title">Bitcoin (BTC/USDT)</div>
+      <div class="gold-widget-content">
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Precio:</span>
+          <span class="gold-widget-value" id="btc-price" style="font-size: 1.1em;">$ --,--.--</span>
+        </div>
+        <div class="gold-widget-row">
+          <span class="gold-widget-label">Cambio:</span>
+          <span class="gold-widget-value" id="btc-change" style="font-weight: bold; font-family: monospace;">— 0.00%</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <div class="button-container">
-    <a href="raspa/" class="button">¿ R A S P A ?</a>
-    <a href="viwnet/" class="button">ANTIGUO VIWNET</a>
-    <a href="Windows/" class="button">Activación de Windows</a>
-    <a href="web-apks/" class="button">ApHacks (INAPKS)</a>
-    <a href="IA/" class="button">IA - Experimental (BETA)</a>
-    <a href="FF/" class="button">Countdown FF</a> 
+    <a href="raspa/index.html" class="button">¿ R A S P A ?</a>
+    <a href="viwnet/index.html" class="button">ANTIGUO VIWNET</a>
+    <a href="Windows/index.html" class="button">Activación de Windows</a>
+    <a href="web-apks/index.html" class="button">ApHacks (INAPKS)</a>
+    <a href="IA/index.html" class="button">IA - Experimental (BETA)</a>
+    <a href="FF/index.html" class="button">Countdown FF</a> 
     <a href="https://github.com/ax-col/ax" class="button">Repositorio AX</a>
-  <!--  <a href="CPWEB/" class="button">CP WEB (Colaboración) Para curiosos</a> -->
-    </div>
+  </div>
 
-<button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
+  <button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
 
-<video class="video-fondo" id="videoFondo" autoplay muted loop playsinline preload="auto">
-  <!-- El source se asignará con JavaScript -->
-</video>
+  <video class="video-fondo" id="videoFondo" autoplay muted loop playsinline preload="auto">
+  </video>
 
-<!-- Script JS corregido con versión (sin duplicar) -->
-<script src="script.js?v=M3V15"></script>
+  <script src="script.js?v=M3V15"></script>
+  
+  <script>
+    // Registro de SW optimizado para el APK
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log("AX: Sistema Offline Listo"))
+          .catch(err => console.log("AX: Error SW", err));
+      });
+    }
+
+    // Control del preloader
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('preloader');
+        if(loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.style.display = 'none', 500);
+        }
+      }, 1000);
+    });
+  </script>
 
 </body>
 </html>

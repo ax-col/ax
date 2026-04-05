@@ -1,14 +1,14 @@
 {
-  "version": "M3V18A26", 
-  "buildDate": "2026-03-24T19:50:00Z",
+  "version": "M4A26V1", 
+  "buildDate": "2026-04-05T11:00:00Z",
   "changelog": [
     {
-      "version": "M3V18A26",
-      "date": "2026-03-24",
+      "version": "M4A26V1",
+      "date": "2026-04-05",
       "changes": [
-       "Implementación de Gold-API con bypass de caché (?t=)",
-       "Inversión de lógica de sonido (Mute por defecto)",
-       "Optimización de transparencia en timer-container"
+       "Migración completa a rutas locales para APK",
+       "Optimización de Service Worker (Caché dinámica de videos)",
+       "Corrección de Manifiesto para modo standalone"
       ]
     }
   ]
