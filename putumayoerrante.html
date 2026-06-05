@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Putumayo Errante | Guía Turística Completa</title>
+    <style>
+        /* --- VARIABLES Y CONFIGURACIÓN BASE --- */
+        :root {
+            --verde-selva: #1b4332;
+            --verde-claro: #2d6a4f;
+            --esmeralda: #52b788;
+            --arena: #f8f9fa;
+            --oscuro: #212529;
+            --blanco: #ffffff;
+            --gris-suave: #e9ecef;
+            --fuente: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--fuente);
+            background-color: var(--arena);
+            color: var(--oscuro);
+            line-height: 1.6;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--verde-selva);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            color: var(--blanco);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--esmeralda);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+            height: 35vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--blanco);
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+
+        /* --- SECCIÓN SELECTOR DE MUNICIPIOS --- */
+        .seccion-navegacion {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 2rem;
+            background-color: var(--blanco);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .section-title {
+            color: var(--verde-selva);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--esmeralda);
+            margin: 0.5rem auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .instruccion {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        /* Panel Limpio de Botones de Opciones */
+        .panel-opciones {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .btn-municipio {
+            background-color: var(--arena);
+            color: var(--verde-selva);
+            border: 2px solid var(--verde-claro);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-municipio:hover, .btn-municipio.activo {
+            background-color: var(--verde-claro);
+            color: var(--blanco);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(45, 106, 79, 0.2);
+        }
+
+        /* --- CONTENEDOR DINÁMICO DE SITIOS --- */
+        .contenedor-sitios {
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1rem;
+        }
+
+        .municipio-bloque {
+            display: none; /* Controlado dinámicamente por JS */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .municipio-header {
+            background-color: var(--verde-selva);
+            color: var(--blanco);
+            padding: 1.2rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .grid-sitios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .sitio-card {
+            background-color: var(--blanco);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .sitio-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .sitio-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .sitio-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .sitio-info h3 {
+            color: var(--verde-selva);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .sitio-info p {
+            font-size: 0.95rem;
+            color: #444;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Bloques informativos de gran valor */
+        .bloque-ruta {
+            background-color: #e3f2fd;
+            border-left: 4px solid #1e88e5;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+            border-radius: 4px;
+            margin-bottom: 0.6rem;
+            color: #1565c0;
+        }
+
+        .bloque-valor {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--esmeralda);
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            color: #2e7d32;
+        }
+
+        /* --- ANIMACIÓN --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--verde-selva);
+            color: var(--blanco);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-sitios { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+            .panel-opciones { gap: 0.5rem; }
+            .btn-municipio { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Putumayo<span>Errante</span></div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>CENTROS TURISTICOS Y CULTURALES DEL PUTUMAYO</h1>
+        <p>Explora de forma directa la oferta ecoturística, fluvial y cultural seleccionando la zona de tu interés.</p>
+    </section>
+
+    <!-- PANEL DE CONTROL LIMPIO -->
+    <section class="seccion-navegacion">
+        <h2 class="section-title">Selecciona una Región o Municipio</h2>
+        <p class="instruccion">Filtra instantáneamente los atractivos y detalles de llegada haciendo clic en las opciones:</p>
+        
+        <div class="panel-opciones">
+            <!-- === MEDIO PUTUMAYO === -->
+            <button class="btn-municipio" onclick="verMunicipio('mocoa')">Mocoa</button>
+            <button class="btn-municipio" onclick="verMunicipio('villagarzon')">Villagarzón</button>
+            <button class="btn-municipio" onclick="verMunicipio('puerto-guzman')">Puerto Guzmán</button>
+
+            <!-- === ALTO PUTUMAYO === -->
+            <button class="btn-municipio" onclick="verMunicipio('valle-sibundoy')">Valle de Sibundoy</button>
+            <button class="btn-municipio" onclick="verMunicipio('santiago')">Santiago</button>
+            <button class="btn-municipio" onclick="verMunicipio('colon')">Colón</button>
+            <button class="btn-municipio" onclick="verMunicipio('san-francisco')">San Francisco</button>
+
+            <!-- === BAJO PUTUMAYO === -->
+            <button class="btn-municipio" onclick="verMunicipio('orito')">Orito</button>
+            <button class="btn-municipio" onclick="verMunicipio('puerto-asis')">Puerto Asís</button>
+            <button class="btn-municipio" onclick="verMunicipio('puerto-caicedo')">Puerto Caicedo</button>
+            <button class="btn-municipio" onclick="verMunicipio('valle-guamuez')">Valle del Guamuez</button>
+            <button class="btn-municipio" onclick="verMunicipio('san-miguel')">San Miguel</button>
+            <button class="btn-municipio" onclick="verMunicipio('puerto-leguizamo')">Puerto Leguízamo</button>
+        </div>
+    </section>
+
+    <!-- CONTENEDOR DE SITIOS TURÍSTICOS COMPLETO -->
+    <main class="contenedor-sitios">
+
+<!-- === MOCOA === -->
+        <div id="mocoa" class="municipio-bloque">
+            <div class="municipio-header">📍 Destinos en Mocoa (Capital del Piedemonte)</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://rutasdelosandes.com/images/rutas/putumayo/cascada-fin-del-mundo/cascada-fin-del-mundo.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cascada Fin del Mundo</h3>
+                        <p>Famosa caída libre de 70 metros de altura sobre la densa selva protectora.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Km 6 vía Mocoa-Villagarzón. De allí se inicia una caminata ecológica de aproximadamente 1.5 horas cruzando senderos de roca natural.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Cuenta con pozos naturales previos cristalinos donde está permitido bañarse de forma segura antes de llegar al gran salto.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.ecoturismoputumayo.com/images/atractivos/2/canon-del-mandiyaco-1.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cañón del Mandiyaco</h3>
+                        <p>Formación y fractura geológica de roca volcánica tallada de forma caprichosa por el río.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado justo en los límites fluviales con el Cauca, sobre la carretera principal que conduce a Pitalito. Entrada terrestre directa.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Contratar guías locales para descubrir las siluetas de animales y figuras míticas talladas en las rocas.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="data:image/jpeg;base64,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" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cascada Hornoyaco</h3>
+                        <p>Majestuoso e imponente salto de agua de 55 metros de altura oculto en la Serranía de los Churumbelos.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Vía Mocoa-Pitalito, ingresando por el sendero peatonal señalizado. Requiere una caminata ecológica de nivel medio de 1 hora entre vegetación nativa.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Al pie de la cascada se forma una inmensa piscina natural profunda, ideal para nadadores experimentados y desconexión total.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://expotur-eco.com/wp-content/uploads/2019/11/cascada-ojo-de-Dios.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cascada Ojo de Dios</h3>
+                        <p>Un prodigio de la naturaleza donde una potente corriente de agua atraviesa una enorme roca sólida cayendo en forma de cúpula.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Se comparte el mismo punto de partida hacia el Fin del Mundo (Km 6 vía Villagarzón), extendiendo el sendero con un guía certificado hacia la parte alta.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> El paso de la luz solar a través de la roca junto con el agua genera un efecto visual místico inigualable para la fotografía.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.ecoturismoputumayo.com/images/atractivos/6/cea-centro-experimental-amazonico-1.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Centro Experimental Amazónico (CEA)</h3>
+                        <p>Centro científico y parque de educación ambiental enfocado en la conservación, fauna y flora del ecosistema amazónico.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado sobre el Km 8 de la carretera principal que comunica a Mocoa con Villagarzón. Acceso directo e ideal para todo tipo de vehículos.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Visita obligada para conocer el vivero botánico, el suricato amazónico y los jaguares en proceso de rehabilitación y cuidado.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2020/06/reserva-natural-la-sociedad-civil-paway-sitios-turisticos-zonas-de-entretenimiento-mocoa-putumayo-colombia-9.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Reserva Natural Paway</h3>
+                        <p>Santuario ecológico y mariposario dedicado a la repoblación de especies nativas y la educación ambiental.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Localizado en el Km 7 de la vía Mocoa-Villagarzón, desviándose unos metros hacia la vereda San José del Pepino.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Cuenta con una espectacular mariposa Morpho Azul gigante y ofrece el hospedaje único en cabañas tipo "casa del árbol" a gran altura.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://media-cdn.tripadvisor.com/media/photo-s/05/23/5e/36/posada-turistica-dantayaco_rotated_270.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balneario Dantayaco y Cascada El Canalón</h3>
+                        <p>Dantayaco ofrece aguas tranquilas y familiares, mientras que El Canalón es una piscina natural encajonada entre imponentes paredes de roca.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Punto de inicio en la vereda San José del Pepino. Dantayaco es de acceso inmediato, mientras que El Canalón requiere 40 minutos de caminata por el cauce.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> El Canalón destaca por sus aguas de intensos tonos verde esmeralda comprimidas por la geografía rocosa, perfecto para tomar baños relajantes.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://weekend-bucket.s3.amazonaws.com/Cascada_Las_Golondrinas_3d2a82fbe7.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cascada Las Golondrinas</h3>
+                        <p>Hermosa e íntima caída de agua rodeada de musgos y vegetación nativa densa, bautizada por las aves que anidan allí.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Se ingresa desde las cercanías del área urbana de Mocoa, tomando un sendero ecológico veredal de nivel bajo-medio.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Un sitio ideal para el senderismo pacífico de observación botánica, libre de grandes aglomeraciones los fines de semana.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.ecoturismoputumayo.com/images/atractivos/5/cavernas-de-licamancha-1.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cavernas de Licamancha</h3>
+                        <p>Complejo misterioso de salones y pasadizos subterráneos esculpidos por corrientes de agua milenarias bajo la selva.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicadas en el sector rural norte de Mocoa. Exigen de manera estricta el acompañamiento de un guía especializado de la región y equipo de linternas.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Espectacular experiencia de espeleología donde se aprecian formaciones de estalactitas y estalagmitas naturales fosilizadas.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.ecoturismoputumayo.com/images/alojamientos/1/posada-turistica-dantayaco-5.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Posadas Turísticas y Gastronomía Local (Vereda Dantayaco)</h3>
+                        <p>Corredor cultural y gastronómico donde se fusiona el descanso rural con las delicias culinarias tradicionales de la región.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Concentradas a lo largo del Km 6 de la vía hacia Villagarzón, sirviendo como base de operaciones para los viajeros en el piedemonte.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> El lugar perfecto para degustar un auténtico maito de pescado, chicha de chontaduro y adquirir artesanías directas sin intermediarios.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === VILLAGARZÓN === -->
+        <div id="villagarzon" class="municipio-bloque">
+            <div class="municipio-header">📍 Villagarzón - Puerta Fluvial y Arqueológica</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?auto=format&fit=crop&w=500&q=80" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Reserva Donde se Oculta el Sol</h3>
+                        <p>Circuito natural que resguarda las hermosas cascadas Mohano (18m) y Wakana (10m).</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desde el casco urbano de Villagarzón tomando transporte veredal hasta el punto de inicio del sendero ecológico.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Un bellísimo proyecto de turismo rural comunitario que incluye almuerzos tradicionales y guías nativos.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.parquesnacionales.gov.co/wp-content/uploads/2024/12/Parque-Nacional-Natural-Cueva-de-los-Guacharos-Cueva-del-indio-Danilo-Arenas-scaled.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Salto del Indio y Cueva de los Guácharos</h3>
+                        <p>Doble cascada sobre la quebrada Kuriyaku contigua a impresionantes sistemas de cavernas subterráneas habitadas por aves nocturnas.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Senderos especializados saliendo de Villagarzón. Las cavernas requieren obligatoriamente equipo de luces y acompañamiento experto.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Combinación perfecta de espeleología extrema y misticismo en un territorio custodiado históricamente por la etnia Inga.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/inline-images/FOTO%20DOS%20PETROGLIFOS%20DEL%20VIDES.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Petroglifos del Vides y Pozo Tres Islas</h3>
+                        <p>Grabados precolombinos en piedra caliza ubicados a las orillas de charcos profundos de agua color verde esmeralda.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Sector rural del Río Vides en Villagarzón. Accesible mediante caminata guiada por las orillas del río.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Excelente sitio para combinar la natación en ríos limpios (famosos "paseos de olla" locales) con observación arqueológica viva.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://imagenes2.eltiempo.com/files/image_1200_535/uploads/2019/05/06/5cd10269ec08a.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Pozo Azul (Río Vides)</h3>
+                        <p>Una piscina natural profunda alimentada por el Río Vides que destaca por sus intensos y bellos reflejos de color azul-verdoso.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Siguiendo el cauce rural del Río Vides a través de senderos ecológicos marcados. Se aconseja ir en compañía de nativos que conocen las profundidades.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Sus aguas frescas que bajan directo de la montaña ofrecen un contraste térmico ideal para renovar energías en los días calurosos.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/File-Monolito_de_la_Piedra_del_Sol_%28centro%29.jpg/250px-File-Monolito_de_la_Piedra_del_Sol_%28centro%29.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>La Piedra del Sol</h3>
+                        <p>Monolito sagrado arqueológico con grabados geométricos profundos que eran utilizados como marcadores astronómicos precolombinos.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicada en zona rural protegida de Villagarzón. Se requiere coordinar la entrada con guías culturales o miembros autorizados de la comunidad.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Los trazos en la roca representan los ciclos lunares y solares antiguos, un destino de enorme valor para los entusiastas de la antropología.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.quehacerentenerife.org/wp-content/uploads/2023/11/43_Charco-de-Las-Piedras-1024x576.png" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Charco de las Piedras</h3>
+                        <p>Balneario natural caracterizado por su lecho cubierto de grandes piedras pulidas y corrientes suaves ideales para el descanso.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Con fácil acceso vehicular desde el casco urbano a través de carreteras destapadas transitables en buen estado técnico.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Sus orillas espaciosas y seguras lo convierten en el punto de encuentro predilecto para caminatas fotográficas y tardes de esparcimiento familiar.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === VALLE DE SIBUNDOY === -->
+         <div id="valle-sibundoy" class="municipio-bloque">
+            <div class="municipio-header">📍 Valle de Sibundoy - Identidad y Montaña Andina</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://cdn.destia.co/img/tours/157/2024/3/fregjupbsydnwmzltkoh-rhy2464.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Ruta Artesanal y Cultural (Sibundoy y San Francisco)</h3>
+                        <p>Inmersión en los talleres de los pueblos Kamëntšá e Inga para conocer el arte prehispánico de la región.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Municipios del Alto Putumayo, accesibles directamente por la carretera Pasto-Mocoa. Los talleres abren sus puertas al público en los centros urbanos.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Compra directa de máscaras de madera que reflejan los estados de ánimo de los ancestros y fajas (chumbes) tejidas a mano.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://ecoglobalexpeditions.com/wp-content/uploads/2017/03/Chorrera-2018w-1.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Páramo de Bordoncillo y Cascada de la Chorrera</h3>
+                        <p>Ecosistemas andinos de alta montaña formados por frailejones, lagunas glaciales y una densa cortina de agua en el bosque de niebla.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Sector alto en los límites de Santiago y San Francisco. Requiere ropa térmica de abrigo e iniciar temprano las caminatas guiadas.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Ideal para deportistas y senderistas de alta resistencia que deseen experimentar el nacimiento de las aguas del Putumayo.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://i.ytimg.com/vi/hdYV_pGMqIo/maxresdefault.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Parque de la Interculturalidad (Sibundoy)</h3>
+                        <p>Centro neurálgico y plaza mayor adornada con imponentes esculturas talladas en troncos de árboles secos por artistas nativos.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado en pleno centro urbano del municipio de Sibundoy, sobre el eje de la Troncal del Putumayo.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Una galería de arte a cielo abierto que relata la cosmogonía y mitología local, rodeada de cafés tradicionales e iglesias coloniales.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.semana.com/resizer/v2/IQECCRFNPNEGXKE4LGJ3PKNXVY.jpeg?auth=ca663f57c8196fa3101df27e56f3cd666e07575c0b293250d332eeff714c7f44&smart=true&quality=75&width=480" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Centro Ceremonial e Histórico Kamëntsá</h3>
+                        <p>Lugar de encuentro ancestral sagrado donde los taitas y médicos tradicionales transmiten la medicina de la selva y la montaña.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> En la periferia rural de Sibundoy, coordinando previamente el ingreso formal con el Cabildo Indígena local.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Resguardo de la herencia medicinal y espiritual, clave para comprender las ceremonias tradicionales asociadas al Clestrinÿe (Carnaval de la Pérdida).</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === Orito === -->
+        <div id="orito" class="municipio-bloque">
+            <div class="municipio-header">📍 Orito - Saberes, Biodiversidad y Agua Selva</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/inline-images/Foto%20cacao%2003.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Ruta del Chocolate y Fincas Agroturísticas</h3>
+                        <p>Un recorrido educativo que expone la sustitución sostenible de cultivos agrícolas por cacao de aroma premium.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desde la cabecera municipal de Orito, se coordinan recorridos con las cooperativas hacia las fincas veredales.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Proceso completamente interactivo: cosechas la mazorca fresca, pruebas el fruto y mueles tu propio chocolate selvático.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2018/01/corunta-cascada-silvania-orito-turismo-4.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Centro Ecoturístico MAYJU y Cascada Silvania</h3>
+                        <p>Parque temático de aventura con puentes colgantes, cablevuelo y senderos hacia cascadas de agua pura.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado a 40 minutos en carro o moto desde el centro urbano de Orito por vía veredal afirmada.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Cuenta con una espectacular "cabaña de aire" flotante construida a 12 metros de altura sobre un árbol nativo.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.parquesnacionales.gov.co/wp-content/uploads/2013/08/Orito_Ingi_Ande_-_cuenca_orito_expedicion_umiyaco-9-_Foto_Archivo_Parques.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Santuario de Flora Plantas Medicinales Orito Ingi Ande</h3>
+                        <p>Área protegida por Parques Nacionales de Colombia destinada a blindar el banco genético botánico de la Amazonía.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> El ingreso es restringido y requiere un estricto permiso institucional previo y acompañamiento de la etnia Kofán.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Considerado la cuna de la medicina tradicional y sagrada del Yagé; un espacio de conservación científica y espiritual supremo.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHQdC8lZ6060U7mqo-NjLSbsM3mpjCJ6rDjg&s" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>El Histórico Viejo Puente de Yarumo</h3>
+                        <p>Estructura emblemática sobre el Río Orito que funciona como corazón logístico e histórico del municipio.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado en las afueras de Orito, punto de partida clave para explorar el sistema fluvial del sur.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Sus alrededores limpios son aprovechados por los locales para refrescarse los fines de semana e iniciar caminatas fotográficas.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Ba%C3%B1istas_en_Piedra_del_Pijil%C3%AD.jpg/330px-Ba%C3%B1istas_en_Piedra_del_Pijil%C3%AD.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>La Enigmática Piedra del Pijilí</h3>
+                        <p>Un descomunal bloque rocoso en medio de la densa selva que posee misteriosas petrograbaciones indígenas precolombinas.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Sector rural profundo de Orito. Se requiere una caminata ecológica guiada de nivel medio a través de senderos boscosos húmedos.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Un místico rincón arqueológico rodeado de mitos selváticos locales, idóneo para los amantes de la aventura extrema y la historia nativa.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9k1vp9Z4cNQNNaTxuOT3VU9pE93CC5yOAhQ&s" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balneario Quebrada la Cocha</h3>
+                        <p>Hermoso paraje natural de aguas cristalinas, templadas y muy calmadas que bajan directamente de la reserva forestal.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> De muy fácil acceso vehicular o en moto a través de las vías interveredales cercanas a la periferia de Orito.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Es el destino familiar por excelencia del municipio para disfrutar de los tradicionales "paseos de olla" y nadar con niños con total seguridad.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://cdn.andeshandbook.org/media/route_gallery/17389832351601757533.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cascada El Canelón</h3>
+                        <p>Una hermosa caída de agua escondida que desciende con fuerza formando un estrecho canal de roca lisa y piscinas de tono verde esmeralda.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Se realiza un trekking ecológico siguiendo el cauce del río con el apoyo indispensable de guías locales que conozcan el terreno.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Las paredes naturales encajonadas permiten experimentar un entorno completamente virgen, ideal para la desconexión total y la fotografía de naturaleza.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === PUERTO ASÍS === -->
+        <div id="puerto-asis" class="municipio-bloque">
+            <div class="municipio-header">📍 Puerto Asís - Capital Fluvial Comercial</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://www.prensa.com/resizer/v2/VC6CM3PPCRC63BGUCCPHMCVGA4.jpg?auth=ac9e4569bb96589f65f7c7e03fbc4091f4cfc8513f8517bfcf17627578d4e022" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Finca La Fortuna (Ruta de Frutas Amazónicas)</h3>
+                        <p>Espacio agrícola interactivo dedicado a la domesticación y transformación de frutos exóticos selváticos.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Vía terrestre a pocos minutos saliendo del centro de Puerto Asís. Excelente acceso para automóviles.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Podrás degustar jugos y postres únicos elaborados con arazá (ácido), copoazú y el energizante asaí.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://tubarco.news/wp-content/uploads/2024/10/Ruta-Nautica-Valle-del-Cauca.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Ruta Tangara y Navegación Fluvial</h3>
+                        <p>Circuito enfocado en el avistamiento técnico de aves tropicales y primates a las orillas del caudaloso Río Putumayo.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Salidas guiadas en lancha rápida desde los muelles fluviales principales de Puerto Asís.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Práctica de la "Taparuka", una técnica de pesca silenciosa y tradicional enseñada por los pescadores locales.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://media-cdn.tripadvisor.com/media/photo-s/15/c4/87/a6/paseo-en-bote-en-el-rio.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Muelle de Hongkong y Paseo en Bote</h3>
+                        <p>Principal puerto fluvial comercial y turístico desde donde se contempla la imponencia y la inmensidad del Río Putumayo.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado en la zona urbana periférica de Puerto Asís, con facilidades de parqueo y acceso para todo tipo de vehículos.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Punto ideal para abordar las famosas falcas y lanchas colectivas, deleitarse con la gastronomía ribereña basada en pescado fresco y capturar atardeceres espectaculares.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2020/06/puente-internacional-sobre-rio-san-miguel-sitios-turisticos-zonas-de-entretenimiento-la-dorada-putumayo-colombia-2.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Puente Internacional de San Miguel</h3>
+                        <p>Imponente obra de infraestructura vial que cruza el río fronterizo, uniendo comercial y culturalmente a Colombia con el Ecuador.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Tomando el corredor del sur pavimentado desde Puerto Asís hacia el extremo fronterizo del departamento.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Un estratégico punto geográfico de intercambio binacional rodeado de dinámicos paisajes comerciales de frontera.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XTp2kwhez7OM6h0TK4chF8XaI3Sj0Oihnw&s" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balneario Natural Playa Rica</h3>
+                        <p>Extensas y hermosas playas de arena y piedra fina formadas en los remansos de los ríos locales durante la temporada de verano.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desvío rural de pocos kilómetros por carretera destapada en buen estado partiendo desde Puerto Asís.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Es el balneario popular por excelencia del municipio, perfecto para nadar, acampar y disfrutar de tardes deportivas al aire libre.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.ecoturismoputumayo.com/images/atractivos/18/reserva-natural-el-escondite-1.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Reserva Natural El Escondite</h3>
+                        <p>Santuario de conservación boscoso privado enfocado en la reforestación, la protección de fauna local y la pedagogía ambiental.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Coordinando previamente el ingreso con los administradores ambientales del predio, ubicado en las afueras de la ciudad.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Caminatas por senderos interpretativos tupidos donde se pueden observar especies de flora nativa y monos churuqueros en libertad.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === PUERTO CAICEDO === -->
+        <div id="puerto-caicedo" class="municipio-bloque">
+            <div class="municipio-header">📍 Puerto Caicedo - Corazón Verde del Río San Juan</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/21/05/c2/bahia-concha.jpg?w=1200&h=-1&s=1" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Playa de la Cocha y Turismo Fluvial</h3>
+                        <p>Inmensas islas y playas de arena blanca que se forman sobre el Río San Juan en épocas secas.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Se aborda una embarcación artesanal en el muelle de Puerto Caicedo navegando aguas abajo guiado por operadores locales.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Zona ideal para practicar bodyrafting (flotación asistida) gracias a la limpieza del río San Juan y acampar en las playas.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.viajaporcolombia.com/images/cronicas/san-juan-piedra-escalera.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balneario Las Piedras (Río San Juan)</h3>
+                        <p>Tradicional y concurrido paraje natural caracterizado por sus grandes y pulidas rocas asentadas sobre piscinas de aguas templadas.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Con un excelente y rápido acceso por vía terrestre interveredal, situado a escasos minutos de la cabecera municipal.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Es el punto de encuentro por excelencia de la comunidad para caminatas familiares de fin de semana y los tradicionales almuerzos a la orilla del río.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://s0.wklcdn.com/image_198/5959788/45537122/29953089.700x525.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Sendero de la Boa Ancestral</h3>
+                        <p>Circuito místico interpretativo que recorre humedales boscosos protegidos, hogar de leyendas sobre la gran serpiente protectora del agua.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ruta especializada que parte desde los límites rurales de Puerto Caicedo. Se exige obligatoriamente ir acompañado de un guía nativo.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Una inmersión profunda que combina el senderismo para el avistamiento de fauna y la preservación de relatos mitológicos de las comunidades locales.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === VALLE DEL GUAMUEZ === -->
+        <div id="valle-guamuez" class="municipio-bloque">
+            <div class="municipio-header">📍 Valle del Guamuez - Agroecología y Frontera Viva</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://www.cali.gov.co/info/caligovco_se/media/pubInt/thumbs/thMetapubInt_600X600_191499.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Resguardo Yarinal (Cultura Kofán / A'i)</h3>
+                        <p>Asentamiento tradicional que preserva con celo su lengua autóctona, cantos rituales y manejo ecológico.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desde el casco urbano de La Hormiga, tomando la ruta terrestre hacia el puente internacional de San Miguel. Requiere concertación previa obligatoria.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Demostraciones auténticas de cacería ancestral con cerbatanas de madera y talleres de tintura natural de textiles.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://s1.wklcdn.com/image_147/4427912/51905414/34442902.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Ruta Agroturística de la Pimienta (La Hormiga)</h3>
+                        <p>Un recorrido técnico y pedagógico por los cultivos de pimienta negra de aroma intenso, reconocidos a nivel nacional por su alta calidad.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Circuitos organizados por asociaciones locales partiendo desde el casco urbano de La Hormiga hacia las veredas agroecológicas productoras.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Experiencia interactiva de recolección y secado artesanal del grano, complementada con degustaciones gastronómicas sazonadas con pimienta regional.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2020/06/rio-guamuez-inspeccion-el-tigre-sitios-turisticos-zonas-de-entretenimiento-valle-del-guamuez-la-hormiga-putumayo-colombia-4.png" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balneario Natural Río Guamuez</h3>
+                        <p>Amplio y refrescante remanso de aguas cristalinas que bajan de la cordillera, rodeado de frondosos árboles nativos de la llanura amazónica.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> De muy fácil y rápido acceso terrestre en carro o motocicleta por los corredores viales aledaños al centro urbano del municipio.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> El sitio turístico y recreativo por excelencia para el esparcimiento familiar de fin de semana, ideal para nadar y descansar en un ambiente muy fresco.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD-N9AV_h5hA6sVWFgJHsmFNMfohP3mdBCeQ&s" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Reserva Natural Ecológica El Diamante</h3>
+                        <p>Sendero de selva tropical protegida que sirve de refugio a gran variedad de aves exóticas, mariposas y pequeños mamíferos amazónicos.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desvío rural por la vía que conduce hacia el sector de frontera. Se aconseja realizar las caminatas en compañía de guías locales certificados.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Un destino perfecto para la desconexión total, el senderismo interpretativo y la fotografía de naturaleza en un entorno boscoso completamente conservado.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === PUERTO LEGUÍZAMO === -->
+        <div id="puerto-leguizamo" class="municipio-bloque">
+            <div class="municipio-header">📍 Puerto Leguízamo - Selva Amazónica Profunda</div>
+            <div class="grid-sitios">
+                
+                <div class="sitio-card">
+                    <img src="https://old.parquesnacionales.gov.co/portal/wp-content/uploads/2013/08/Rodrigo_Duran_s09.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Parque Nacional Natural La Paya</h3>
+                        <p>Santuario de conservación nacional absoluto que alberga la gigantesca e indómita Laguna de la Apaya.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Exclusivamente por vía fluvial navegando largas horas el río Putumayo desde Puerto Asís o volando directo a Leguízamo. Requiere lanchas con motores potentes.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Territorio virgen donde es posible observar delfines rosados de agua dulce (toninas), caimanes negros y monos soldados en su estado natural.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://cdn979857.fac.mil.co/sites/default/files/gallery-article/patrullajes_fluviales_fortalecen_seguridad_en_el_rio_orteguaza_6_1.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Expedición Fluvial por los Ríos Putumayo y Caquetá</h3>
+                        <p>Una travesía náutica extrema por las arterias fluviales más imponentes del sur colombiano, recorriendo densos e infinitos paisajes de selva virgen.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Rutas en embarcaciones fluviales de largo alcance o falcas que parten de los muelles autorizados de Puerto Leguízamo bajo la supervisión de marinos fluviales.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> La inmersión definitiva en el pulmón del mundo, ideal para la desconexión tecnológica radical, la navegación de aventura y la fotografía de horizontes amazónicos salvajes.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://i.ytimg.com/vi/lJytFbatYRQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAywyNUID1zJBoFZ4O7Lq47wM4lLw" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Resguardo Indígena Murui-Muina (Cultura Huitoto)</h3>
+                        <p>Asentamiento ancestral que resguarda la sabiduría milenaria de la selva en su tradicional Maloca, compartiendo su cosmogonía y danzas espirituales.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Por vía fluvial o senderos ecológicos específicos desde la cabecera municipal. Es fundamental contar con la invitación y aprobación previa de las autoridades comunitarias.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Experiencia cultural mística invaluable. Incluye la pedagogía del mambeo tradicional, diálogos con los abuelos sabios y el conocimiento de plantas medicinales sagradas.</div>
+                    </div>
+                </div>
+
+                <div class="sitio-card">
+                    <img src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/12/d7/fc/bd.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Muelle Turístico y Avistamiento de Toninas</h3>
+                        <p>El vibrante punto de encuentro del municipio a orillas del río, desde donde se coordinan los recorridos turísticos y se observa la rutina del pueblo pesquero.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicado directamente en el frente fluvial del casco urbano de Puerto Leguízamo; de acceso inmediato a pie desde cualquier hotel local.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> En sus proximidades, con un poco de paciencia al amanecer o al atardecer, es común ver la superficie del agua romperse por el juego sutil de los delfines rosados y grises.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<!-- === SANTIAGO === -->
+        <div id="santiago" class="municipio-bloque">
+            <div class="municipio-header">📍 Santiago - Puerta de Oro del Putumayo</div>
+            <div class="grid-sitios">
+                <div class="sitio-card">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/6c/5d/c2/hermosos-paisajes-recoorridos.jpg?w=1200&h=-1&s=1" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Laguna de San Diego</h3>
+                        <p>Espejo de agua místico situado en la parte alta del municipio, rodeado de pastizales andinos, neblina y leyendas tradicionales de la etnia Inga.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desvío rural de 20 minutos partiendo desde la cabecera municipal de Santiago, accesible para vehículos de tracción simple.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Excelente locación para el avistamiento de aves migratorias de montaña y senderismo paisajístico en un entorno de paz absoluta.</div>
+                    </div>
+                </div>
+                <div class="sitio-card">
+                    <img src="https://www.viajes.cl/hubfs/Piscina%20interior%20de%20Termas%20de%20Jahuel%20Hotel%20%26%20Spa.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balneario y Termales de Santiago</h3>
+                        <p>Afloramientos naturales de aguas templadas ricos en minerales subterráneos que brotan a las faldas de la cordillera andina.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicados a pocos kilómetros del centro urbano, con accesos señalizados y parqueadero para motocicletas y carros.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Espacio tradicional de relajación física y turismo de bienestar, ideal para aclimatarse al entrar al departamento.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- === COLÓN === -->
+        <div id="colon" class="municipio-bloque">
+            <div class="municipio-header">📍 Colón - Bienestar y Aguas Medicinales</div>
+            <div class="grid-sitios">
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2018/07/centro-turistico-ambiaku-termales-colon-putumayo-6.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Termales de Ambiaku</h3>
+                        <p>Piscinas naturales de aguas termales mineromedicinales dispuestas para el descanso en medio de la imponente cordillera andina.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Ubicadas en el municipio de Colón (Valle de Sibundoy), desvío terrestre corto y totalmente pavimentado desde la vía principal.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Ecoturismo de bienestar ideal para desintoxicar el cuerpo y relajar los músculos gracias a sus ricas propiedades minerales terrestres.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- === SAN FRANCISCO === -->
+        <div id="san-francisco" class="municipio-bloque">
+            <div class="municipio-header">📍 San Francisco - Sendero de Aguas de Montaña</div>
+            <div class="grid-sitios">
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2020/07/paramo-de-bordoncillo-o-quilinsayaco-sitios-turisticos-zonas-de-entretenimiento-valle-del-sibundoy-santiago-putumayo-colombia-3.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Páramo de Bordoncillo y La Chorrera</h3>
+                        <p>Ecosistemas andinos de alta montaña formados por densos frailejones, lagunas glaciales y una imponente cortina de agua en el bosque de niebla.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Sector alto en los límites de Santiago y San Francisco. Requiere ropa térmica de abrigo e iniciar temprano las caminatas guiadas.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Destino ideal para deportistas y senderistas de alta resistencia que busquen experimentar el nacimiento de las aguas del Putumayo.</div>
+                    </div>
+                </div>
+                <div class="sitio-card">
+                    <img src="https://www.ecoturismoputumayo.com/images/atractivos/4/cascadas-fin-del-mundo-1.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Cascada Minchoy</h3>
+                        <p>Escondida y majestuosa caída de agua cristalina y muy helada que desciende de los bosques protectores andino-amazónicos.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desde el municipio de San Francisco, tomando la ruta hacia la vereda Minchoy, seguido de un trekking ecológico de nivel medio-alto.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Un entorno completamente virgen para la desconexión total. Sus estrechos cañones rocosos albergan gran variedad de orquídeas salvajes.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- === PUERTO GUZMÁN === -->
+        <div id="puerto-guzman" class="municipio-bloque">
+            <div class="municipio-header">📍 Puerto Guzmán - Portal Fluvial del Río Caquetá</div>
+            <div class="grid-sitios">
+                <div class="sitio-card">
+                    <img src="https://colombia.un.org/sites/default/files/styles/hero_header_2xl_1x/public/2021-12/festival_rafting_-El%20turismo%20y%20la%20naturaleza%20generan%20tejido%20social%20y%20paz%20en%20el%20r%C3%ADo%20Pato%2C%20en%20Caquet%C3%A1.jpg?itok=FW63JQi4" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Ecoturismo Comunitario en el Río Caquetá</h3>
+                        <p>Impresionantes recorridos en embarcaciones tradicionales por uno de los ríos más caudalosos de Colombia, conectando con islas nativas y playas estacionales.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Desde el muelle principal de Puerto Guzmán, se coordinan salidas en falcas guiadas por pescadores locales autorizados.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Observación directa de avifauna amazónica profunda, intercambio cultural con comunidades ribereñas y atardeceres mágicos sobre el horizonte del agua.</div>
+                    </div>
+                </div>
+                <div class="sitio-card">
+                    <img src="https://www.vozterra.com/assets/images/capitulos/caqueta/ecosistema/Rio_Sarabando_El_Horeb_Caqueta.jpg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Senderos Ecológicos y Humedales del Putumayo</h3>
+                        <p>Caminatas interpretativas a través de densos bosques de galería y humedales protegidos que sirven de refugio a especies de fauna silvestre.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Rutas terrestres y semi-fluviales que parten desde las afueras rurales de la cabecera municipal de Guzmán.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> El entorno perfecto para el senderismo fotográfico y el avistamiento técnico de primates y mariposas exóticas en un hábitat sin intervención masiva.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- === SAN MIGUEL === -->
+        <div id="san-miguel" class="municipio-bloque">
+            <div class="municipio-header">📍 San Miguel (La Dorada) - Ventana de Integración Fronteriza</div>
+            <div class="grid-sitios">
+                <div class="sitio-card">
+                    <img src="https://ccputumayo.org.co/wp-content/uploads/2024/12/Diapositiva2-1.png" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Eje Fronterizo y Puente Internacional San Miguel</h3>
+                        <p>Punto de conexión binacional clave sobre el río San Miguel que une al departamento del Putumayo con la provincia de Sucumbíos en Ecuador.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Accesible por la Troncal del Sur, vía completamente pavimentada en excelente estado desde el Valle del Guamuez hasta la frontera.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Dinámico intercambio comercial y multicultural de frontera. Es una parada obligatoria para fotografiar el límite geográfico binacional.</div>
+                    </div>
+                </div>
+                <div class="sitio-card">
+                    <img src="https://www.encuentraloenputumayo.com/wp-content/uploads/2018/02/balneario-y-estadero-las-rocas-zonas-de-entretenimiento-salon-de-eventos-hormiga-valle-del-guamuez-la-hormiga-putumayo-colombia-3.jpeg" class="sitio-img">
+                    <div class="sitio-info">
+                        <h3>Balnearios del Río San Miguel</h3>
+                        <p>Zonas de recreación natural con playas de piedra pulida y corrientes refrescantes ideales para mitigar el denso calor de la llanura.</p>
+                        <div class="bloque-ruta"><strong>🗺️ Cómo llegar:</strong> Playas y accesos ubicados a pocos minutos de la zona urbana de La Dorada, de muy fácil ingreso en moto o carro.</div>
+                        <div class="bloque-valor"><strong>💎 Valor:</strong> Espacio idóneo para compartir el tradicional "paseo de olla" del fin de semana junto a la comunidad local y disfrutar de aguas limpias de frontera.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Putumayo Errante. Fomentando el desarrollo del turismo comunitario y sostenible.</p>
+    </footer>
+
+    <!-- INTERACTIVIDAD CON JAVASCRIPT -->
+    <script>
+        function verMunicipio(idMunicipio) {
+            // 1. Quitar el estado activo de todos los botones
+            const botones = document.querySelectorAll('.btn-municipio');
+            botones.forEach(btn => btn.classList.remove('activo'));
+            
+            // 2. Añadir clase activa al botón presionado
+            // Se usa de forma segura event o el elemento correspondiente
+            if (window.event && window.event.target) {
+                window.event.target.classList.add('activo');
+            }
+
+            // 3. Ocultar todos los bloques informativos de destinos
+            const bloques = document.querySelectorAll('.municipio-bloque');
+            bloques.forEach(bloque => bloque.style.display = 'none');
+
+            // 4. Mostrar únicamente el bloque del municipio consultado
+            const bloqueSeleccionado = document.getElementById(idMunicipio);
+            if(bloqueSeleccionado) {
+                bloqueSeleccionado.style.display = 'block';
+                // Auto-scroll fluido automático hacia la sección abierta
+                bloqueSeleccionado.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Al cargar la página NO se selecciona ningún municipio por defecto, 
+        // manteniendo la vista fija en la parte superior.
+        document.addEventListener("DOMContentLoaded", function() {
+            // Se eliminó la simulación de clic inicial para mantener la interfaz limpia al cargar.
+        });
+    </script>
+</body>
+</html>
