@@ -26,7 +26,7 @@
             text-align: center;
             max-width: 450px;
             width: 90%;
-            display: block; /* Controlado por JS */
+            display: block;
         }
         h1 { color: #00adb5; margin-bottom: 20px; font-size: 28px; }
         p { color: #aaaaaa; font-size: 14px; }
@@ -41,10 +41,7 @@
             box-sizing: border-box;
             font-size: 16px;
         }
-        input[type="url"]:focus {
-            outline: none;
-            border-color: #00adb5;
-        }
+        input[type="url"]:focus { outline: none; border-color: #00adb5; }
         button {
             background-color: #00adb5;
             color: white;
@@ -91,35 +88,32 @@
 </div>
 
 <script>
-    // Configuración base de tu dominio en GitHub Pages
+    // Configuración base de tu repositorio en GitHub Pages
     const BASE_URL = "https://ax-col.github.io/ax/";
 
-    // CREDENCIALES COMPLETAS DE TU PROYECTO EN SUPABASE
+    // CREDENCIALES CONFIGURADAS CON TUS DATOS REALES
     const SUPABASE_URL = "https://bkgklfnwqunogtqclrho.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2tsZm53cXVub2d0cWNscmhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg0ODQzNTMsImV4cCI6MjAzNDA2MDM1M30.YOUR_REMAINING_KEY_HERE"; // Tu clave anon/public vinculada
+    const SUPABASE_KEY = "sb_publishable_O0MJd3GpF_oL7TVdLdUYEQ_mwCy81A-"; 
     
-    // Inicializar la conexión
-    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // CORRECCIÓN: Usamos 'supabaseClient' para evitar el conflicto de nombres
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 1. SISTEMA AUTOMÁTICO DE DETECCIÓN Y REDIRECCIÓN
+    // 1. CONTROL DE REDIRECCIONES AUTOMÁTICAS (?id=rf######)
     async function procesarRedireccion() {
         const urlParams = new URLSearchParams(window.location.search);
-        const codigoBuscado = urlParams.get('id'); // Busca si la URL contiene ?id=rfXXXXXX
+        const codigoBuscado = urlParams.get('id');
 
         if (codigoBuscado) {
-            // Si el usuario viene desde un link corto, ocultamos el formulario e iniciamos la carga
             document.getElementById('panel-acortador').style.display = 'none';
             document.getElementById('status-lectura').style.display = 'block';
 
-            // Consulta directa a tu tabla 'enlaces' en la nube
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('enlaces')
                 .select('url_larga')
                 .eq('codigo', codigoBuscado)
                 .single();
 
             if (data && data.url_larga) {
-                // Redirigir de inmediato al destino real
                 window.location.href = data.url_larga;
             } else {
                 alert("El código de enlace no existe en AX PROYECT.");
@@ -128,40 +122,36 @@
         }
     }
 
-    // 2. SISTEMA PARA CREAR NUEVOS ENLACES DESDE LA INTERFAZ
+    // 2. FUNCIÓN PARA CREAR NUEVOS ENLACES
     async function crearEnlace() {
         const urlLarga = document.getElementById('urlLarga').value.trim();
         
         if (!urlLarga || !urlLarga.startsWith('http')) {
-            alert("Por favor, introduce un enlace válido (debe empezar con http:// o https://)");
+            alert("Por favor, introduce un enlace válido (que empiece con http:// o https://)");
             return;
         }
 
-        // Generador de sufijo aleatorio rf######
         const numeroAleatorio = Math.floor(100000 + Math.random() * 900000);
         const nuevoCodigo = "rf" + numeroAleatorio;
 
-        // Mandar los datos directo a tu tabla en Supabase
-        const { error } = await supabase
+        // Guardar fila en la tabla de Supabase
+        const { error } = await supabaseClient
             .from('enlaces')
             .insert([{ codigo: nuevoCodigo, url_larga: urlLarga }]);
 
         if (error) {
-            alert("Error al conectar con Supabase: " + error.message);
+            alert("Error al conectar con tu base de datos: " + error.message);
             return;
         }
 
-        // Si se guardó correctamente, armamos la URL pública unificada
         const linkFinal = BASE_URL + "?id=" + nuevoCodigo;
         const tagA = document.getElementById('linkAcortado');
         tagA.href = linkFinal;
         tagA.innerText = linkFinal;
         
-        // Mostrar la caja con el resultado listo para copiar
         document.getElementById('zonaResultado').style.display = 'block';
     }
 
-    // Arrancar la comprobación apenas cargue el archivo
     window.onload = procesarRedireccion;
 </script>
 

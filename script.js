@@ -70,13 +70,13 @@ function animarTexto() {
 }
 
 // ======================================================
-// CONTADOR MUNDIAL (CON ANIMACIÓN ORIGINAL)
+// CONTADOR 2027 (CON ANIMACIÓN ORIGINAL)
 // ======================================================
 let previousTimerValues = { days: '00', hours: '00', minutes: '00', seconds: '00' };
 
 function updateTimer() {
   // Fecha original del mundial
-  const targetDate = new Date('2026-06-11T10:00:00').getTime();
+  const targetDate = new Date('2027-01-01T10:00:00').getTime();
   const now = new Date().getTime();
   const difference = targetDate - now;
 
