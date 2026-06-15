@@ -91,7 +91,7 @@ function updateTimer() {
     updateTimerDisplay('minutes', minutes);
     updateTimerDisplay('seconds', seconds);
   } else {
-    document.querySelectorAll('.timer-title').forEach(t => t.textContent = '¡BIENVENIDO MUNDIAL!');
+    document.querySelectorAll('.timer-title').forEach(t => t.textContent = '¡BIENVENIDO 2027!');
   }
 }
 

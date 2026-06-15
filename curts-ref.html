@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redireccionando... - AX PROYECT</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #00adb5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <div id="status">Redireccionando al sitio web de origen...</div>
+
+<script>
+    const SUPABASE_URL = "https://bkgklfnwqunogtqclrho.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_O0MJd3GpF_oL7TVdLdUYEQ_mwCy81A-"; 
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function procesarRedireccion() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const codigoBuscado = urlParams.get('id'); // Captura el rfXXXXXX de la URL
+
+        if (codigoBuscado) {
+            // Busca la fila en Supabase que coincida con ese código
+            const { data, error } = await supabaseClient
+                .from('enlaces')
+                .select('url_larga')
+                .eq('codigo', codigoBuscado)
+                .single();
+
+            // Si lo encuentra, saca la URL original y saca al usuario hacia allá
+            if (data && data.url_larga) {
+                window.location.href = data.url_larga;
+            } else {
+                document.getElementById('status').innerText = "El enlace no existe en AX PROYECT.";
+            }
+        } else {
+            // Si entran a curts-ref.html sin poner un ?id=, los regresamos al panel
+            window.location.href = "https://ax-col.github.io/ax/curts/";
+        }
+    }
+
+    window.onload = procesarRedireccion;
+</script>
+</body>
+</html>
