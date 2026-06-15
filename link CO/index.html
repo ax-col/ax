@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AX - Acortador Global</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+        h1 { color: #00adb5; margin-bottom: 20px; font-size: 28px; }
+        p { color: #aaaaaa; font-size: 14px; }
+        input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #393e46;
+            border-radius: 6px;
+            background-color: #222831;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="url"]:focus {
+            outline: none;
+            border-color: #00adb5;
+        }
+        button {
+            background-color: #00adb5;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #007c82; }
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #222831;
+            border-radius: 6px;
+            display: none;
+            word-break: break-all;
+            border: 1px dashed #00adb5;
+        }
+        .resultado a { color: #00adb5; font-weight: bold; text-decoration: none; font-size: 16px; }
+        .resultado a:hover { text-decoration: underline; }
+        .status { font-size: 18px; color: #00adb5; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="panel-acortador">
+    <h1>AX Link Shortener</h1>
+    <p>Introduce tu enlace largo para guardarlo en la nube:</p>
+    <input type="url" id="urlLarga" placeholder="https://ejemplo.com/link-largo" required>
+    <button onclick="crearEnlace()">Acortar Enlace</button>
+
+    <div class="resultado" id="zonaResultado">
+        <p>¡Link global generado! Cópialo y compártelo:</p>
+        <p><a id="linkAcortado" href="#" target="_blank"></a></p>
+    </div>
+</div>
+
+<div id="status-lectura" class="status">
+    Buscando enlace en AX PROYECT y redireccionando...
+</div>
+
+<script>
+    // Configuración de tu dominio en GitHub Pages
+    const BASE_URL = "https://ax-col.github.io/ax/";
+
+    // CREDENCIALES ASOCIADAS A TU PANEL DE SUPABASE
+    const SUPABASE_URL = "https://bkgklfnwqunogtqclrho.supabase.co";
+    const SUPABASE_KEY = "TU_ANON_KEY_AQUI"; // <-- REEMPLAZA CON TU ANON KEY COMPLETA
+    
+    // Inicializar conexión
+    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 1. SISTEMA AUTOMÁTICO DE REDIRECCIÓN
+    async function procesarRedireccion() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const codigoBuscado = urlParams.get('id');
+
+        if (codigoBuscado) {
+            document.getElementById('panel-acortador').style.display = 'none';
+            document.getElementById('status-lectura').style.display = 'block';
+
+            // Consulta directa a la tabla 'enlaces' que acabas de crear
+            const { data, error } = await supabase
+                .from('enlaces')
+                .select('url_larga')
+                .eq('codigo', codigoBuscado)
+                .single();
+
+            if (data && data.url_larga) {
+                window.location.href = data.url_larga;
+            } else {
+                alert("El código de enlace no existe en AX PROYECT.");
+                window.location.href = BASE_URL;
+            }
+        }
+    }
+
+    // 2. SISTEMA DE CREACIÓN E INSERCIÓN
+    async function crearEnlace() {
+        const urlLarga = document.getElementById('urlLarga').value.trim();
+        
+        if (!urlLarga || !urlLarga.startsWith('http')) {
+            alert("Por favor, introduce un enlace válido (debe empezar con http:// o https://)");
+            return;
+        }
+
+        // Generador de sufijo aleatorio rf######
+        const numeroAleatorio = Math.floor(100000 + Math.random() * 900000);
+        const nuevoCodigo = "rf" + numeroAleatorio;
+
+        // Inserción en la base de datos en tiempo real
+        const { error } = await supabase
+            .from('enlaces')
+            .insert([{ codigo: nuevoCodigo, url_larga: urlLarga }]);
+
+        if (error) {
+            alert("Error al conectar con Supabase: " + error.message);
+            return;
+        }
+
+        // Mostrar el link resultante en la interfaz
+        const linkFinal = BASE_URL + "?id=" + nuevoCodigo;
+        const tagA = document.getElementById('linkAcortado');
+        tagA.href = linkFinal;
+        tagA.innerText = linkFinal;
+        
+        document.getElementById('zonaResultado').style.display = 'block';
+    }
+
+    window.onload = procesarRedireccion;
+</script>
+
+</body>
+</html>
