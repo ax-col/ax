@@ -75,7 +75,7 @@ function animarTexto() {
 let previousTimerValues = { days: '00', hours: '00', minutes: '00', seconds: '00' };
 
 function updateTimer() {
-  // Fecha original del mundial
+  // Contador para el 1 de enero de 2027 a las 10:00 AM (hora local)
   const targetDate = new Date('2027-01-01T10:00:00').getTime();
   const now = new Date().getTime();
   const difference = targetDate - now;

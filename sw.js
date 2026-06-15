@@ -1,9 +1,9 @@
-const CACHE_NAME = 'ax-cache-v3'; // Cambia el número cuando hagas un cambio grande
+const CACHE_NAME = 'ax-cache-v4'; // Cambia el número cuando hagas un cambio grande
 const assets = [
   './',
   './index.html',
-  './styles.css?v=M4V1',
-  './script.js?v=M4V1',
+  './styles.css?v=M6V1',
+  './script.js?v=M6V1',
   './manifest.json',
   './version.json'
 ];
