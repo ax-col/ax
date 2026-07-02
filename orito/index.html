@@ -347,10 +347,23 @@
             }
         });
 
+        // Medición limpia usando la propiedad .size nativa de los snapshots en JavaScript
         onValue(onlineRef, (snapshot) => {
-            const totalActive = snapshot.numChildren();
+            let totalActive = 0;
+            
+            // Si el nodo existe, iteramos sobre sus hijos para contar los usuarios reales en línea
+            if (snapshot.exists()) {
+                snapshot.forEach(() => {
+                    totalActive++;
+                });
+            }
+            
+            // Actualiza la interfaz dinámicamente con el conteo real exacto
             document.getElementById('active-users').textContent = totalActive;
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+
 </body>
 </html>
