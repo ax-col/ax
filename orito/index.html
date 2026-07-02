@@ -230,6 +230,27 @@
             font-weight: 300;
         }
 
+        .progress-bar-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 6px;
+            border-radius: 10px;
+            margin: 15px 0 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 65%;
+            height: 100%;
+            background: linear-gradient(90deg, #78e08f, #11998e);
+            border-radius: 10px;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
         /* --- SECCIÓN INTERACTIVA DEL MAPA --- */
         .map-section {
             display: none; 
@@ -339,7 +360,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Estilos Popups Satélite */
         .leaflet-popup-content-wrapper {
             background: #101f24 !important;
             color: #fff !important;
@@ -402,8 +422,13 @@
                 Actualmente nos encontramos realizando modificaciones técnicas profundas en nuestro sistema de mapas. Estamos trabajando minuciosamente para ofrecer la ubicación exacta de cada lugar, establecimiento, recurso y punto clave dentro del municipio de Orito.
             </p>
             <p class="description">
-                Este despliegue estructural inicial forma parte de nuestro plan de expansion integral, diseñado para proyectarse y conectar progresivamente con el resto de la región del Putumayo.
+                Este despliegue estructural inicial forma parte de nuestro plan de expansión integral, diseñado para proyectarse y conectar progresivamente con el resto de la región del Putumayo.
             </p>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <span class="status-text">Fase de cartografía y calibración en curso de manera global...</span>
         </div>
 
         <section class="map-section" id="mapModule">
@@ -481,7 +506,6 @@
     </script>
 
     <script>
-        // Formato ISO 8601 explícito con Zona Horaria de Colombia (GMT-5) para evitar fallos de renderizado
         const targetDate = new Date("2026-07-05T12:00:00-05:00").getTime();
         let mapInitialized = false;
         let mapInstance = null;
@@ -499,17 +523,12 @@
             if (mapInitialized) return;
             mapInitialized = true;
 
-            // 1. Ocultar componentes de desarrollo y contador
             document.getElementById('updateCountdownBox').style.display = 'none';
             document.getElementById('maintenanceModule').style.display = 'none';
-
-            // 2. Mostrar sección del mapa
             document.getElementById('mapModule').style.display = 'block';
 
-            // 3. Levantar mapa Leaflet
             mapInstance = L.map('map').setView([0.6692, -76.8724], 16);
 
-            // Servidor Satelital Híbrido de Google Maps
             L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
                 maxZoom: 21,
                 attribution: '&copy; Google Maps'
@@ -548,7 +567,6 @@
             renderizarMarcadores(categoria);
         }
 
-        // Loop principal del reloj con protección ante valores negativos
         const countdownInterval = setInterval(() => {
             const now = new Date().getTime();
             const difference = targetDate - now;
@@ -569,8 +587,5 @@
             }
         }, 1000);
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 </body>
 </html>
