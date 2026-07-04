@@ -3,7 +3,6 @@ git status
 git add .
 git commit -m "Update all"
 git push
-git status
 
 # AX
 ### Plataforma Web de Ayuda Comunitaria
