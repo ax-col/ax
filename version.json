@@ -1,9 +1,9 @@
 {
-  "version": "M6A26V1", 
+  "version": "M7A26V1", 
   "buildDate": "2026-04-05T11:00:00Z",
   "changelog": [
     {
-      "version": "M6A26V1",
+      "version": "M7A26V1",
       "date": "2026-04-05",
       "changes": [
        "Migración completa a rutas locales para APK",
