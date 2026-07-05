@@ -1,0 +1,808 @@
+/*
+|======================================================|
+| ESTILOS GLOBALES Y DE CONTENIDO (NUEVOS DEL USUARIO) |
+|======================================================|
+*/
+
+body {
+  background-color: #000;
+  color: white;
+  font-family: "Roboto", sans-serif; /* <-- Cambia 'cursive' por 'sans-serif' */
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.devonshire-regular {
+  font-family: "Devonshire", cursive; /* Aquí sí dejamos cursive porque es su estilo */
+  font-weight: 400; /* Devonshire solo tiene un peso (400) */
+  font-style: normal;
+}
+
+#animated-text {
+  font-size: 50px;
+  letter-spacing: 5px;
+  text-align: center;
+}
+
+#animated-text span {
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* Estilos de brillo de texto (color-red1, color-red-glow, etc.) */
+.color-red1 {
+  color: black; /* Negro suave para mejor contraste */
+  text-shadow: 
+    0 0 12px rgba(255, 0, 0, 0.8), /* Sombra 1 */
+    0 0 1px rgb(0, 0, 0); /* Sombra 2 */
+  transition: text-shadow 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+}
+
+/* Efecto hover para mayor interactividad */
+.color-red-glow:hover {
+  text-shadow: 
+    0 0 12px rgba(255, 0, 0, 1), /* Sombra roja más intensa */
+    0 0 20px rgba(255, 255, 255, 0.8); /* Sombra blanca más pronunciada */
+  color: #333333; /* Ligeramente más claro en hover */
+}
+
+/* Clase opcional para textos más grandes */
+.color-red-glow--large {
+  text-shadow: 
+    0 0 10px rgba(255, 0, 0, 0.8), 
+    0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
+}
+
+/* Contenedores de botones principales */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 50px auto;
+  width: 90%;
+  max-width: 400px; /* PC/TV */
+}
+
+.button {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  background-color: transparent;
+  border: 3px solid red;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.button:hover {
+  background-color: rebeccapurple;
+  color: red;
+  cursor: pointer;
+}
+
+/* Solo móviles */
+@media (max-width: 768px) {
+  .button-container {
+    max-width: 300px; /* 25% más pequeño en móviles */
+    margin: 30px auto;
+  }
+  
+  .button {
+    padding: 15px;
+    font-size: 1em;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
+  .button-container {
+    max-width: 280px; /* Aún más pequeño */
+  }
+}
+
+/* ====================================================== */
+/* VIDEO COMO FONDO (SOLO PARA PÁGINA PRINCIPAL)         */
+/* ====================================================== */
+
+/* Video de fondo fijo - USADO SOLO COMO FONDO */
+.video-fondo {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  z-index: -1 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: block !important;
+}
+
+/* Video reproductor - PARA MOSTRAR SEGMENTOS */
+.video-reproductor {
+  max-width: 800px;
+  margin: 30px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  display: none; /* Inicialmente oculto */
+}
+
+.video-reproductor video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+/* Ocultar video-mobile (no se usa) */
+.video-mobile {
+  display: none !important;
+}
+
+/* Contenido principal encima del video */
+.content {
+  position: relative;
+  z-index: 1 !important; /* Asegurar que esté sobre el video fondo */
+  color: white;
+  text-align: center;
+  padding: 50px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.video-inline {
+  max-width: 800px;
+  margin: 30px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.video-inline video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/*
+|=========================================================|
+| ESTILOS DE BOTONES/VIDEO (PREVIAMENTE SEPARADOS DEL HTML)|
+|=========================================================|
+*/
+
+/* Botón de sonido grande (mute-toggle) */
+.mute-toggle {
+  /* Propiedades de posicionamiento/tamaño del nuevo código */
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  backdrop-filter: blur(4px);
+  transition: background 0.3s;
+
+  /* Sobreescrituras y estilos del código original (previamente separado) */
+  padding: 20px 40px !important; /* Más grande que el nuevo */
+  font-size: 1.5em !important; /* Más grande que el nuevo */
+  /* El background y el color del original serán establecidos por JS en toggleMute() */
+  background: linear-gradient(135deg, transparent 0%, #00b3ff 100%) !important; 
+  color: rgb(255, 255, 255) !important;
+  border: 2px solid #00ffcc !important;
+
+  /* Estilos para el botón centrado en el HTML */
+  margin: 30px auto !important;
+  display: block !important;
+  min-width: 250px !important;
+  font-weight: bold !important;
+
+  /* Sobreescritura del hover */
+  background-color: transparent; /* Permite que el linear-gradient del original/JS se muestre */
+}
+
+.mute-toggle:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 0 10px #002fff !important;
+  /* El background del nuevo código se ignora a favor del original */
+    background-color: transparent; 
+}
+
+/* Contenedor de botones CN */
+.botones-video-container {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border: 3px solid #ffffff !important;
+  border-radius: 15px !important;
+  padding: 20px !important;
+  margin:20px auto !important;
+  max-width: 1000px !important;
+  text-align: center !important;
+}
+
+.titulo-segmentos {
+  color: #ff0000 !important;
+  font-size: 2.1em !important;
+  margin-bottom: 25px !important;
+  font-weight: bold !important;
+  text-shadow: 10px 0px 20px #ff0000 !important;
+}
+
+.botones-video {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 20px !important;
+  margin-top: 20px !important;
+}
+
+.btn-video {
+  padding: 20px 20px !important;
+  font-size: 1.4em !important;
+  font-weight: bold !important;
+  background: linear-gradient(135deg, #ffffff 0%, transparent 100%) !important;
+  color: rgb(255, 0, 0) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  min-width: 100px !important;
+  border: 2px solid #ffffff !important;
+  transition: all 0.3s !important;
+}
+
+.btn-video:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 10px #ffffff !important;
+  background: linear-gradient(135deg, #0c0000 0%, #ff0000 100%) !important;
+}
+
+.btn-video.activo {
+  background: linear-gradient(135deg, #00fbbc 100%, rgb(0, 255, 0) 100%) !important;
+  border-color: #000000 !important;
+  box-shadow: 0 0 20px #0073ff !important;
+}
+
+.info-video {
+  color: #00ffcc !important;
+  font-size: 2.1em !important;
+  margin-top: 20px !important;
+  font-weight: bold !important;
+}
+
+.mensaje-movil {
+  display: none !important;
+  color: #ff0000 !important;
+  font-size: 1.1em !important;
+  margin: 20px !important;
+  text-align: center !important;
+}
+
+/* MEJORAS PARA MÓVILES - MOSTRAR TODO */
+@media (max-width: 768px) {
+  /* MOSTRAR los botones de video en móviles */
+  .botones-video { 
+    display: flex !important; 
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* MOSTRAR el título de segmentos */
+  .titulo-segmentos { 
+    display: block !important; 
+    font-size: 1.8em !important;
+  }
+
+  /* OCULTAR el mensaje "solo escritorio" */
+  .mensaje-movil { 
+    display: none !important; 
+  }
+
+  /* Ajustar contenedor de botones */
+  .botones-video-container { 
+    padding: 15px !important; 
+    margin: 20px 10px !important;
+    max-width: 95% !important;
+  }
+
+  /* Ajustar botones CN individuales */
+  .btn-video {
+    padding: 12px 16px !important;
+    font-size: 1.1em !important;
+    min-width: 70px !important;
+  }
+
+  /* Ajustar info del video */
+  .info-video {
+    font-size: 1.5em !important;
+    margin-top: 15px !important;
+  }
+
+  /* Ajustar botón mute para móvil */
+  .mute-toggle { 
+    padding: 15px 25px !important; 
+    font-size: 1.2em !important; 
+    min-width: 180px !important;
+    position: static !important; 
+    top: auto !important;
+    right: auto !important;
+    margin: 20px auto !important; 
+  }
+
+  /* Video sigue siendo fondo completo en móviles */
+  .video-desktop {
+    max-height: 100vh !important; /* Restauramos altura completa */
+    object-fit: cover !important; /* Cubrir toda la pantalla */
+    position: fixed !important; /* Fondo fijo */
+    margin: 0 !important; /* Sin márgenes */
+  }
+
+  /* Ocultar video-mobile ya que usamos el desktop para todos */
+  .video-mobile {
+    display: none !important;
+  }
+
+  /* Ajustar animación de texto */
+  #animated-text {
+    font-size: 35px;
+    letter-spacing: 3px;
+  }
+
+  /* Corrección para iframes en móviles */
+  iframe {
+    width: 280px !important;
+    height: 70px !important;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    margin: 15px 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .mute-toggle { 
+    padding: 10px 20px !important; 
+    font-size: 1.0em !important; 
+    min-width: 150px !important; 
+  }
+}
+
+/* ====================================================== */
+/* MEJORAS ADICIONALES PARA MULTI-DISPOSITIVO            */
+/* ====================================================== */
+
+/* Para tablets (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .botones-video-container {
+    max-width: 90% !important;
+  }
+
+  .btn-video {
+    padding: 15px 20px !important;
+    min-width: 85px !important;
+  }
+}
+
+/* Para TVs y pantallas grandes (> 1200px) */
+@media (min-width: 1200px) {
+  .botones-video-container {
+    max-width: 1200px !important;
+    padding: 30px !important;
+  }
+
+  .btn-video {
+    padding: 25px 30px !important;
+    font-size: 1.6em !important;
+    min-width: 120px !important;
+  }
+}
+
+/* Mejorar visibilidad del temporizador en móviles */
+@media (max-width: 600px) {
+  .timer-container { 
+    padding: 15px !important; 
+    margin: 20px 10px !important;
+  }
+
+  .time-value { 
+    width: 55px !important; 
+    height: 70px !important; 
+  }
+
+  .time-value-inner { 
+    font-size: 32px !important; 
+  }
+
+  .button-container {
+    margin: 30px auto !important;
+    max-width: 95% !important;
+  }
+
+  .button {
+    padding: 15px !important;
+    font-size: 1em !important;
+  }
+
+  .timer-container { padding: 20px; }
+  .timer-display { gap: 10px; }
+  .time-value { width: 60px; height: 80px; }
+  .time-value-inner { font-size: 36px; }
+  .timer-separator { font-size: 20px; }
+}
+
+/*
+|======================================================|
+| ESTILOS DEL TEMPORIZADOR (ANIMACIÓN DE CAÍDA)        |
+|======================================================|
+*/
+
+/* --- BASE DEL TEMPORIZADOR --- */
+.timer-wrapper {
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.timer-container {
+    background: transparent; 
+    border: 3px solid rgb(10, 242, 110);
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0 8px 32px transparent;
+    display: inline-block;
+    max-width: 95%;
+}
+
+.timer-display {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- VALORES DE LOS CUADROS (PC POR DEFECTO) --- */
+.time-value {
+    position: relative;
+    width: 70px;  
+    height: 90px; 
+    background: transparent;
+    border: 1.5px solid rgba(0, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.time-value-inner {
+    position: absolute;
+    font-size: 42px; 
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    font-family: 'Courier New', monospace;
+}
+
+/* --- MEDIA QUERY: AJUSTE PARA CELULARES --- */
+@media (max-width: 480px) {
+    .timer-container {
+        padding: 15px 10px;
+    }
+
+    .time-value {
+        width: 18vw;  /* Un poco más ancho para que no se vea apretado */
+        height: 22vw;
+        max-width: 60px;
+        max-height: 80px;
+    }
+    
+    .time-value-inner {
+        font-size: 8vw; 
+        max-size: 34px;
+    }
+
+    .timer-display {
+        gap: 5px; /* Espacio mínimo entre unidades */
+    }
+
+    /* Ajuste para que el Widget de Oro no tape el Timer */
+    .content-wrapper { 
+        display: flex;
+        flex-direction: column; 
+        gap: 20px;
+    }
+}
+
+/* --- TUS ANIMACIONES (MANTENER IGUAL) --- */
+.current-number { animation: fallDown 0.8s forwards; }
+.next-number { animation: fallIntoPlace 0.8s forwards; }
+@keyframes fallDown { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(100px); opacity: 0; } }
+@keyframes fallIntoPlace { 0% { transform: translateY(-100px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+/*
+|======================================================|
+| ESTILOS DEL WIDGET (AISLADO)                        |
+|======================================================|
+*/
+
+/* Contenedor principal del widget */
+.gold-widget-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+
+/* Widget compacto */
+.gold-widget {
+  background: transparent;
+  border: 1px solid rgb(9, 191, 224);
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 12px transparent;
+}
+
+/* Título del widget */
+.gold-widget-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Contenido del widget */
+.gold-widget-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Fila de información */
+.gold-widget-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Última fila sin borde */
+.gold-widget-row:last-child {
+  border-bottom: none;
+}
+
+/* Etiqueta de información */
+.gold-widget-label {
+  color: rgb(110, 255, 197);
+  font-weight: bold;
+  font-size: 12px;
+  text-align: left;
+}
+
+/* Valor de información */
+.gold-widget-value {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+}
+
+/* Fila de actualización con estilo especial */
+.gold-widget-update .gold-widget-label {
+  color: rgb(255, 0, 0);
+  font-size: 11px;
+}
+
+.gold-widget-update .gold-widget-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .gold-widget {
+    padding: 12px 16px;
+    max-width: 95%;
+  }
+
+  .gold-widget-title {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .gold-widget-row {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+
+  .gold-widget-label {
+    font-size: 19px;
+  }
+
+  .gold-widget-value {
+    font-size: 11px;
+  }
+}
+
+/* Animación de carga */
+@keyframes gold-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.gold-widget.loading {
+  animation: gold-pulse 1.5s ease-in-out infinite;
+}
+
+/* Estado de error */
+.gold-widget.error {
+  border-color: rgba(255, 100, 100, 0.3);
+  background: rgba(255, 100, 100, 0.05);
+}
+
+.gold-widget.error .gold-widget-title {
+  color: rgba(255, 150, 150, 0.9);
+}
+
+
+/* Ajustes para el widget Oro + Bitcoin */
+.gold-widget-title {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #00ffcc;
+}
+
+#btc-change {
+  font-family: monospace;
+  transition: color 0.3s;
+}
+/*
+|======================================================|
+| ESTILOS DEL WIDGET DE ORO (INTEGRADO)               |
+|======================================================|
+*/
+
+.gold-widget-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+
+.gold-widget {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gold-widget-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.gold-widget-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gold-widget-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gold-widget-row:last-child {
+  border-bottom: none;
+}
+
+.gold-widget-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: bold;
+  font-size: 12px;
+  text-align: left;
+}
+
+.gold-widget-value {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+  min-width: 120px;
+}
+
+.gold-widget-update .gold-widget-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+}
+
+.gold-widget-update .gold-widget-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+@keyframes gold-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.gold-widget.loading {
+  animation: gold-pulse 1.5s ease-in-out infinite;
+}
+
+.gold-widget.error {
+  border-color: rgba(255, 100, 100, 0.3);
+  background: rgba(255, 100, 100, 0.05);
+}
+
+.gold-widget.error .gold-widget-title {
+  color: rgba(255, 150, 150, 0.9);
+}
+
+/* Responsive para el widget de oro */
+@media (max-width: 600px) {
+  .gold-widget {
+    padding: 12px 16px;
+    max-width: 95%;
+  }
+
+  .gold-widget-title {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .gold-widget-row {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+
+  .gold-widget-value {
+    min-width: 80px;
+  }
+}
