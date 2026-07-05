@@ -5,17 +5,11 @@ git commit -m "Update all"
 git push
 
 # Ubicación Local com.ax.col
-~ $ cd storage/downloads/ax/AX-Root/AX_APP/ 
+storage/downloads/AX-Root/AX_APP/ 
 
-# ACTUALIZAR APP TERMUX
-rm -rf obj classes.dex base.apk compiled_res.zip
-aapt2 compile --dir res -o compiled_res.zip
-aapt2 link --manifest AndroidManifest.xml -I android.jar compiled_res.zip -o base.apk --java src/com/ax/col
-mkdir -p obj
-javac -source 8 -target 8 -d obj -classpath android.jar $(find src -name "*.java")
-d8 obj/com/ax/col/*.class --lib android.jar --output .
-zip -ur base.apk classes.dex assets/
-apksigner sign --ks debug.keystore --ks-pass pass:android base.apk
+# EJECUTAR PARA ACTUALIZAR APP TERMUX
+cd storage/downloads/AX-Root/AX_APP/
+bash compilar.sh
 
 # Visualizar Estructura
 find . -maxdepth 3 -not -path '*/.*'
