@@ -6,10 +6,10 @@ git commit -m "Update Web or App"
 git push
 
 # Ubicación Local com.ax.col
-storage/downloads/AX-Root/AX_APP/ 
+storage/downloads/github/app/ 
 
 # EJECUTAR PARA ACTUALIZAR APP TERMUX
-cd storage/downloads/AX-Root/AX_APP/
+cd storage/downloads/github/app/
 bash compilar.sh
 
 # Visualizar Estructura
