@@ -1,5 +1,5 @@
 # Subir los cambios a GitHub
-git pull origin main
+git pull origin main # Actualizar repositorio global
 git status
 git add .
 git commit -m "Update Web or App"
