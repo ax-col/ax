@@ -1,4 +1,5 @@
 # Subir los cambios a GitHub
+git pull origin main
 git status
 git add .
 git commit -m "Update all"
