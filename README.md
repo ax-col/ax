@@ -2,7 +2,7 @@
 git pull origin main
 git status
 git add .
-git commit -m "Update all"
+git commit -m "Update Web or App"
 git push
 
 # Ubicación Local com.ax.col
