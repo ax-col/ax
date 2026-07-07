@@ -806,3 +806,106 @@ body {
     min-width: 80px;
   }
 }
+
+/* --- CONTENEDOR COMPACTO Y AJUSTADO --- */
+.ax-cyber-card-compact {
+    position: relative;
+    width: 100%;
+    max-width: 360px; /* Un poco más estrecho para encajar mejor */
+    margin: 15px auto; /* Menos separación con los elementos de arriba/abajo */
+    padding: 2px; /* Grosor del borde sutil */
+    border-radius: 12px;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: 0 0 20px rgba(0, 255, 150, 0.1);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* --- EL BORDE RGB ANIMADO (Se mantiene igual de épico) --- */
+.ax-cyber-card-compact .ax-cyber-border {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        #ff0055 0deg,   /* Nace arriba en el centro */
+        #00ffcc 45deg,
+        #0072ff 90deg,
+        #9900ff 135deg,
+        #ff0055 180deg,  /* Se encuentra abajo */
+        #9900ff 225deg,
+        #0072ff 270deg,
+        #00ffcc 315deg,
+        #ff0055 360deg   /* Cierra arriba */
+    );
+    animation: rgb-split 4s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rgb-split {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- INTERIOR ULTRA COMPACTADO --- */
+.ax-cyber-content {
+    position: relative;
+    background: rgba(6, 6, 8, 0.85); /* Un pelo más opaco para que se lea mejor al ser chico */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px 15px; /* Reducido al mínimo: espacio justo arriba, abajo y a los lados */
+    border-radius: 10px;
+    z-index: 2;
+    text-align: center;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ax-cyber-content h3 {
+    font-size: 15px; /* Tamaño más sobrio */
+    letter-spacing: 3px;
+    color: #00ffcc;
+    text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+    margin: 0 0 4px 0; /* Espaciado mínimo */
+}
+
+.ax-cyber-content p {
+    font-size: 11px;
+    color: #888da8;
+    letter-spacing: 1px;
+    margin: 0 0 15px 0; /* Margen recortado antes del botón */
+    text-transform: uppercase;
+}
+
+/* --- BOTÓN AJUSTADO AL ANCHO --- */
+.btn-cyber-download {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; /* Botón más estilizado y menos alto */
+    background: transparent;
+    color: #00ffcc;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 2px solid #00ffcc;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 8px rgba(0, 255, 204, 0.2), 0 0 10px rgba(0, 255, 204, 0.1);
+}
+
+.btn-cyber-download:hover {
+    color: #060608;
+    background: #00ffcc;
+    box-shadow: 0 0 18px rgba(0, 255, 204, 0.6);
+    transform: scale(1.02);
+}
+
+.btn-cyber-download:active {
+    transform: scale(0.98);
+}

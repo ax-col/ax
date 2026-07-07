@@ -5,12 +5,9 @@ git add .
 git commit -m "Update Web or App"
 git push
 
-# Ubicación Local com.ax.col
-storage/downloads/github/app/ 
-
-# EJECUTAR PARA ACTUALIZAR APP TERMUX
-cd storage/downloads/github/app/
-bash compilar.sh
+# EJECUTAR PARA INICIALIZAR
+cd storage/downloads/github/
+python runax.py
 
 # Visualizar Estructura
 find . -maxdepth 3 -not -path '*/.*'
@@ -18,10 +15,11 @@ find . -maxdepth 3 -not -path '*/.*'
 # AX
 Plataforma Web de Ayuda Comunitaria
 AX es una plataforma web progresiva pensada para ayudar a la comunidad. Centraliza información, recursos y ubicaciones locales en un solo lugar.
+
 #Estructura AX WEB
-#![Estructura del Proyecto WEB](png-principal/ax_web.png)
+(png-principal/ax_web.png)
 #Estructura AX APK
-#![Estructura del Proyecto APK](png-principal/ax_apk.png)
+(png-principal/ax_apk.png)
 
 # Características
 - **PWA**: Instalable desde el navegador. Usa `manifest.json` y `sw.js` para funcionar offline.
@@ -29,10 +27,6 @@ AX es una plataforma web progresiva pensada para ayudar a la comunidad. Centrali
 - **Módulos**: Varias secciones independientes en carpetas para organizar contenido.
 - **Gestor de versiones**: `version-manager.js` + `version.json` para controlar actualizaciones.
 - **Multimedia**: Carpeta `AX-Files/` con videos informativos.
-
-# Como Clonar
-git clone https://github.com/ax-col/ax.git
-cd ax
 
 # Tecnologías
 - HTML5, CSS3, JavaScript Vanilla
