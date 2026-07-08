@@ -11,34 +11,30 @@ app.post('/api/auditar-ultra-automatico', async (req, res) => {
     
     let browser;
     try {
-        // Lanzamos un Chrome controlado por código
         browser = await puppeteer.launch({
-            headless: true, // true para que sea invisible, false si quieres ver cómo se mueve solo
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            headless: true, 
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu'
+            ]
         });
 
         const page = await browser.newPage();
-        
-        // Nos disfrazamos de un celular común para evitar cualquier bloqueo
         await page.setUserAgent('Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36');
 
-        console.path = "🔗 Navegando directo a la sección de desempeños...";
-        // Vamos directo a la URL de notas (Udeki pedirá login de forma nativa si no hay sesión)
+        console.log("🔗 Navegando directo a la sección de desempeños...");
         await page.goto('https://app.udeki.com/desempenio/estudiante', { waitUntil: 'networkidle2' });
 
-        // --- AQUÍ EL ROBOT ESPERA A QUE LAS NOTAS ESTÉN EN PANTALLA ---
         console.log("⏳ Esperando que carguen las asignaturas en la memoria de Udeki...");
-        
-        // Esperamos a que la variable global 'asignaturas' exista y tenga datos en la ventana
         await page.waitForFunction(() => window.asignaturas && window.asignaturas.length > 0, { timeout: 30000 });
 
-        console.log("📦 ¡Mina de oro detectada! Extrayendo array directo de la memoria...");
-        // Extraemos el objeto 'asignaturas' en caliente directo de la pestaña
+        console.log("📦 Extrayendo array directo de la memoria...");
         const asignaturasCargadas = await page.evaluate(() => {
             return window.asignaturas;
         });
 
-        // Procesamos los datos con tu regla del 80%
         const datosProcesados = asignaturasCargadas.map(materia => {
             let logrados = 0;
             let periodos = materia.periodos || [];
@@ -52,7 +48,7 @@ app.post('/api/auditar-ultra-automatico', async (req, res) => {
                 });
             });
 
-            const meta = 4; // Tu meta estándar
+            const meta = 4; 
             return {
                 materia: materia.asignatura || materia.nombre,
                 nota: materia.nota || 0,
@@ -76,6 +72,7 @@ app.post('/api/auditar-ultra-automatico', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('🚀 Servidor Mágico AX corriendo en http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor Mágico AX corriendo en el puerto ${PORT}`);
 });
