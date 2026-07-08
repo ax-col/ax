@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tiempo desde 05/02/2019</title>
     <link rel="stylesheet" href="styles.css"> <!-- Conectar archivo CSS -->
+    <script>
+    (function() {
+        const isGithub = window.location.hostname.includes("github.io");
+        // Forzamos la ruta correcta con o sin slash final
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptPath;
+        document.head.appendChild(script);
+    })();
+</script>
 </head>
 <body>
     <div class="container">

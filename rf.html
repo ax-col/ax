@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redireccionando... - AX PROYECT</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="/analytics-loader.js"></script>
+    
+    <script>
+    (function() {
+        const isGithub = window.location.hostname.includes("github.io");
+        // Forzamos la ruta correcta con o sin slash final
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptPath;
+        document.head.appendChild(script);
+    })();
+</script>
 
 </head>
 <body>

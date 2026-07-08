@@ -6,7 +6,18 @@
     <title>Sección 1</title>
     <link rel="stylesheet" href="styles2.css">
 
-      <script type="module" src="/analytics-loader.js"></script>
+<script>
+    (function() {
+        const isGithub = window.location.hostname.includes("github.io");
+        // Forzamos la ruta correcta con o sin slash final
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptPath;
+        document.head.appendChild(script);
+    })();
+</script>
 
 </head>
 <body>
