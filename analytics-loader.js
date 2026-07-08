@@ -2,18 +2,29 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, runTransaction, onValue, push, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 👑 1. INYECTAR ICONOS Y FAVICONS GLOBALES DE INMEDIATO
+// 👑 1. DETECTAR LA RUTA BASE AUTOMÁTICAMENTE (Local vs GitHub Pages)
+const getBaseURL = () => {
+    const loc = window.location;
+    // Si estamos en GitHub Pages dentro de la subcarpeta /ax/
+    if (loc.hostname.includes("github.io") && loc.pathname.startsWith("/ax")) {
+        return "/ax";
+    }
+    return ""; // Raíz pura para localhost:8080 en Termux
+};
+
+const baseUrl = getBaseURL();
+
+// 🚀 INYECTAR ICONOS Y FAVICONS CON RUTA DINÁMICA
 (function() {
     const faviconTags = [
-        { tag: 'link', rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' },
-        { tag: 'link', rel: 'icon', sizes: '192x192', href: '/png-principal/icon-192x192.png' },
-        { tag: 'link', rel: 'icon', sizes: '512x512', href: '/png-principal/icon-512x512.png' },
-        { tag: 'link', rel: 'apple-touch-icon', href: '/png-principal/icon-192x192.png' },
-        { tag: 'link', rel: 'manifest', href: '/manifest.json' }
+        { tag: 'link', rel: 'icon', href: `${baseUrl}/favicon.ico`, type: 'image/x-icon' },
+        { tag: 'link', rel: 'icon', sizes: '192x192', href: `${baseUrl}/png-principal/icon-192x192.png` },
+        { tag: 'link', rel: 'icon', sizes: '512x512', href: `${baseUrl}/png-principal/icon-512x512.png` },
+        { tag: 'link', rel: 'apple-touch-icon', href: `${baseUrl}/png-principal/icon-192x192.png` },
+        { tag: 'link', rel: 'manifest', href: `${baseUrl}/manifest.json` }
     ];
 
     faviconTags.forEach(item => {
-        // Evitar duplicados si ya existen en el HTML
         if (!document.querySelector(`link[href="${item.href}"]`)) {
             const element = document.createElement(item.tag);
             Object.keys(item).forEach(key => {

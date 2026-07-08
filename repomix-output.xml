@@ -78,13 +78,15 @@ YJPO/
   index.html
   script.js
   styles.css
+analytics-loader.js
 AX.py
-base.apk
+icon-loader.js
 index.html
 main_ax.html
 manifest.json
 README.md
 rf.html
+run.py
 script.js
 styles.css
 sw.js
@@ -94,379 +96,6 @@ version.json
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="CPWEB/index.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W E B - 2</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-</head>
-    
-<body>
-    <header class="header">
-        <h2 class="description">C P W E B</h2>
-        <h3>LO QUE VIO USTED NUNCA LO VIO</h3>
-    </header>
-
-    <!-- Medidor de velocidad debajo de la descripción -->
-    <div class="speedometer">
-        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
-        <div class="ping" id="ping">Ping: -- ms</div>
-        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
-    </div>
-
-    <!-- Botones para redirigir a cada sección -->
-    <div class="section-buttons">
-        <a href="index1.html" class="button">Sección 1</a>
-        <a href="index2.html" class="button">Sección 2</a>
-        <a href="index3.html" class="button">Sección 3</a>
-      <!--
-       <h2 class="description2">X - W E B</h2>
-        <h3>ESTO ES DE INTERNET</h3>
-        <a href="index4.html" class="button">Sección 1</a>
-       <a href="index5.html" class="button">Sección 2</a>
-        <a href="index6.html" class="button">Sección 3</a>
-        <a href="index7.html" class="button">Sección 4</a>
-        <a href="index8.html" class="button">Sección 5</a>
-        <a href="index9.html" class="button">Sección 6</a>
-      -->
-    </div>
-
-    <script src="script.js"></script>
-
-  
-</body>
-</html>
-</file>
-
-<file path="CPWEB/index1.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sección 1</title>
-    <link rel="stylesheet" href="styles2.css">
-    <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-</head>
-<body>
-    <header class="header">
-        <h2 class="description">S E C C I O N - 1</h2>
-    </header>
-  
-    <!-- Medidor de velocidad debajo de la descripción -->
-    <div class="speedometer">
-        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
-        <div class="ping" id="ping">Ping: -- ms</div>
-        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
-    </div>
-    <div class="video-container">
-          <script src="script.js"></script>
-      
-        <!-- Esto es seccion 1 -->
-        <video src="https://files.catbox.moe/8hya2g.mp4" controls></video>
-        <video src="https://files.catbox.moe/tkbkq4.mp4" controls></video>
-        <video src="https://files.catbox.moe/6z6mqk.mp4" controls></video>
-        <video src="https://files.catbox.moe/l7bdbl.mp4" controls></video>
-        <video src="https://files.catbox.moe/ms4i00.mp4" controls></video>
-        <video src="https://files.catbox.moe/xm87so.mp4" controls></video>
-        <video src="https://files.catbox.moe/ys6n5o.mp4" controls></video>
-        <video src="https://files.catbox.moe/h2lvje.mp4" controls></video>
-        <video src="https://files.catbox.moe/ecjpky.mp4" controls></video>
-        <video src="https://files.catbox.moe/6s29p8.mp4" controls></video>
-        <video src="https://files.catbox.moe/ced58h.mp4" controls></video>
-        <video src="https://files.catbox.moe/np0o61.mp4" controls></video>
-        <video src="https://files.catbox.moe/72ajtm.mp4" controls></video>
-        <video src="https://files.catbox.moe/rruyrt.mp4" controls></video>
-        <video src="https://files.catbox.moe/7sbzf7.mp4" controls></video>
-        <video src="https://files.catbox.moe/bnit88.mp4" controls></video> 
-        <video src="https://files.catbox.moe/i8nuwu.mp4" controls></video>
-        <video src="https://files.catbox.moe/wz1s17.mp4" controls></video>
-        <video src="https://files.catbox.moe/hzuzqu.mp4" controls></video>
-        <video src="https://files.catbox.moe/3xumue.mp4" controls></video>
-        <video src="https://files.catbox.moe/n62s2y.mp4" controls></video>
-        <video src="https://files.catbox.moe/k24nfm.mp4" controls></video>
-        <video src="https://files.catbox.moe/mjp0mv.mp4" controls></video>
-        <video src="https://files.catbox.moe/7016nB.mp4" controls></video>
-        <video src="https://files.catbox.moe/83801p.mp4" controls></video>
-        <video src="https://files.catbox.moe/ayq601.mp4" controls></video>
-        <video src="https://files.catbox.moe/bobkno.mp4" controls></video>
-        <video src="https://files.catbox.moe/u181p2.mp4" controls></video>
-        <video src="https://files.catbox.moe/ntv3wg.mp4" controls></video>
-        <video src="https://files.catbox.moe/ryxvrv.mp4" controls></video>
-        <video src="https://files.catbox.moe/jafgsu.mp4" controls></video>
-        <video src="https://files.catbox.moe/ha7ibw.mp4" controls></video>
-        <video src="https://files.catbox.moe/o50shv.mp4" controls></video>
-        <video src="https://files.catbox.moe/bmpz1g.mp4" controls></video>
-  
-     </div>
-
-    <a href="index.html" class="button">Volver al Inicio</a>
-</body>
-</html>
-</file>
-
-<file path="CPWEB/index2.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sección 2</title>
-    <link rel="stylesheet" href="styles2.css">
-    <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-</head>
-<body>
-    <header class="header">
-        <h2 class="description">S E C C I O N - 2</h2>
-    </header>
-
-      <!-- Medidor de velocidad debajo de la descripción -->
-    <div class="speedometer">
-        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
-        <div class="ping" id="ping">Ping: -- ms</div>
-        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
-    </div>
-      <script src="script.js"></script>
-  
-    <div class="video-container">
-        <!-- Esto es seccion 1 -->
-        <video src="https://files.catbox.moe/7rykhi.mp4" controls></video>
-        <video src="https://files.catbox.moe/h64ovc.mp4" controls></video>
-        <video src="https://files.catbox.moe/blzl4b.mp4" controls></video>
-        <video src="https://files.catbox.moe/42ymip.mp4" controls></video>
-        <video src="https://files.catbox.moe/npfl70.mp4" controls></video>
-        <video src="https://files.catbox.moe/au12gm.mp4" controls></video>
-        <video src="https://files.catbox.moe/k9xor1.mp4" controls></video>
-        <video src="https://files.catbox.moe/5h6rse.mp4" controls></video>
-        <video src="https://files.catbox.moe/4vgiae.mp4" controls></video>
-        <video src="https://files.catbox.moe/t7d4gr.mp4" controls></video>
-        <video src="https://files.catbox.moe/fitl9e.mp4" controls></video>
-        <video src="https://files.catbox.moe/ardp5i.mp4" controls></video>
-        <video src="https://files.catbox.moe/0e7685.mp4" controls></video>
-        <video src="https://files.catbox.moe/hkapx4.mp4" controls></video>
-        <video src="https://files.catbox.moe/u0t768.mp4" controls></video>
-        <video src="https://files.catbox.moe/pibklr.mp4" controls></video> 
-        <video src="https://files.catbox.moe/tzacqp.mp4" controls></video>
-        <video src="https://files.catbox.moe/pl7io7.mp4" controls></video>
-        <video src="https://files.catbox.moe/h62f4n.mp4" controls></video>
-        <video src="https://files.catbox.moe/so5s67.mp4" controls></video>
-        <video src="https://files.catbox.moe/cq2p0j.mp4" controls></video>
-        <video src="https://files.catbox.moe/9l3rgu.mp4" controls></video>
-        <video src="https://files.catbox.moe/hb7rdd.mp4" controls></video>
-        <video src="https://files.catbox.moe/9zqdf0.mp4" controls></video>
-        <video src="https://files.catbox.moe/ybu19y.mp4" controls></video>
-        <video src="https://files.catbox.moe/pfm3fy.mp4" controls></video>
-        <video src="https://files.catbox.moe/kkgaqa.mp4" controls></video>
-        <video src="https://files.catbox.moe/sq51er.mp4" controls></video>
-        <video src="https://files.catbox.moe/id9ice.mp4" controls></video>
-        <video src="https://files.catbox.moe/l5rbb7.mp4" controls></video>
-        <video src="https://files.catbox.moe/6aqi08.mp4" controls></video>
-        <video src="https://files.catbox.moe/9am7nn.mp4" controls></video>
-        <video src="https://files.catbox.moe/fg0aa5.mp4" controls></video>
-        <video src="https://files.catbox.moe/0r0pyt.mp4" controls></video>
-  
-     </div>
-
-    <a href="index.html" class="button">Volver al Inicio</a>
-</body>
-</html>
-</file>
-
-<file path="CPWEB/index3.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sección 3</title>
-    <link rel="stylesheet" href="styles2.css">
-    <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-</head>
-<body>
-    <header class="header">
-        <h2 class="description">S E C C I O N - 3</h2>
-    </header>
-
-      <!-- Medidor de velocidad debajo de la descripción -->
-    <div class="speedometer">
-        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
-        <div class="ping" id="ping">Ping: -- ms</div>
-        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
-    </div>
-      <script src="script.js"></script>
-
-    <div class="video-container">
-        <!-- Esto es seccion 1 -->
-        <video src="https://files.catbox.moe/gwmai7.mp4" controls></video>
-        <video src="https://files.catbox.moe/gwmai7.mp4" controls></video>
-        <video src="https://files.catbox.moe/thyt14.mp4" controls></video>
-        <video src="https://files.catbox.moe/olgvch.mp4" controls></video>
-        <video src="https://files.catbox.moe/1l6uzz.mp4" controls></video>
-        <video src="https://files.catbox.moe/ngbnxm.mp4" controls></video>
-        <video src="https://files.catbox.moe/peznzk.mp4" controls></video>
-        <video src="https://files.catbox.moe/5yg1e3.mp4" controls></video>
-        <video src="https://files.catbox.moe/hq1xh2.mp4" controls></video>
-        <video src="https://files.catbox.moe/mhnbkv.mp4" controls></video>
-        <video src="https://files.catbox.moe/6ecjn0.mp4" controls></video>
-        <video src="https://files.catbox.moe/s5ulbe.mp4" controls></video>
-        <video src="https://files.catbox.moe/iiid8q.mp4" controls></video>
-        <video src="https://files.catbox.moe/jdmvc2.mp4" controls></video>
-        <video src="https://files.catbox.moe/csuqh6.mp4" controls></video>
-        <video src="https://files.catbox.moe/t24k3v.mp4" controls></video> 
-        <video src="https://files.catbox.moe/tcyabr.mp4" controls></video>
-        <video src="https://files.catbox.moe/qosnva.mp4" controls></video>
-        <video src="https://files.catbox.moe/uxj7kn.mp4" controls></video>
-        <video src="https://files.catbox.moe/eonsp2.mp4" controls></video>
-        <video src="https://files.catbox.moe/h7ck4k.mp4" controls></video>
-        <video src="https://files.catbox.moe/orrp7j.mp4" controls></video>
-        <video src="https://files.catbox.moe/ceoipb.mp4" controls></video>
-        <video src="https://files.catbox.moe/rragzs.mp4" controls></video>
-        <video src="https://files.catbox.moe/47iad6.mp4" controls></video>
-        <video src="https://files.catbox.moe/cmmuj3.mp4" controls></video>
-        <video src="https://files.catbox.moe/mbfot9.mp4" controls></video>
-        <video src="https://files.catbox.moe/j7gath.mp4" controls></video>
-        <video src="https://files.catbox.moe/i1kzu3.mp4" controls></video>
-        <video src="https://files.catbox.moe/ofr3vu.mp4" controls></video>
-        <video src="https://files.catbox.moe/54blps.mp4" controls></video>
-        <video src="https://files.catbox.moe/l1q75w.mp4" controls></video>
-        <video src="https://files.catbox.moe/bbyw57.mp4" controls></video>
-        <video src="https://files.catbox.moe/3h0e7h.mp4" controls></video>
-  
-     </div>
-
-    <a href="index.html" class="button">Volver al Inicio</a>
-</body>
-</html>
-</file>
-
-<file path="CPWEB/index4.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sección 1</title>
-    <link rel="stylesheet" href="styles2.css">
-    <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-</head>
-<body>
-    <header class="header">
-        <h2 class="description">X W E B - 1</h2>
-    </header>
-
-      <!-- Medidor de velocidad debajo de la descripción -->
-    <div class="speedometer">
-        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
-        <div class="ping" id="ping">Ping: -- ms</div>
-        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
-    </div>
-      <script src="script.js"></script>
-
-    <div class="video-container">
-        <!-- Esto es seccion 1 -->
-        <video src="https://qu.ax/KQDe.mp4" controls></video>
-        <video src="https://qu.ax/PTMgb.mp4" controls></video>
-        <video src="https://qu.ax/fSdCu.mp4" controls></video>
-        <video src="https://qu.ax/uUpVU.mp4" controls></video>
-        <video src="https://qu.ax/weKFk.mp4" controls></video>
-        <video src="https://qu.ax/SGfk.mp4" controls></video>
-        <video src="https://qu.ax/RplR.mp4" controls></video>
-        <video src="https://qu.ax/LrMM.mp4" controls></video>
-        <video src="https://qu.ax/iwhR.mp4" controls></video>
-        <video src="https://qu.ax/eXUY.mp4" controls></video>
-        <video src="https://qu.ax/omSg.mp4" controls></video>
-        <video src="https://qu.ax/eVn.mp4" controls></video>
-        <video src="https://qu.ax/DmTdK.mp4" controls></video>
-        <video src="https://cdn.videy.co/rtP0s9Hd1.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2Lwh_FlnUw4nXI9OOhtfHYqejDEwKVXIiseRdYTAR7xYhr5c2QVlhYgoY_aem_V1QmHMU06379tRy35VyPyw" controls></video>
-        <video src="https://cdn.videy.co/Jw6fRZcF1.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR0FQN-8VGGj4KRzd_jB5vYsu2TiF3bga82WI3-B6nQM9BHACSPxsrw_0y8_aem_DzH5x3wj7U7eCHkdR2EQgg" controls></video>
-        <video src="https://qu.ax/laCxR.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2WzOciVm9yRzPbc_ceHzODEq4B0sWqggOrYqcyiEoMruSbDkxgAKnri44_aem_mVTRONbnHeC7UMtz7Mq31g" controls></video> 
-        <video src="https://qu.ax/DXiba.mp4" controls></video>
-        <video src="https://qu.ax/OOUAY.mp4" controls></video>
-        <video src="https://qu.ax/tWZEV.mp4" controls></video>
-        <video src="https://qu.ax/wyWuW.mp4" controls></video>
-        <video src="https://qu.ax/cgzt.mp4" controls></video>
-        <video src="https://qu.ax/relLv.mp4" controls></video>
-        <video src="https://qu.ax/NSSSx.mp4" controls></video>
-        <video src="https://qu.ax/YiKcc.mp4" controls></video>
-        <video src="https://qu.ax/CwaWV.mp4" controls></video>
-        <video src="https://qu.ax/KttRC.mp4" controls></video>
-        <video src="https://qu.ax/lYYwa.mp4" controls></video>
-        <video src="https://qu.ax/ehuWz.mp4" controls></video>
-        <video src="https://qu.ax/DvwtK.mp4" controls></video>
-        <video src="https://qu.ax/cAQTM.mp4" controls></video>
-        <video src="https://qu.ax/jNAyd.mp4" controls></video>
-        <video src="https://cdn.videy.co/1A5Js31j1.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2OUYNz3HWs_jRCdt_1sKde7MUT-ehVJoATBpvhwsB8EOf_LxW62PeKdgI_aem_YJX1T3xD9G21s3sY4PTlZw" controls></video>
-     </div>
-
-    <a href="index.html" class="button">Volver al Inicio</a>
-</body>
-</html>
-</file>
 
 <file path="CPWEB/script.js">
 function updateMetrics() {
@@ -1302,52 +931,6 @@ body {
 }
 </file>
 
-<file path="Windows/index.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activar Windows</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-</head>
-<body>
-    <div class="content">
-        <h1>Pasos para activar Windows</h1>
-        <h3>Opcion 1</h3>
-        <p><span class="highlight">Windows + R</span> | Ejecutar en modo <span class="highlight">Administrador</span> para que funcione bien</p>
-        <p>Luego escribir <span class="highlight">CMD</span></p>
-        <p>Después escribir esto <span class="highlight">irm https://get.activated.win | iex</span></p>
-        <p>Esperar a que <span class="highlight">inicie</span> el proceso</p>
-        <p>Apenas aparezca un panel escribir el número <span class="highlight">1</span></p>
-        <p><span class="highlight">Esperar</span> a que continúe sin tocar nada</p>
-        <p><span class="highlight">Aparecerá</span> la clave de <span class="highlight">Windows</span> Generada en el codigo</p>
-        <p><span class="highlight">Esperar</span> a que salga <span class="highlight">Press ani KEY</span> </p>
-        <p>El mensaje de <span class="highlight">Windows Habrá desaparecido</span> de la pantalla</p>
-        <p class="footer">Extraído por Andrex</p>
-        <h3>Opcion 2</h3>
-        <p class="footer">wmic path SoftwareLicensingService get OA3xOriginalProductKey</p>
-        <h4>msg * "https//viwnet.github.io/windows"</h4>
-        
-    </div>
-    
-</body>
-</html>
-</file>
-
 <file path="Windows/styles.css">
 body {
     background-color: black;
@@ -1385,148 +968,362 @@ h1 {
 }
 </file>
 
+<file path="CPWEB/index.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W E B - 2</title>
+    <link rel="stylesheet" href="styles.css">
+    
+ <script type="module" src="/analytics-loader.js"></script>
+    
+</head>
+    
+<body>
+    <header class="header">
+        <h2 class="description">C P W E B</h2>
+        <h3>LO QUE NUNCA LO VIO</h3>
+    </header>
+
+    <!-- Medidor de velocidad debajo de la descripción -->
+    <div class="speedometer">
+        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
+        <div class="ping" id="ping">Ping: -- ms</div>
+        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
+    </div>
+
+    <!-- Botones para redirigir a cada sección -->
+    <div class="section-buttons">
+        <a href="index1.html" class="button">Sección 1</a>
+        <a href="index2.html" class="button">Sección 2</a>
+        <a href="index3.html" class="button">Sección 3</a>
+      <!--
+       <h2 class="description2">X - W E B</h2>
+        <h3>ESTO ES DE INTERNET</h3>
+        <a href="index4.html" class="button">Sección 1</a>
+       <a href="index5.html" class="button">Sección 2</a>
+        <a href="index6.html" class="button">Sección 3</a>
+        <a href="index7.html" class="button">Sección 4</a>
+        <a href="index8.html" class="button">Sección 5</a>
+        <a href="index9.html" class="button">Sección 6</a>
+      -->
+    </div>
+
+    <script src="script.js"></script>
+
+  
+</body>
+</html>
+</file>
+
+<file path="CPWEB/index1.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección 1</title>
+    <link rel="stylesheet" href="styles2.css">
+
+      <script type="module" src="/analytics-loader.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <h2 class="description">S E C C I O N - 1</h2>
+    </header>
+  
+    <!-- Medidor de velocidad debajo de la descripción -->
+    <div class="speedometer">
+        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
+        <div class="ping" id="ping">Ping: -- ms</div>
+        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
+    </div>
+    <div class="video-container">
+          <script src="script.js"></script>
+      
+        <!-- Esto es seccion 1 -->
+        <video src="https://files.catbox.moe/8hya2g.mp4" controls></video>
+        <video src="https://files.catbox.moe/tkbkq4.mp4" controls></video>
+        <video src="https://files.catbox.moe/6z6mqk.mp4" controls></video>
+        <video src="https://files.catbox.moe/l7bdbl.mp4" controls></video>
+        <video src="https://files.catbox.moe/ms4i00.mp4" controls></video>
+        <video src="https://files.catbox.moe/xm87so.mp4" controls></video>
+        <video src="https://files.catbox.moe/ys6n5o.mp4" controls></video>
+        <video src="https://files.catbox.moe/h2lvje.mp4" controls></video>
+        <video src="https://files.catbox.moe/ecjpky.mp4" controls></video>
+        <video src="https://files.catbox.moe/6s29p8.mp4" controls></video>
+        <video src="https://files.catbox.moe/ced58h.mp4" controls></video>
+        <video src="https://files.catbox.moe/np0o61.mp4" controls></video>
+        <video src="https://files.catbox.moe/72ajtm.mp4" controls></video>
+        <video src="https://files.catbox.moe/rruyrt.mp4" controls></video>
+        <video src="https://files.catbox.moe/7sbzf7.mp4" controls></video>
+        <video src="https://files.catbox.moe/bnit88.mp4" controls></video> 
+        <video src="https://files.catbox.moe/i8nuwu.mp4" controls></video>
+        <video src="https://files.catbox.moe/wz1s17.mp4" controls></video>
+        <video src="https://files.catbox.moe/hzuzqu.mp4" controls></video>
+        <video src="https://files.catbox.moe/3xumue.mp4" controls></video>
+        <video src="https://files.catbox.moe/n62s2y.mp4" controls></video>
+        <video src="https://files.catbox.moe/k24nfm.mp4" controls></video>
+        <video src="https://files.catbox.moe/mjp0mv.mp4" controls></video>
+        <video src="https://files.catbox.moe/7016nB.mp4" controls></video>
+        <video src="https://files.catbox.moe/83801p.mp4" controls></video>
+        <video src="https://files.catbox.moe/ayq601.mp4" controls></video>
+        <video src="https://files.catbox.moe/bobkno.mp4" controls></video>
+        <video src="https://files.catbox.moe/u181p2.mp4" controls></video>
+        <video src="https://files.catbox.moe/ntv3wg.mp4" controls></video>
+        <video src="https://files.catbox.moe/ryxvrv.mp4" controls></video>
+        <video src="https://files.catbox.moe/jafgsu.mp4" controls></video>
+        <video src="https://files.catbox.moe/ha7ibw.mp4" controls></video>
+        <video src="https://files.catbox.moe/o50shv.mp4" controls></video>
+        <video src="https://files.catbox.moe/bmpz1g.mp4" controls></video>
+  
+     </div>
+
+    <a href="index.html" class="button">Volver al Inicio</a>
+</body>
+</html>
+</file>
+
+<file path="CPWEB/index2.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección 2</title>
+    <link rel="stylesheet" href="styles2.css">
+      
+<script type="module" src="/analytics-loader.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <h2 class="description">S E C C I O N - 2</h2>
+    </header>
+
+      <!-- Medidor de velocidad debajo de la descripción -->
+    <div class="speedometer">
+        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
+        <div class="ping" id="ping">Ping: -- ms</div>
+        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
+    </div>
+      <script src="script.js"></script>
+  
+    <div class="video-container">
+        <!-- Esto es seccion 1 -->
+        <video src="https://files.catbox.moe/7rykhi.mp4" controls></video>
+        <video src="https://files.catbox.moe/h64ovc.mp4" controls></video>
+        <video src="https://files.catbox.moe/blzl4b.mp4" controls></video>
+        <video src="https://files.catbox.moe/42ymip.mp4" controls></video>
+        <video src="https://files.catbox.moe/npfl70.mp4" controls></video>
+        <video src="https://files.catbox.moe/au12gm.mp4" controls></video>
+        <video src="https://files.catbox.moe/k9xor1.mp4" controls></video>
+        <video src="https://files.catbox.moe/5h6rse.mp4" controls></video>
+        <video src="https://files.catbox.moe/4vgiae.mp4" controls></video>
+        <video src="https://files.catbox.moe/t7d4gr.mp4" controls></video>
+        <video src="https://files.catbox.moe/fitl9e.mp4" controls></video>
+        <video src="https://files.catbox.moe/ardp5i.mp4" controls></video>
+        <video src="https://files.catbox.moe/0e7685.mp4" controls></video>
+        <video src="https://files.catbox.moe/hkapx4.mp4" controls></video>
+        <video src="https://files.catbox.moe/u0t768.mp4" controls></video>
+        <video src="https://files.catbox.moe/pibklr.mp4" controls></video> 
+        <video src="https://files.catbox.moe/tzacqp.mp4" controls></video>
+        <video src="https://files.catbox.moe/pl7io7.mp4" controls></video>
+        <video src="https://files.catbox.moe/h62f4n.mp4" controls></video>
+        <video src="https://files.catbox.moe/so5s67.mp4" controls></video>
+        <video src="https://files.catbox.moe/cq2p0j.mp4" controls></video>
+        <video src="https://files.catbox.moe/9l3rgu.mp4" controls></video>
+        <video src="https://files.catbox.moe/hb7rdd.mp4" controls></video>
+        <video src="https://files.catbox.moe/9zqdf0.mp4" controls></video>
+        <video src="https://files.catbox.moe/ybu19y.mp4" controls></video>
+        <video src="https://files.catbox.moe/pfm3fy.mp4" controls></video>
+        <video src="https://files.catbox.moe/kkgaqa.mp4" controls></video>
+        <video src="https://files.catbox.moe/sq51er.mp4" controls></video>
+        <video src="https://files.catbox.moe/id9ice.mp4" controls></video>
+        <video src="https://files.catbox.moe/l5rbb7.mp4" controls></video>
+        <video src="https://files.catbox.moe/6aqi08.mp4" controls></video>
+        <video src="https://files.catbox.moe/9am7nn.mp4" controls></video>
+        <video src="https://files.catbox.moe/fg0aa5.mp4" controls></video>
+        <video src="https://files.catbox.moe/0r0pyt.mp4" controls></video>
+  
+     </div>
+
+    <a href="index.html" class="button">Volver al Inicio</a>
+</body>
+</html>
+</file>
+
+<file path="CPWEB/index3.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección 3</title>
+    <link rel="stylesheet" href="styles2.css">
+    
+    <script type="module" src="/analytics-loader.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <h2 class="description">S E C C I O N - 3</h2>
+    </header>
+
+      <!-- Medidor de velocidad debajo de la descripción -->
+    <div class="speedometer">
+        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
+        <div class="ping" id="ping">Ping: -- ms</div>
+        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
+    </div>
+      <script src="script.js"></script>
+
+    <div class="video-container">
+        <!-- Esto es seccion 1 -->
+        <video src="https://files.catbox.moe/gwmai7.mp4" controls></video>
+        <video src="https://files.catbox.moe/gwmai7.mp4" controls></video>
+        <video src="https://files.catbox.moe/thyt14.mp4" controls></video>
+        <video src="https://files.catbox.moe/olgvch.mp4" controls></video>
+        <video src="https://files.catbox.moe/1l6uzz.mp4" controls></video>
+        <video src="https://files.catbox.moe/ngbnxm.mp4" controls></video>
+        <video src="https://files.catbox.moe/peznzk.mp4" controls></video>
+        <video src="https://files.catbox.moe/5yg1e3.mp4" controls></video>
+        <video src="https://files.catbox.moe/hq1xh2.mp4" controls></video>
+        <video src="https://files.catbox.moe/mhnbkv.mp4" controls></video>
+        <video src="https://files.catbox.moe/6ecjn0.mp4" controls></video>
+        <video src="https://files.catbox.moe/s5ulbe.mp4" controls></video>
+        <video src="https://files.catbox.moe/iiid8q.mp4" controls></video>
+        <video src="https://files.catbox.moe/jdmvc2.mp4" controls></video>
+        <video src="https://files.catbox.moe/csuqh6.mp4" controls></video>
+        <video src="https://files.catbox.moe/t24k3v.mp4" controls></video> 
+        <video src="https://files.catbox.moe/tcyabr.mp4" controls></video>
+        <video src="https://files.catbox.moe/qosnva.mp4" controls></video>
+        <video src="https://files.catbox.moe/uxj7kn.mp4" controls></video>
+        <video src="https://files.catbox.moe/eonsp2.mp4" controls></video>
+        <video src="https://files.catbox.moe/h7ck4k.mp4" controls></video>
+        <video src="https://files.catbox.moe/orrp7j.mp4" controls></video>
+        <video src="https://files.catbox.moe/ceoipb.mp4" controls></video>
+        <video src="https://files.catbox.moe/rragzs.mp4" controls></video>
+        <video src="https://files.catbox.moe/47iad6.mp4" controls></video>
+        <video src="https://files.catbox.moe/cmmuj3.mp4" controls></video>
+        <video src="https://files.catbox.moe/mbfot9.mp4" controls></video>
+        <video src="https://files.catbox.moe/j7gath.mp4" controls></video>
+        <video src="https://files.catbox.moe/i1kzu3.mp4" controls></video>
+        <video src="https://files.catbox.moe/ofr3vu.mp4" controls></video>
+        <video src="https://files.catbox.moe/54blps.mp4" controls></video>
+        <video src="https://files.catbox.moe/l1q75w.mp4" controls></video>
+        <video src="https://files.catbox.moe/bbyw57.mp4" controls></video>
+        <video src="https://files.catbox.moe/3h0e7h.mp4" controls></video>
+  
+     </div>
+
+    <a href="index.html" class="button">Volver al Inicio</a>
+</body>
+</html>
+</file>
+
+<file path="CPWEB/index4.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección 1</title>
+    <link rel="stylesheet" href="styles2.css">
+    
+ <script type="module" src="/analytics-loader.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <h2 class="description">X W E B - 1</h2>
+    </header>
+
+      <!-- Medidor de velocidad debajo de la descripción -->
+    <div class="speedometer">
+        <div class="upload">Subida: <span id="upload">--</span> Mbps</div>
+        <div class="ping" id="ping">Ping: -- ms</div>
+        <div class="download">Descarga: <span id="download">--</span> Mbps</div>
+    </div>
+      <script src="script.js"></script>
+
+    <div class="video-container">
+        <!-- Esto es seccion 1 -->
+        <video src="https://qu.ax/KQDe.mp4" controls></video>
+        <video src="https://qu.ax/PTMgb.mp4" controls></video>
+        <video src="https://qu.ax/fSdCu.mp4" controls></video>
+        <video src="https://qu.ax/uUpVU.mp4" controls></video>
+        <video src="https://qu.ax/weKFk.mp4" controls></video>
+        <video src="https://qu.ax/SGfk.mp4" controls></video>
+        <video src="https://qu.ax/RplR.mp4" controls></video>
+        <video src="https://qu.ax/LrMM.mp4" controls></video>
+        <video src="https://qu.ax/iwhR.mp4" controls></video>
+        <video src="https://qu.ax/eXUY.mp4" controls></video>
+        <video src="https://qu.ax/omSg.mp4" controls></video>
+        <video src="https://qu.ax/eVn.mp4" controls></video>
+        <video src="https://qu.ax/DmTdK.mp4" controls></video>
+        <video src="https://cdn.videy.co/rtP0s9Hd1.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2Lwh_FlnUw4nXI9OOhtfHYqejDEwKVXIiseRdYTAR7xYhr5c2QVlhYgoY_aem_V1QmHMU06379tRy35VyPyw" controls></video>
+        <video src="https://cdn.videy.co/Jw6fRZcF1.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR0FQN-8VGGj4KRzd_jB5vYsu2TiF3bga82WI3-B6nQM9BHACSPxsrw_0y8_aem_DzH5x3wj7U7eCHkdR2EQgg" controls></video>
+        <video src="https://qu.ax/laCxR.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2WzOciVm9yRzPbc_ceHzODEq4B0sWqggOrYqcyiEoMruSbDkxgAKnri44_aem_mVTRONbnHeC7UMtz7Mq31g" controls></video> 
+        <video src="https://qu.ax/DXiba.mp4" controls></video>
+        <video src="https://qu.ax/OOUAY.mp4" controls></video>
+        <video src="https://qu.ax/tWZEV.mp4" controls></video>
+        <video src="https://qu.ax/wyWuW.mp4" controls></video>
+        <video src="https://qu.ax/cgzt.mp4" controls></video>
+        <video src="https://qu.ax/relLv.mp4" controls></video>
+        <video src="https://qu.ax/NSSSx.mp4" controls></video>
+        <video src="https://qu.ax/YiKcc.mp4" controls></video>
+        <video src="https://qu.ax/CwaWV.mp4" controls></video>
+        <video src="https://qu.ax/KttRC.mp4" controls></video>
+        <video src="https://qu.ax/lYYwa.mp4" controls></video>
+        <video src="https://qu.ax/ehuWz.mp4" controls></video>
+        <video src="https://qu.ax/DvwtK.mp4" controls></video>
+        <video src="https://qu.ax/cAQTM.mp4" controls></video>
+        <video src="https://qu.ax/jNAyd.mp4" controls></video>
+        <video src="https://cdn.videy.co/1A5Js31j1.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2OUYNz3HWs_jRCdt_1sKde7MUT-ehVJoATBpvhwsB8EOf_LxW62PeKdgI_aem_YJX1T3xD9G21s3sY4PTlZw" controls></video>
+     </div>
+
+    <a href="index.html" class="button">Volver al Inicio</a>
+</body>
+</html>
+</file>
+
 <file path="curts/styles.css">
 
 </file>
 
-<file path="FF/index.html">
+<file path="Windows/index.html">
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Temporizador de Fechas</title>
-  <!-- Favicon principal -->
-<link rel="icon" href="/ax/favicon.ico" type="image/x-icon">
-
-<!-- PWA / Android -->
-<link rel="icon" sizes="192x192" href="/ax/png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="/ax/png-principal/icon-512x512.png">
-
-<!-- Apple -->
-<link rel="apple-touch-icon" href="/ax/png-principal/icon-192x192.png">
-
-<!-- Open Graph mínimo -->
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/ax-col/ax/main/png-principal/icon-512x512.png">
-
-
-<!-- ============================= -->
-<!-- ESTILOS CSS -->
-<!-- ============================= -->
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activar Windows</title>
+    <link rel="stylesheet" href="styles.css">
+<script type="module" src="/analytics-loader.js"></script>
 </head>
-
 <body>
-
-<!-- ============================= -->
-<!-- ESTRUCTURA HTML -->
-<!-- ============================= -->
-<div class="hierarchy-container">
-
-    <!-- CREADOR -->
-    <div class="level-1">
-        <div class="counter-card">
-            <div class="card-title">Creador Harold</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="creador-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 10000001</div>
-        </div>
+    <div class="content">
+        <h1>Pasos para activar Windows</h1>
+        <h3>Opcion 1</h3>
+        <p><span class="highlight">Windows + R</span> | Ejecutar en modo <span class="highlight">Administrador</span> para que funcione bien</p>
+        <p>Luego escribir <span class="highlight">CMD</span></p>
+        <p>Después escribir esto <span class="highlight">irm https://get.activated.win | iex</span></p>
+        <p>Esperar a que <span class="highlight">inicie</span> el proceso</p>
+        <p>Apenas aparezca un panel escribir el número <span class="highlight">1</span></p>
+        <p><span class="highlight">Esperar</span> a que continúe sin tocar nada</p>
+        <p><span class="highlight">Aparecerá</span> la clave de <span class="highlight">Windows</span> Generada en el codigo</p>
+        <p><span class="highlight">Esperar</span> a que salga <span class="highlight">Press ani KEY</span> </p>
+        <p>El mensaje de <span class="highlight">Windows Habrá desaparecido</span> de la pantalla</p>
+        <p class="footer">Extraído por Andrex</p>
+        <h3>Opcion 2</h3>
+        <p class="footer">wmic path SoftwareLicensingService get OA3xOriginalProductKey</p>
+        <h4>msg * "https//viwnet.github.io/windows"</h4>
+        
     </div>
-
-    <!-- MODERADORES -->
-    <div class="level-2">
-        <div class="counter-card">
-            <div class="card-title">Moderador BR</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="mod-br-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 239917183</div>
-        </div>
-
-        <div class="counter-card">
-            <div class="card-title">Moderador US</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="mod-us-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 242183160</div>
-        </div>
-    </div>
-
-    <!-- CUENTAS FILA 1 -->
-    <div class="level-3">
-        <div class="counter-card">
-            <div class="card-title">Cuenta 1</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="cuenta1-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 2928340222</div>
-        </div>
-        <div class="counter-card">
-            <div class="card-title">Cuenta 2</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="cuenta2-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 7945458224</div>
-        </div>
-        <div class="counter-card">
-            <div class="card-title">Cuenta 3</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="cuenta3-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 8003198841</div>
-        </div>
-    </div>
-
-    <!-- CUENTAS FILA 2 -->
-    <div class="level-4">
-        <div class="counter-card">
-            <div class="card-title">Cuenta ?</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="cuenta4-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 000000000</div>
-        </div>
-        <div class="counter-card">
-            <div class="card-title">Cuenta ?</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="cuenta5-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 000000000</div>
-        </div>
-        <div class="counter-card">
-            <div class="card-title">Cuenta ?</div>
-            <div class="counter-box">
-                <div class="numbers-container" id="cuenta6-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
-            </div>
-            <div class="card-id">ID 7945458224 BANEADA</div>
-        </div>
-    </div>
-</div>
-
-<!-- ============================= -->
-<!-- JAVASCRIPT -->
-<!-- ============================= -->
-<script src="script.js"></script>
     
 </body>
 </html>
@@ -1671,8 +1468,569 @@ body {
 }
 </file>
 
+<file path="analytics-loader.js">
+// 📡 IMPORTACIONES ESTÁTICAS (Nativas para type="module")
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, runTransaction, onValue, push, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// 👑 1. INYECTAR ICONOS Y FAVICONS GLOBALES DE INMEDIATO
+(function() {
+    const faviconTags = [
+        { tag: 'link', rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' },
+        { tag: 'link', rel: 'icon', sizes: '192x192', href: '/png-principal/icon-192x192.png' },
+        { tag: 'link', rel: 'icon', sizes: '512x512', href: '/png-principal/icon-512x512.png' },
+        { tag: 'link', rel: 'apple-touch-icon', href: '/png-principal/icon-192x192.png' },
+        { tag: 'link', rel: 'manifest', href: '/manifest.json' }
+    ];
+
+    faviconTags.forEach(item => {
+        // Evitar duplicados si ya existen en el HTML
+        if (!document.querySelector(`link[href="${item.href}"]`)) {
+            const element = document.createElement(item.tag);
+            Object.keys(item).forEach(key => {
+                if (key !== 'tag') element.setAttribute(key, item[key]);
+            });
+            document.head.appendChild(element);
+        }
+    });
+})();
+
+// 🎨 2. INYECTAR ESTILOS DE LA BARRA SUPERIOR
+const styles = document.createElement('style');
+styles.innerHTML = `
+    #ax-global-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 45px;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 99999;
+        box-sizing: border-box;
+        font-family: 'Courier New', Courier, monospace;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+        pointer-events: none;
+    }
+    .ax-header-left {
+        color: #ffffff !important;
+        font-weight: bold !important;
+        font-size: 18px !important;
+        letter-spacing: 2px;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        pointer-events: auto;
+    }
+    .ax-header-right {
+        display: flex;
+        gap: 8px;
+        pointer-events: auto;
+    }
+    .ax-stat-box {
+        background: rgba(10, 10, 10, 0.75) !important;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 5px 10px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: #a0a5c0;
+    }
+    .ax-stat-box .stat-value {
+        color: #ffffff !important;
+        font-weight: bold;
+    }
+    .ax-stat-box.online .stat-value {
+        color: #00ffcc !important;
+        text-shadow: 0 0 6px rgba(0, 255, 204, 0.6);
+    }
+    .ax-stat-box .stat-dot {
+        width: 6px;
+        height: 6px;
+        background-color: #00ffcc;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px #00ffcc;
+        animation: ax-pulse-dot 2s infinite;
+    }
+    @keyframes ax-pulse-dot {
+        0% { opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { opacity: 0.3; }
+    }
+`;
+document.head.appendChild(styles);
+
+// 🏢 3. FUNCIÓN PARA PINTAR LA ESTRUCTURA EN EL BODY
+const injectHeader = () => {
+    if (!document.getElementById('ax-global-header')) {
+        const header = document.createElement('div');
+        header.id = 'ax-global-header';
+        header.innerHTML = `
+            <div class="ax-header-left">AX</div>
+            <div class="ax-header-right">
+                <div class="ax-stat-box">
+                    <span class="stat-label">VISTAS:</span>
+                    <span id="global-total-visits" class="stat-value">--</span>
+                </div>
+                <div class="ax-stat-box online">
+                    <span class="stat-dot"></span>
+                    <span class="stat-label">ONLINE:</span>
+                    <span id="global-active-users" class="stat-value">--</span>
+                </div>
+            </div>
+        `;
+        document.body.insertBefore(header, document.body.firstChild);
+    }
+};
+
+if (document.body) {
+    injectHeader();
+} else {
+    document.addEventListener("DOMContentLoaded", injectHeader);
+}
+
+// 🔥 4. ENTORNO CONFIGURACIÓN DE FIREBASE
+const firebaseConfig = {
+    apiKey: "AIzaSyDI8C65d5SJa-DslwylhK58iWZcsf-3duE",
+    authDomain: "open-817a9.firebaseapp.com",
+    databaseURL: "https://open-817a9-default-rtdb.firebaseio.com",
+    projectId: "open-817a9",
+    storageBucket: "open-817a9.firebasestorage.app",
+    messagingSenderId: "90367601661",
+    appId: "1:90367601661:web:1f1fde2dbd29c8dd220794"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const visitsRef = ref(db, 'analytics/total_visits');
+const onlineRef = ref(db, 'analytics/online_users');
+
+runTransaction(visitsRef, (currentValue) => {
+    return (currentValue || 0) + 1;
+});
+
+onValue(visitsRef, (snapshot) => {
+    const total = snapshot.val() || 0;
+    const viewEl = document.getElementById('global-total-visits');
+    if (viewEl) viewEl.textContent = Number(total).toLocaleString();
+});
+
+const connectedRef = ref(db, '.info/connected');
+onValue(connectedRef, (snap) => {
+    if (snap.val() === true) {
+        const myUserRef = push(onlineRef);
+        onDisconnect(myUserRef).remove();
+        set(myUserRef, true);
+    }
+});
+
+onValue(onlineRef, (snapshot) => {
+    let totalActive = 0;
+    if (snapshot.exists()) {
+        snapshot.forEach(() => { totalActive++; });
+    }
+    const onlineEl = document.getElementById('global-active-users');
+    if (onlineEl) onlineEl.textContent = totalActive;
+});
+</file>
+
 <file path="AX.py">
 #
+</file>
+
+<file path="icon-loader.js">
+// ==========================================
+// 📊 ANALÍTICA Y BARRA SUPERIOR GLOBAL (AX)
+// ==========================================
+(function() {
+    // 1. INYECTAR LOS ESTILOS CSS DIRECTAMENTE AL HEAD
+    const styles = document.createElement('style');
+    styles.innerHTML = `
+        #ax-global-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9998;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0));
+            pointer-events: none;
+        }
+        .ax-header-left {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+            pointer-events: auto;
+        }
+        .ax-header-right {
+            display: flex;
+            gap: 8px;
+            pointer-events: auto;
+        }
+        .ax-stat-box {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #888da8;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .ax-stat-box .stat-value {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .ax-stat-box.online .stat-value {
+            color: #00ffcc;
+            text-shadow: 0 0 6px rgba(0, 255, 204, 0.4);
+        }
+        .ax-stat-box .stat-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #00ffcc;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00ffcc;
+            animation: ax-pulse-dot 2s infinite;
+        }
+        @keyframes ax-pulse-dot {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+    `;
+    document.head.appendChild(styles);
+
+    // 2. INYECTAR LA ESTRUCTURA HTML AL PRINCIPIO DEL BODY
+    if (!document.getElementById('ax-global-header')) {
+        const header = document.createElement('div');
+        header.id = 'ax-global-header';
+        header.innerHTML = `
+            <div class="ax-header-left">AX</div>
+            <div class="ax-header-right">
+                <div class="ax-stat-box">
+                    <span class="stat-label">VISTAS:</span>
+                    <span id="global-total-visits" class="stat-value">--</span>
+                </div>
+                <div class="ax-stat-box online">
+                    <span class="stat-dot"></span>
+                    <span class="stat-label">ONLINE:</span>
+                    <span id="global-active-users" class="stat-value">--</span>
+                </div>
+            </div>
+        `;
+        
+        if (document.body) {
+            document.body.insertBefore(header, document.body.firstChild);
+        } else {
+            document.addEventListener("DOMContentLoaded", () => {
+                document.body.insertBefore(header, document.body.firstChild);
+            });
+        }
+    }
+
+    // 3. ENRUTAMIENTO DINÁMICO DE FIREBASE CORE
+    import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js").then((FirebaseApp) => {
+        import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js").then((FirebaseDB) => {
+            
+            const firebaseConfig = {
+                apiKey: "AIzaSyDI8C65d5SJa-DslwylhK58iWZcsf-3duE",
+                authDomain: "open-817a9.firebaseapp.com",
+                databaseURL: "https://open-817a9-default-rtdb.firebaseio.com",
+                projectId: "open-817a9",
+                storageBucket: "open-817a9.firebasestorage.app",
+                messagingSenderId: "90367601661",
+                appId: "1:90367601661:web:1f1fde2dbd29c8dd220794"
+            };
+
+            const app = FirebaseApp.initializeApp(firebaseConfig);
+            const db = FirebaseDB.getDatabase(app);
+
+            const visitsRef = FirebaseDB.ref(db, 'analytics/total_visits');
+            const onlineRef = FirebaseDB.ref(db, 'analytics/online_users');
+
+            // Transacción para contador global de vistas totales
+            FirebaseDB.runTransaction(visitsRef, (currentValue) => {
+                return (currentValue || 0) + 1;
+            });
+
+            // Pintar vistas totales actualizadas
+            FirebaseDB.onValue(visitsRef, (snapshot) => {
+                const total = snapshot.val() || 0;
+                const viewEl = document.getElementById('global-total-visits');
+                if (viewEl) viewEl.textContent = Number(total).toLocaleString();
+            });
+
+            // Lógica nativa de usuarios Online
+            const connectedRef = FirebaseDB.ref(db, '.info/connected');
+            FirebaseDB.onValue(connectedRef, (snap) => {
+                if (snap.val() === true) {
+                    const myUserRef = FirebaseDB.push(onlineRef);
+                    FirebaseDB.onDisconnect(myUserRef).remove();
+                    FirebaseDB.set(myUserRef, true);
+                }
+            });
+
+            // Pintar usuarios activos en línea fluctuando en tiempo real
+            FirebaseDB.onValue(onlineRef, (snapshot) => {
+                let totalActive = 0;
+                if (snapshot.exists()) {
+                    snapshot.forEach(() => { totalActive++; });
+                }
+                const onlineEl = document.getElementById('global-active-users');
+                if (onlineEl) onlineEl.textContent = totalActive;
+            });
+
+        });
+    });
+})();
+</file>
+
+<file path="manifest.json">
+{
+  "name": "AX PRINCIPAL",
+  "short_name": "AX",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff0000",
+  "icons": [
+    {
+      "src": "png-principal/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "png-principal/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "scope": ".",
+  "description": "AX - Sistema Operativo Web Personal"
+}
+</file>
+
+<file path="run.py">
+import os
+import sys
+import subprocess
+import time
+
+def limpiar_pantalla():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def ejecutar_comando(comando):
+    try:
+        subprocess.run(comando, shell=True, check=True)
+        return True
+    except subprocess.CalledProcessError:
+        print(f"\n❌ Error al ejecutar: {comando}")
+        input("\nPresiona Enter para continuar...")
+        return False
+
+def verificar_url_ax():
+    try:
+        url_actual = subprocess.check_output("git remote get-url origin", shell=True, text=True).strip()
+        if "ax-col/ax" not in url_actual:
+            print("\n⚙️ Git Shield: Actualizando enlace del repositorio Web (ax)...")
+            subprocess.run("git remote set-url origin https://github.com/ax-col/ax.git", shell=True)
+            time.sleep(1)
+    except Exception:
+        pass
+
+def main():
+    verificar_url_ax()
+    while True:
+        limpiar_pantalla()
+        print("==================================================")
+        print("🛰️  SISTEMA DE CONTROL AX - JEFE WEB (ax)")
+        print("==================================================")
+        print("1. Ver Estado Local (git status)")
+        print("2. Descargar Cambios de GitHub (git pull)")
+        print("3. Subir Cambios a GitHub (git add + commit + push)")
+        print("4. Volver al Panel Líder")
+        print("==================================================")
+        opc = input("Selecciona una opción (1-4): ").strip()
+
+        if opc == "1":
+            ejecutar_comando("git status")
+            input("\nPresiona Enter para volver...")
+        elif opc == "2":
+            print("\n📥 Descargando repositorio...")
+            ejecutar_comando("git pull origin main")
+            input("\nPresiona Enter para volver...")
+        elif opc == "3":
+            msg = input("Mensaje del commit (deja vacío para usar por defecto): ").strip()
+            if not msg:
+                msg = "Update Web Production via run.py"
+            
+            print("\n➕ Indexando archivos con calma...")
+            time.sleep(1.5)
+            if ejecutar_comando("git add ."):
+                print("💬 Creando el commit de actualización...")
+                time.sleep(1.5)
+                if ejecutar_comando(f'git commit -m "{msg}"'):
+                    print("🚀 Iniciando subida a los servidores de GitHub (Push)...")
+                    time.sleep(2)
+                    ejecutar_comando("git push origin main")
+            input("\nPresiona Enter para volver...")
+        elif opc == "4":
+            break
+
+if __name__ == "__main__":
+    main()
+</file>
+
+<file path="FF/index.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temporizador de Fechas</title>
+ <script type="module" src="/analytics-loader.js"></script>
+
+<!-- ============================= -->
+<!-- ESTILOS CSS -->
+<!-- ============================= -->
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- ============================= -->
+<!-- ESTRUCTURA HTML -->
+<!-- ============================= -->
+<div class="hierarchy-container">
+
+    <!-- CREADOR -->
+    <div class="level-1">
+        <div class="counter-card">
+            <div class="card-title">Creador Harold</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="creador-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 10000001</div>
+        </div>
+    </div>
+
+    <!-- MODERADORES -->
+    <div class="level-2">
+        <div class="counter-card">
+            <div class="card-title">Moderador BR</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="mod-br-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 239917183</div>
+        </div>
+
+        <div class="counter-card">
+            <div class="card-title">Moderador US</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="mod-us-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 242183160</div>
+        </div>
+    </div>
+
+    <!-- CUENTAS FILA 1 -->
+    <div class="level-3">
+        <div class="counter-card">
+            <div class="card-title">Cuenta 1</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta1-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 2928340222</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta 2</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta2-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 7945458224</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta 3</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta3-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 8003198841</div>
+        </div>
+    </div>
+
+    <!-- CUENTAS FILA 2 -->
+    <div class="level-4">
+        <div class="counter-card">
+            <div class="card-title">Cuenta ?</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta4-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 000000000</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta ?</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta5-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 000000000</div>
+        </div>
+        <div class="counter-card">
+            <div class="card-title">Cuenta ?</div>
+            <div class="counter-box">
+                <div class="numbers-container" id="cuenta6-display">
+                    <!-- Los números se insertarán dinámicamente con JS -->
+                </div>
+            </div>
+            <div class="card-id">ID 7945458224 BANEADA</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================= -->
+<!-- JAVASCRIPT -->
+<!-- ============================= -->
+<script src="script.js"></script>
+    
+</body>
+</html>
 </file>
 
 <file path="rf.html">
@@ -1683,6 +2041,8 @@ body {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redireccionando... - AX PROYECT</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/analytics-loader.js"></script>
+
 </head>
 <body>
 
@@ -1721,33 +2081,6 @@ body {
 </script>
 </body>
 </html>
-</file>
-
-<file path="manifest.json">
-{
-  "name": "AX PRINCIPAL",
-  "short_name": "AX",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#ff0000",
-  "icons": [
-    {
-      "src": "png-principal/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "png-principal/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "scope": ".",
-  "description": "AX - Sistema Operativo Web Personal"
-}
 </file>
 
 <file path="version-manager.js">
@@ -2018,6 +2351,7 @@ window.forceUpdate = () => {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AX System - Boot Interface v1.2</title>
+<script type="module" src="/analytics-loader.js"></script>
 
   <!-- Fuente tipo terminal -->
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet" />
@@ -2284,84 +2618,6 @@ window.forceUpdate = () => {
     setInterval(updateCounter, 1000);
     updateCounter();
   </script>
-</body>
-</html>
-</file>
-
-<file path="curts/index.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AX Link Shortener - Panel Curts</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background-color: #1e1e1e; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; max-width: 450px; width: 90%; }
-        h1 { color: #00adb5; margin-bottom: 20px; font-size: 28px; }
-        p { color: #aaaaaa; font-size: 14px; }
-        input[type="url"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #393e46; border-radius: 6px; background-color: #222831; color: #fff; box-sizing: border-box; font-size: 16px; }
-        input[type="url"]:focus { outline: none; border-color: #00adb5; }
-        button { background-color: #00adb5; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.3s; }
-        button:hover { background-color: #007c82; }
-        .resultado { margin-top: 20px; padding: 15px; background-color: #222831; border-radius: 6px; display: none; word-break: break-all; border: 1px dashed #00adb5; }
-        .resultado a { color: #00adb5; font-weight: bold; text-decoration: none; font-size: 16px; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>AX Link Shortener</h1>
-    <p>Introduce cualquier enlace largo para guardarlo en la nube:</p>
-    <input type="url" id="urlLarga" placeholder="https://ejemplo.com/link-largo" required>
-    <button onclick="crearEnlace()">Acortar Enlace</button>
-
-    <div class="resultado" id="zonaResultado">
-        <p>¡Link global generado con éxito!</p>
-        <p><a id="linkAcortado" href="#" target="_blank"></a></p>
-    </div>
-</div>
-
-<script>
-    // CAMBIO CLAVE: Ahora los enlaces generados apuntarán directamente a tu archivo receptor
-    const BASE_URL = "https://ax-col.github.io/ax/rf.html";
-    const SUPABASE_URL = "https://bkgklfnwqunogtqclrho.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_O0MJd3GpF_oL7TVdLdUYEQ_mwCy81A-"; 
-    
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    async function crearEnlace() {
-        const urlLarga = document.getElementById('urlLarga').value.trim();
-        
-        if (!urlLarga || !urlLarga.startsWith('http')) {
-            alert("Por favor, introduce un enlace válido (que empiece con http:// o https://)");
-            return;
-        }
-
-        const numeroAleatorio = Math.floor(100000 + Math.random() * 900000);
-        const nuevoCodigo = "rf" + numeroAleatorio;
-
-        // Guarda cualquier link dinámico que pongas en la caja de texto
-        const { error } = await supabaseClient
-            .from('enlaces')
-            .insert([{ codigo: nuevoCodigo, url_larga: urlLarga }]);
-
-        if (error) {
-            alert("Error al conectar con tu base de datos: " + error.message);
-            return;
-        }
-
-        // Armará el link como: https://ax-col.github.io/ax/curts-ref.html?id=rfXXXXXX
-        const linkFinal = BASE_URL + "?id=" + nuevoCodigo;
-        const tagA = document.getElementById('linkAcortado');
-        tagA.href = linkFinal;
-        tagA.innerText = linkFinal;
-        
-        document.getElementById('zonaResultado').style.display = 'block';
-    }
-</script>
-
 </body>
 </html>
 </file>
@@ -2956,6 +3212,85 @@ window.forceUpdate = () => {
             }
         }, 1000);
     </script>
+</body>
+</html>
+</file>
+
+<file path="curts/index.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AX Link Shortener - Panel Curts</title>
+    <script type="module" src="/analytics-loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: #1e1e1e; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; max-width: 450px; width: 90%; }
+        h1 { color: #00adb5; margin-bottom: 20px; font-size: 28px; }
+        p { color: #aaaaaa; font-size: 14px; }
+        input[type="url"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #393e46; border-radius: 6px; background-color: #222831; color: #fff; box-sizing: border-box; font-size: 16px; }
+        input[type="url"]:focus { outline: none; border-color: #00adb5; }
+        button { background-color: #00adb5; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.3s; }
+        button:hover { background-color: #007c82; }
+        .resultado { margin-top: 20px; padding: 15px; background-color: #222831; border-radius: 6px; display: none; word-break: break-all; border: 1px dashed #00adb5; }
+        .resultado a { color: #00adb5; font-weight: bold; text-decoration: none; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>AX Link Shortener</h1>
+    <p>Introduce cualquier enlace largo para guardarlo en la nube:</p>
+    <input type="url" id="urlLarga" placeholder="https://ejemplo.com/link-largo" required>
+    <button onclick="crearEnlace()">Acortar Enlace</button>
+
+    <div class="resultado" id="zonaResultado">
+        <p>¡Link global generado con éxito!</p>
+        <p><a id="linkAcortado" href="#" target="_blank"></a></p>
+    </div>
+</div>
+
+<script>
+    // CAMBIO CLAVE: Ahora los enlaces generados apuntarán directamente a tu archivo receptor
+    const BASE_URL = "https://ax-col.github.io/ax/rf.html";
+    const SUPABASE_URL = "https://bkgklfnwqunogtqclrho.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_O0MJd3GpF_oL7TVdLdUYEQ_mwCy81A-"; 
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function crearEnlace() {
+        const urlLarga = document.getElementById('urlLarga').value.trim();
+        
+        if (!urlLarga || !urlLarga.startsWith('http')) {
+            alert("Por favor, introduce un enlace válido (que empiece con http:// o https://)");
+            return;
+        }
+
+        const numeroAleatorio = Math.floor(100000 + Math.random() * 900000);
+        const nuevoCodigo = "rf" + numeroAleatorio;
+
+        // Guarda cualquier link dinámico que pongas en la caja de texto
+        const { error } = await supabaseClient
+            .from('enlaces')
+            .insert([{ codigo: nuevoCodigo, url_larga: urlLarga }]);
+
+        if (error) {
+            alert("Error al conectar con tu base de datos: " + error.message);
+            return;
+        }
+
+        // Armará el link como: https://ax-col.github.io/ax/curts-ref.html?id=rfXXXXXX
+        const linkFinal = BASE_URL + "?id=" + nuevoCodigo;
+        const tagA = document.getElementById('linkAcortado');
+        tagA.href = linkFinal;
+        tagA.innerText = linkFinal;
+        
+        document.getElementById('zonaResultado').style.display = 'block';
+    }
+</script>
+
 </body>
 </html>
 </file>
@@ -3769,22 +4104,122 @@ body {
     min-width: 80px;
   }
 }
+
+/* --- CONTENEDOR COMPACTO Y AJUSTADO --- */
+.ax-cyber-card-compact {
+    position: relative;
+    width: 100%;
+    max-width: 360px; /* Un poco más estrecho para encajar mejor */
+    margin: 15px auto; /* Menos separación con los elementos de arriba/abajo */
+    padding: 2px; /* Grosor del borde sutil */
+    border-radius: 12px;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: 0 0 20px rgba(0, 255, 150, 0.1);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* --- EL BORDE RGB ANIMADO (Se mantiene igual de épico) --- */
+.ax-cyber-card-compact .ax-cyber-border {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        #ff0055 0deg,   /* Nace arriba en el centro */
+        #00ffcc 45deg,
+        #0072ff 90deg,
+        #9900ff 135deg,
+        #ff0055 180deg,  /* Se encuentra abajo */
+        #9900ff 225deg,
+        #0072ff 270deg,
+        #00ffcc 315deg,
+        #ff0055 360deg   /* Cierra arriba */
+    );
+    animation: rgb-split 4s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rgb-split {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- INTERIOR ULTRA COMPACTADO --- */
+.ax-cyber-content {
+    position: relative;
+    background: rgba(6, 6, 8, 0.85); /* Un pelo más opaco para que se lea mejor al ser chico */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px 15px; /* Reducido al mínimo: espacio justo arriba, abajo y a los lados */
+    border-radius: 10px;
+    z-index: 2;
+    text-align: center;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ax-cyber-content h3 {
+    font-size: 15px; /* Tamaño más sobrio */
+    letter-spacing: 3px;
+    color: #00ffcc;
+    text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+    margin: 0 0 4px 0; /* Espaciado mínimo */
+}
+
+.ax-cyber-content p {
+    font-size: 11px;
+    color: #888da8;
+    letter-spacing: 1px;
+    margin: 0 0 15px 0; /* Margen recortado antes del botón */
+    text-transform: uppercase;
+}
+
+/* --- BOTÓN AJUSTADO AL ANCHO --- */
+.btn-cyber-download {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; /* Botón más estilizado y menos alto */
+    background: transparent;
+    color: #00ffcc;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 2px solid #00ffcc;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 8px rgba(0, 255, 204, 0.2), 0 0 10px rgba(0, 255, 204, 0.1);
+}
+
+.btn-cyber-download:hover {
+    color: #060608;
+    background: #00ffcc;
+    box-shadow: 0 0 18px rgba(0, 255, 204, 0.6);
+    transform: scale(1.02);
+}
+
+.btn-cyber-download:active {
+    transform: scale(0.98);
+}
 </file>
 
 <file path="README.md">
 # Subir los cambios a GitHub
-git pull origin main
+git pull origin main # Actualizar repositorio global
 git status
 git add .
 git commit -m "Update Web or App"
 git push
 
-# Ubicación Local com.ax.col
-storage/downloads/AX-Root/AX_APP/ 
-
-# EJECUTAR PARA ACTUALIZAR APP TERMUX
-cd storage/downloads/AX-Root/AX_APP/
-bash compilar.sh
+# EJECUTAR PARA INICIALIZAR
+cd storage/downloads/github/
+python runax.py
 
 # Visualizar Estructura
 find . -maxdepth 3 -not -path '*/.*'
@@ -3792,10 +4227,11 @@ find . -maxdepth 3 -not -path '*/.*'
 # AX
 Plataforma Web de Ayuda Comunitaria
 AX es una plataforma web progresiva pensada para ayudar a la comunidad. Centraliza información, recursos y ubicaciones locales en un solo lugar.
+
 #Estructura AX WEB
-#![Estructura del Proyecto WEB](png-principal/ax_web.png)
+(png-principal/ax_web.png)
 #Estructura AX APK
-#![Estructura del Proyecto APK](png-principal/ax_apk.png)
+(png-principal/ax_apk.png)
 
 # Características
 - **PWA**: Instalable desde el navegador. Usa `manifest.json` y `sw.js` para funcionar offline.
@@ -3803,10 +4239,6 @@ AX es una plataforma web progresiva pensada para ayudar a la comunidad. Centrali
 - **Módulos**: Varias secciones independientes en carpetas para organizar contenido.
 - **Gestor de versiones**: `version-manager.js` + `version.json` para controlar actualizaciones.
 - **Multimedia**: Carpeta `AX-Files/` con videos informativos.
-
-# Como Clonar
-git clone https://github.com/ax-col/ax.git
-cd ax
 
 # Tecnologías
 - HTML5, CSS3, JavaScript Vanilla
@@ -4101,11 +4533,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <title>AX PRINCIPAL</title>
 <meta name="description" content="AX alojado en GitHub Pages.">
 
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="icon" sizes="192x192" href="png-principal/icon-192x192.png">
-<link rel="icon" sizes="512x512" href="png-principal/icon-512x512.png">
-<link rel="apple-touch-icon" href="png-principal/icon-192x192.png">
-<link rel="manifest" href="manifest.json">
+<script type="module" src="/analytics-loader.js"></script>
 
 <link rel="stylesheet" href="styles.css">
 
@@ -4128,6 +4556,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 </style>
 </head>
+
 
 <body>
   <div id="preloader">
@@ -4200,6 +4629,19 @@ document.addEventListener('DOMContentLoaded', () => {
     <a href="FF/index.html" class="button">Countdown FF</a> 
     <a href="https://github.com/ax-col/ax" class="button">Repositorio AX</a>
   </div>
+  
+<div class="ax-cyber-card-compact">
+    <div class="ax-cyber-border"></div>
+    <div class="ax-cyber-content">
+        <h3>SISTEMA AX - CORE</h3>
+        <p>Descargar paquete móvil [base.apk]</p>
+        
+        <a href="https://github.com/ax-col/app/raw/refs/heads/main/base.apk" download="AX-Comunidad.apk" class="btn-cyber-download">
+            <span class="btn-glow"></span>
+            <span class="btn-text">📥 DESCARGAR APK</span>
+        </a>
+    </div>
+</div>
 
   <button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
 
