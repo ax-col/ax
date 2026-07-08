@@ -54,10 +54,10 @@
             tabla.style.display = "none";
 
             try {
-                const response = await fetch('http://localhost:3000/api/auditar-ultra-automatico', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+const response = await fetch('https://ax-7tge.onrender.com/api/auditar-ultra-automatico', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+});
 
                 const res = await response.json();
 
