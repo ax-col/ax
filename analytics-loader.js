@@ -151,6 +151,7 @@ const db = getDatabase(app);
 const visitsRef = ref(db, 'analytics/total_visits');
 const onlineRef = ref(db, 'analytics/online_users');
 
+// 📈 CONTROL DE VISITAS TOTALES
 runTransaction(visitsRef, (currentValue) => {
     return (currentValue || 0) + 1;
 });
@@ -161,18 +162,33 @@ onValue(visitsRef, (snapshot) => {
     if (viewEl) viewEl.textContent = Number(total).toLocaleString();
 });
 
+// 👥 CONTROL DE USUARIOS ONLINE OPTIMIZADO (Anti-duplicados por navegación)
+// Generar o recuperar un ID único para esta pestaña/sesión del navegador
+let sessionToken = sessionStorage.getItem('ax_user_session');
+if (!sessionToken) {
+    sessionToken = 'user_' + Math.random().toString(36).substring(2, 15);
+    sessionStorage.setItem('ax_user_session', sessionToken);
+}
+
 const connectedRef = ref(db, '.info/connected');
 onValue(connectedRef, (snap) => {
     if (snap.val() === true) {
-        const myUserRef = push(onlineRef);
+        // En lugar de usar push(), apuntamos directamente a un nodo único de este usuario
+        const myUserRef = ref(db, `analytics/online_users/${sessionToken}`);
+        
+        // Al desconectarse (cerrar la pestaña definitivamente), se elimina de la BD
         onDisconnect(myUserRef).remove();
+        
+        // Marcamos la sesión actual como activa con la hora del servidor
         set(myUserRef, true);
     }
 });
 
+// Escuchar los cambios globales de usuarios activos
 onValue(onlineRef, (snapshot) => {
     let totalActive = 0;
     if (snapshot.exists()) {
+        // Al usar claves únicas fijas por sesión, Firebase las sobrescribe en lugar de duplicarlas
         snapshot.forEach(() => { totalActive++; });
     }
     const onlineEl = document.getElementById('global-active-users');
