@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría de Notas Udeki - AX Project</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0d0e12; color: #fff; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { width: 100%; max-width: 550px; background: #14161f; padding: 30px; border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.5); border: 1px solid #232736; text-align: center; }
+        h2 { color: #fff; margin-bottom: 5px; }
+        p.subtitle { color: #787f99; font-size: 14px; margin-bottom: 25px; }
+        .btn-magic { width: 100%; background: linear-gradient(135deg, #00ff88 0%, #00bc62 100%); color: #0d0e12; padding: 16px; border-radius: 8px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,255,136,0.3); transition: 0.2s; }
+        .btn-magic:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,255,136,0.5); }
+        #status { margin-top: 15px; color: #00ff88; font-weight: bold; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 25px; background: #1a1d29; border-radius: 8px; overflow: hidden; display: none; }
+        th, td { padding: 12px; text-align: left; font-size: 14px; border-bottom: 1px solid #232736; }
+        th { background: #1f2333; color: #00ff88; }
+        .cumple { color: #00ff88; font-weight: bold; }
+        .alerta { color: #ff4d4d; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Auditoría de Desempeños AX 🎩</h2>
+        <p class="subtitle">Escaneo inteligente en tiempo real. Sin extensiones, sin códigos y sin enredos.</p>
+        
+        <button class="btn-magic" onclick="ejecutarEscaneoEspía()">
+            ⚡ Iniciar Auditoría Inteligente AX
+        </button>
+
+        <div id="status"></div>
+
+        <table id="tabla-resultados">
+            <thead>
+                <tr>
+                    <th>Asignatura</th>
+                    <th>Nota</th>
+                    <th>Estado (80%)</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo-tabla"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function ejecutarEscaneoEspía() {
+            const statusDiv = document.getElementById('status');
+            const tabla = document.getElementById('tabla-resultados');
+            const cuerpo = document.getElementById('cuerpo-tabla');
+
+            statusDiv.innerText = "⏳ Levantando navegador robótico AX y escaneando Udeki... Espera unos segundos.";
+            cuerpo.innerHTML = "";
+            tabla.style.display = "none";
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auditar-ultra-automatico', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const res = await response.json();
+
+                if (res.success) {
+                    statusDiv.innerText = "✅ ¡Auditoría completada con éxito!";
+                    tabla.style.display = "table";
+                    res.datos.forEach(item => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                            <td><strong>${item.materia}</strong></td>
+                            <td>${item.nota}</td>
+                            <td><span class="${item.cumple ? 'cumple' : 'alerta'}">${item.cumple ? 'CUMPLE ✅' : 'ALERTA ❌'}</span></td>
+                        `;
+                        cuerpo.appendChild(fila);
+                    });
+                } else {
+                    statusDiv.innerText = "❌ Ocurrió un inconveniente.";
+                    alert("Asegúrate de tener abierta tu sesión de Udeki en el navegador antes de escanear.");
+                }
+            } catch (error) {
+                statusDiv.innerText = "";
+                alert("No se pudo conectar con el motor local de AX.");
+            }
+        }
+    </script>
+</body>
+</html>
