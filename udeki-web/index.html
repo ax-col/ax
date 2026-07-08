@@ -9,9 +9,16 @@
         .container { width: 100%; max-width: 550px; background: #14161f; padding: 30px; border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.5); border: 1px solid #232736; text-align: center; }
         h2 { color: #fff; margin-bottom: 5px; }
         p.subtitle { color: #787f99; font-size: 14px; margin-bottom: 25px; }
-        .btn-magic { width: 100%; background: linear-gradient(135deg, #00ff88 0%, #00bc62 100%); color: #0d0e12; padding: 16px; border-radius: 8px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,255,136,0.3); transition: 0.2s; }
+        
+        .form-group { text-align: left; margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; color: #00ff88; margin-bottom: 6px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 12px; background: #1a1d29; border: 1px solid #232736; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; }
+        .form-group input:focus { outline: none; border-color: #00ff88; }
+
+        .btn-magic { width: 100%; background: linear-gradient(135deg, #00ff88 0%, #00bc62 100%); color: #0d0e12; padding: 16px; border-radius: 8px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,255,136,0.3); transition: 0.2s; margin-top: 10px; }
         .btn-magic:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,255,136,0.5); }
         #status { margin-top: 15px; color: #00ff88; font-weight: bold; font-size: 14px; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 25px; background: #1a1d29; border-radius: 8px; overflow: hidden; display: none; }
         th, td { padding: 12px; text-align: left; font-size: 14px; border-bottom: 1px solid #232736; }
         th { background: #1f2333; color: #00ff88; }
@@ -23,9 +30,19 @@
 
     <div class="container">
         <h2>Auditoría de Desempeños AX 🎩</h2>
-        <p class="subtitle">Escaneo inteligente en tiempo real. Sin extensiones, sin códigos y sin enredos.</p>
+        <p class="subtitle">Escaneo inteligente en tiempo real. Rápido y sin intermediarios.</p>
         
-        <button class="btn-magic" onclick="ejecutarEscaneoEspía()">
+        <div class="form-group">
+            <label>Correo de Udeki</label>
+            <input type="email" id="email" placeholder="tu_correo@estudiante.com">
+        </div>
+        
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="password" placeholder="••••••••">
+        </div>
+
+        <button class="btn-magic" onclick="iniciarAuditoriaAutomatica()">
             ⚡ Iniciar Auditoría Inteligente AX
         </button>
 
@@ -35,7 +52,8 @@
             <thead>
                 <tr>
                     <th>Asignatura</th>
-                    <th>Nota</th>
+                    <th>Nota actual</th>
+                    <th>Logros (Meta: 4)</th>
                     <th>Estado (80%)</th>
                 </tr>
             </thead>
@@ -44,43 +62,112 @@
     </div>
 
     <script>
-        async function ejecutarEscaneoEspía() {
+        async function iniciarAuditoriaAutomatica() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
             const statusDiv = document.getElementById('status');
             const tabla = document.getElementById('tabla-resultados');
             const cuerpo = document.getElementById('cuerpo-tabla');
 
-            statusDiv.innerText = "⏳ Levantando navegador robótico AX y escaneando Udeki... Espera unos segundos.";
+            if (!email || !password) return alert("Por favor, completa ambos campos.");
+
+            statusDiv.innerText = "⏳ Abriendo puente seguro con Udeki... No cierres la ventana que se va a abrir.";
             cuerpo.innerHTML = "";
             tabla.style.display = "none";
 
-            try {
-const response = await fetch('https://ax-7tge.onrender.com/api/auditar-ultra-automatico', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' }
-});
+            // Se abre una ventana flotante pequeña para gestionar la sesión del usuario de forma nativa
+            const udekiWindow = window.open('https://app.udeki.com/login', 'UdekiBridge', 'width=450,height=500');
 
-                const res = await response.json();
-
-                if (res.success) {
-                    statusDiv.innerText = "✅ ¡Auditoría completada con éxito!";
-                    tabla.style.display = "table";
-                    res.datos.forEach(item => {
-                        const fila = document.createElement('tr');
-                        fila.innerHTML = `
-                            <td><strong>${item.materia}</strong></td>
-                            <td>${item.nota}</td>
-                            <td><span class="${item.cumple ? 'cumple' : 'alerta'}">${item.cumple ? 'CUMPLE ✅' : 'ALERTA ❌'}</span></td>
-                        `;
-                        cuerpo.appendChild(fila);
-                    });
-                } else {
-                    statusDiv.innerText = "❌ Ocurrió un inconveniente.";
-                    alert("Asegúrate de tener abierta tu sesión de Udeki en el navegador antes de escanear.");
-                }
-            } catch (error) {
+            if (!udekiWindow) {
                 statusDiv.innerText = "";
-                alert("No se pudo conectar con el motor local de AX.");
+                return alert("⚠️ Por favor, permite los permisos de ventanas emergentes (pop-ups) en tu navegador para automatizar el proceso.");
             }
+
+            // Inyectamos las credenciales de forma automática apenas cargue el login
+            const intervalo = setInterval(() => {
+                try {
+                    if (udekiWindow.location.href.includes('login')) {
+                        const doc = udekiWindow.document;
+                        const emailInput = doc.querySelector('input[type="email"]') || doc.querySelector('input[name="email"]');
+                        const passInput = doc.querySelector('input[type="password"]');
+                        const btnSubmit = doc.querySelector('button[type="submit"]');
+
+                        if (emailInput && passInput && btnSubmit) {
+                            emailInput.value = email;
+                            passInput.value = password;
+                            clearInterval(intervalo);
+                            btnSubmit.click(); // Inicia sesión legítimamente
+                            
+                            esperarCalificaciones(udekiWindow, statusDiv, tabla, cuerpo);
+                        }
+                    }
+                } catch (e) {
+                    // Ignoramos errores temporales de cruce de origen entre cargas
+                }
+            }, 1000);
+        }
+
+        function esperarCalificaciones(udekiWindow, statusDiv, tabla, cuerpo) {
+            let intentos = 0;
+            const checkNotas = setInterval(() => {
+                intentos++;
+                try {
+                    // Redirección forzada interna una vez pase el login
+                    if (udekiWindow.location.pathname.includes('home') || udekiWindow.location.pathname === '/') {
+                        udekiWindow.location.href = 'https://app.udeki.com/desempenio/estudiante';
+                    }
+
+                    // Extraemos el array directamente desde la memoria de la pestaña del estudiante
+                    const notasCargadas = udekiWindow.asignaturas || udekiWindow.asignaturasMv || null;
+
+                    if (notasCargadas && notasCargadas.length > 0) {
+                        clearInterval(checkNotas);
+                        statusDiv.innerText = "✅ ¡Datos recuperados con éxito!";
+                        udekiWindow.close(); // Cerramos la ventana flotante automáticamente
+
+                        procesarYRenderizar(notasCargadas, tabla, cuerpo);
+                    }
+                } catch (e) {
+                    // Manejo de seguridad del navegador mientras transiciona
+                }
+
+                if (intentos > 20) {
+                    clearInterval(checkNotas);
+                    udekiWindow.close();
+                    statusDiv.innerText = "❌ Tiempo de espera agotado. Revisa tus datos e intenta de nuevo.";
+                }
+            }, 1500);
+        }
+
+        function procesarYRenderizar(asignaturas, tabla, cuerpo) {
+            tabla.style.display = "table";
+            
+            asignaturas.forEach(materia => {
+                let logrados = 0;
+                let periodos = materia.periodos || [];
+                
+                periodos.forEach(p => {
+                    let logros = p.logros || [];
+                    logros.forEach(l => {
+                        if (['SUPERIOR', 'ALTO', 'BASICO'].includes(l.nombre_escala)) {
+                            logrados++;
+                        }
+                    });
+                });
+
+                const meta = 4; // Tu regla del 80%
+                const notaActual = materia.nota || 0;
+                const cumpleFiltro = (notaActual >= 3.5 || logrados >= meta);
+
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td><strong>${materia.asignatura || materia.nombre}</strong></td>
+                    <td>${notaActual}</td>
+                    <td>${logrados} / ${meta}</td>
+                    <td><span class="${cumpleFiltro ? 'cumple' : 'alerta'}">${cumpleFiltro ? 'CUMPLE ✅' : 'ALERTA ❌'}</span></td>
+                `;
+                cuerpo.appendChild(fila);
+            });
         }
     </script>
 </body>
