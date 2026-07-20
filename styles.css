@@ -182,7 +182,7 @@ body {
 /* Botón de sonido grande (mute-toggle) */
 .mute-toggle {
   /* Propiedades de posicionamiento/tamaño del nuevo código */
-  position: fixed;
+  position: center;
   top: 15px;
   right: 15px;
   z-index: 10;
@@ -200,9 +200,9 @@ body {
   padding: 20px 40px !important; /* Más grande que el nuevo */
   font-size: 1.5em !important; /* Más grande que el nuevo */
   /* El background y el color del original serán establecidos por JS en toggleMute() */
-  background: linear-gradient(135deg, transparent 0%, #00b3ff 100%) !important; 
+  background: linear-gradient(135deg, transparent 0%, #0055ff 100%) !important; 
   color: rgb(255, 255, 255) !important;
-  border: 2px solid #00ffcc !important;
+  border: 2px solid #0055ff !important;
 
   /* Estilos para el botón centrado en el HTML */
   margin: 30px auto !important;
@@ -216,7 +216,7 @@ body {
 
 .mute-toggle:hover {
   transform: scale(1.05) !important;
-  box-shadow: 0 0 10px #002fff !important;
+  box-shadow: 0px 7px 10px #ff0000 !important;
   /* El background del nuevo código se ignora a favor del original */
     background-color: transparent; 
 }
@@ -460,7 +460,7 @@ body {
 
 .timer-container {
     background: transparent; 
-    border: 3px solid rgb(10, 242, 110);
+    border: 3px solid rgb(4, 0, 255);
     border-radius: 25px;
     padding: 20px;
     box-shadow: 0 8px 32px transparent;
