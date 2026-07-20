@@ -7,8 +7,8 @@
 <script>
     (function() {
         const isGithub = window.location.hostname.includes("github.io");
-        // Forzamos la ruta correcta con o sin slash final
-        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        // Forzamos la ruta correcta: en GitHub va a la raíz absoluta, en local sube un nivel hacia la raíz (../)
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "../analytics-loader.js";
         
         const script = document.createElement('script');
         script.type = 'module';
@@ -18,8 +18,30 @@
 </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background-color: #1e1e1e; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; max-width: 450px; width: 90%; }
+        /* LIMPIEZA GLOBAL: Eliminamos el fondo negro estático para darle paso al Canvas dinámico */
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            color: #ffffff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background: transparent !important; /* Permite ver el fondo inyectado por el script */
+        }
+        .container { 
+            background-color: rgba(30, 30, 30, 0.85); /* Un toque de transparencia para que resalten las partículas de fondo */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7); 
+            text-align: center; 
+            max-width: 450px; 
+            width: 90%; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 10; /* Asegura que el panel quede por encima del canvas interactivo */
+        }
         h1 { color: #00adb5; margin-bottom: 20px; font-size: 28px; }
         p { color: #aaaaaa; font-size: 14px; }
         input[type="url"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #393e46; border-radius: 6px; background-color: #222831; color: #fff; box-sizing: border-box; font-size: 16px; }
@@ -45,7 +67,6 @@
 </div>
 
 <script>
-    // CAMBIO CLAVE: Ahora los enlaces generados apuntarán directamente a tu archivo receptor
     const BASE_URL = "https://ax-col.github.io/ax/rf.html";
     const SUPABASE_URL = "https://bkgklfnwqunogtqclrho.supabase.co";
     const SUPABASE_KEY = "sb_publishable_O0MJd3GpF_oL7TVdLdUYEQ_mwCy81A-"; 
@@ -63,7 +84,6 @@
         const numeroAleatorio = Math.floor(100000 + Math.random() * 900000);
         const nuevoCodigo = "rf" + numeroAleatorio;
 
-        // Guarda cualquier link dinámico que pongas en la caja de texto
         const { error } = await supabaseClient
             .from('enlaces')
             .insert([{ codigo: nuevoCodigo, url_larga: urlLarga }]);
@@ -73,7 +93,6 @@
             return;
         }
 
-        // Armará el link como: https://ax-col.github.io/ax/curts-ref.html?id=rfXXXXXX
         const linkFinal = BASE_URL + "?id=" + nuevoCodigo;
         const tagA = document.getElementById('linkAcortado');
         tagA.href = linkFinal;

@@ -53,7 +53,7 @@ body {
     0 0 20px rgba(255, 255, 255, 0.6); /* Sombras más amplias para escalar */
 }
 
-/* Contenedores de botones principales */
+    /* Contenedores de botones principales */
 .button-container {
   display: flex;
   flex-direction: column;
@@ -70,20 +70,20 @@ body {
   padding: 20px;
   color: white;
   background-color: transparent;
-  border: 3px solid red;
+  border: 3px solid white;
   border-radius: 12px;
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1em;
   transition: all 0.3s ease;
-  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 3px rgba(102, 127, 255, 0.9);
   text-align: center;
   box-sizing: border-box;
 }
 
 .button:hover {
-  background-color: rebeccapurple;
-  color: red;
+  background-color: rgba(102, 127, 255, 0.9);
+  color: black;
   cursor: pointer;
 }
 

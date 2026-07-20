@@ -1,5 +1,7 @@
 body {
-    background-color: black;
+    /* AJUSTE GLOBAL: Cambiado a transparente para que el script maestro pinte el lienzo negro y las partículas */
+    background-color: #000000 !important; /* Respaldo */
+    background: transparent !important;
     color: white;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -13,13 +15,21 @@ body {
 h1 {
     text-align: center;
     margin-top: 20px;
+    color: #ffffff;
 }
 
 .content {
-    padding: 20px;
+    /* Estilo de consola cyberpunk flotante */
+    background-color: rgba(15, 15, 15, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 0, 60, 0.2); /* Borde sutil rojo AX */
+    border-radius: 12px;
+    padding: 30px;
     text-align: center; /* Centra el texto dentro del contenedor */
     max-width: 800px; /* Limita el ancho del contenido para que no sea demasiado amplio */
-    width: 100%;
+    width: 90%;
+    z-index: 10; /* Por encima del canvas */
 }
 
 .highlight {
@@ -31,4 +41,5 @@ h1 {
     color: red;
     font-size: 24px;
     font-weight: bold;
+    word-break: break-all; /* Evita que el comando largo desconfigure el responsive */
 }

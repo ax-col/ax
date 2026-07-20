@@ -8,7 +8,8 @@
 }
 
 body {
-    background: #000;
+    /* AJUSTE GLOBAL: Cambiado a transparente para permitir ver la red de partículas y fondo maestro */
+    background: transparent;
     color: #fff;
     font-family: Arial, sans-serif;
     padding: 16px 20px;
@@ -26,6 +27,8 @@ body {
     padding-bottom: 40px;
     transform: scale(0.9);
     transform-origin: top center;
+    position: relative;
+    z-index: 10; /* Asegura que las tarjetas jerárquicas queden por encima de las partículas interactivas */
 }
 
 /* =========================
@@ -73,7 +76,9 @@ body {
 .counter-box {
     width: 380px; /* Aumentado para más unidades */
     height: 95px;
-    background: #000;
+    background: rgba(0, 0, 0, 0.75); /* Ajustado con leve transparencia para dar efecto de profundidad con el fondo */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -82,10 +87,7 @@ body {
     border: 2px solid #fff; /*Borde blanco*/
 }
 
-/* Fondo verde detrás de las box - COLOR DE FONDO DETRÁS DE LAS BOX */
-body {
-    background: #ff0000 !important; /* Rojo - COLOR DE FONDO GENERAL */
-}
+/* REMOVIDO: Se eliminó el bloque 'body { background: #ff0000 !important; }' que dañaba la interfaz global */
 
 /* =========================
    CONTENEDOR DE NÚMEROS ANIMADOS

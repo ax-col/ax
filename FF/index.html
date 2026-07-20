@@ -7,8 +7,8 @@
 <script>
     (function() {
         const isGithub = window.location.hostname.includes("github.io");
-        // Forzamos la ruta correcta con o sin slash final
-        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        // CORRECCIÓN: En GitHub va a la raíz absoluta, en local sube un nivel (../) para salir de la subcarpeta
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "../analytics-loader.js";
         
         const script = document.createElement('script');
         script.type = 'module';
@@ -17,40 +17,30 @@
     })();
 </script>
 
-<!-- ============================= -->
-<!-- ESTILOS CSS -->
-<!-- ============================= -->
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<!-- ============================= -->
-<!-- ESTRUCTURA HTML -->
-<!-- ============================= -->
 <div class="hierarchy-container">
 
-    <!-- CREADOR -->
     <div class="level-1">
         <div class="counter-card">
             <div class="card-title">Creador Harold</div>
             <div class="counter-box">
                 <div class="numbers-container" id="creador-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 10000001</div>
         </div>
     </div>
 
-    <!-- MODERADORES -->
     <div class="level-2">
         <div class="counter-card">
             <div class="card-title">Moderador BR</div>
             <div class="counter-box">
                 <div class="numbers-container" id="mod-br-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 239917183</div>
         </div>
@@ -59,21 +49,18 @@
             <div class="card-title">Moderador US</div>
             <div class="counter-box">
                 <div class="numbers-container" id="mod-us-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 242183160</div>
         </div>
     </div>
 
-    <!-- CUENTAS FILA 1 -->
     <div class="level-3">
         <div class="counter-card">
-            <div class="card-title">Cuenta 1</div>
+            <div class="counter-title card-title">Cuenta 1</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta1-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 2928340222</div>
         </div>
@@ -81,8 +68,7 @@
             <div class="card-title">Cuenta 2</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta2-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 7945458224</div>
         </div>
@@ -90,21 +76,18 @@
             <div class="card-title">Cuenta 3</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta3-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 8003198841</div>
         </div>
     </div>
 
-    <!-- CUENTAS FILA 2 -->
     <div class="level-4">
         <div class="counter-card">
             <div class="card-title">Cuenta ?</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta4-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 000000000</div>
         </div>
@@ -112,8 +95,7 @@
             <div class="card-title">Cuenta ?</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta5-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 000000000</div>
         </div>
@@ -121,17 +103,13 @@
             <div class="card-title">Cuenta ?</div>
             <div class="counter-box">
                 <div class="numbers-container" id="cuenta6-display">
-                    <!-- Los números se insertarán dinámicamente con JS -->
-                </div>
+                    </div>
             </div>
             <div class="card-id">ID 7945458224 BANEADA</div>
         </div>
     </div>
 </div>
 
-<!-- ============================= -->
-<!-- JAVASCRIPT -->
-<!-- ============================= -->
 <script src="script.js"></script>
     
 </body>

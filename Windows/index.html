@@ -8,8 +8,8 @@
 <script>
     (function() {
         const isGithub = window.location.hostname.includes("github.io");
-        // Forzamos la ruta correcta con o sin slash final
-        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        // CORRECCIÓN: En GitHub va a la raíz absoluta, en local sube un nivel (../) para salir de la subcarpeta Windows/
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "../analytics-loader.js";
         
         const script = document.createElement('script');
         script.type = 'module';
@@ -35,8 +35,6 @@
         <h3>Opcion 2</h3>
         <p class="footer">wmic path SoftwareLicensingService get OA3xOriginalProductKey</p>
         <h4>msg * "https//viwnet.github.io/windows"</h4>
-        
     </div>
-    
 </body>
 </html>
