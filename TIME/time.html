@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Time Map</title>
+
+    <script>
+    (function() {
+        const isGithub = window.location.hostname.includes("github.io");
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptPath;
+        document.head.appendChild(script);
+    })();
+    </script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Leaflet Terminator -->
+    <script src="https://cdn.jsdelivr.net/npm/@joergdietrich/leaflet.terminator@1.0.0/L.Terminator.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #0b0f17;
+        }
+
+        #map {
+            height: 420px;
+            width: 100%;
+            background: #0d131d;
+            border-radius: 1.25rem;
+            will-change: transform;
+        }
+
+        .leaflet-container {
+            background-color: #0b0f17 !important;
+        }
+
+        .custom-popup .leaflet-popup-content-wrapper {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+            border-radius: 1rem;
+            padding: 4px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .custom-popup .leaflet-popup-tip {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .custom-pin {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pin-marker {
+            width: 12px;
+            height: 12px;
+            background-color: #6366f1;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #6366f1;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f17; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen p-3 sm:p-6 lg:p-8">
+
+    <!-- Navbar / Header -->
+    <header class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-800/80 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-xl">
+                <i class="fa-solid fa-earth-americas"></i>
+            </div>
+            <div>
+                <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">ChronoEarth</h1>
+                <p class="text-xs text-slate-400">Mapa de ciclo Solar y Zonas Horarias Mundiales</p>
+            </div>
+        </div>
+
+        <!-- Buscador Inteligente -->
+        <div class="relative w-full md:w-96">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input type="text" id="searchInput" placeholder="Buscar entre 195 países o capitales..." 
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-100 placeholder-slate-500 transition-all">
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto space-y-6">
+
+        <!-- PANEL SUPERIOR: MAPA DE DÍA Y NOCHE -->
+        <section class="bg-slate-900/40 border border-slate-800/80 p-3 sm:p-4 rounded-3xl backdrop-blur-xl relative overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between mb-3 px-2">
+                <div class="flex items-center gap-2">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Mapa Global en Vivo (Ciclo Sol / Sombra)</h2>
+                </div>
+                <div class="text-[11px] text-slate-400 flex items-center gap-4">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-sun text-amber-400"></i> Día</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-moon text-indigo-400"></i> Noche</span>
+                </div>
+            </div>
+
+            <!-- Mapa Container -->
+            <div id="map" class="relative z-10 shadow-inner"></div>
+        </section>
+
+        <!-- PANEL INFERIOR -->
+        <section class="space-y-4" id="zonesContainer">
+            <!-- Renderizado dinámico -->
+        </section>
+
+    </main>
+
+    <script>
+        // 1. BASE DE DATOS COMPLETA
+        const countries = [
+            { name: "Afganistán", capital: "Kabul", code: "af", timeZone: "Asia/Kabul", lat: 34.5553, lng: 69.2075 },
+            { name: "Albania", capital: "Tirana", code: "al", timeZone: "Europe/Tirane", lat: 41.3275, lng: 19.8187 },
+            { name: "Alemania", capital: "Berlín", code: "de", timeZone: "Europe/Berlin", lat: 52.5200, lng: 13.4050 },
+            { name: "Andorra", capital: "Andorra la Vella", code: "ad", timeZone: "Europe/Andorra", lat: 42.5063, lng: 1.5218 },
+            { name: "Angola", capital: "Luanda", code: "ao", timeZone: "Africa/Luanda", lat: -8.8390, lng: 13.2894 },
+            { name: "Antigua y Barbuda", capital: "Saint John's", code: "ag", timeZone: "America/Antigua", lat: 17.1274, lng: -61.8468 },
+            { name: "Arabia Saudita", capital: "Riad", code: "sa", timeZone: "Asia/Riyadh", lat: 24.7136, lng: 46.6753 },
+            { name: "Argelia", capital: "Argel", code: "dz", timeZone: "Africa/Algiers", lat: 36.7538, lng: 3.0588 },
+            { name: "Argentina", capital: "Buenos Aires", code: "ar", timeZone: "America/Argentina/Buenos_Aires", lat: -34.6037, lng: -58.3816 },
+            { name: "Armenia", capital: "Ereván", code: "am", timeZone: "Asia/Yerevan", lat: 40.1792, lng: 44.4991 },
+            { name: "Australia", capital: "Canberra", code: "au", timeZone: "Australia/Sydney", lat: -35.2809, lng: 149.1300 },
+            { name: "Austria", capital: "Viena", code: "at", timeZone: "Europe/Vienna", lat: 48.2082, lng: 16.3738 },
+            { name: "Azerbaiyán", capital: "Bakú", code: "az", timeZone: "Asia/Baku", lat: 40.4093, lng: 49.8671 },
+            { name: "Bahamas", capital: "Nassau", code: "bs", timeZone: "America/Nassau", lat: 25.0343, lng: -77.3963 },
+            { name: "Bangladés", capital: "Daca", code: "bd", timeZone: "Asia/Dhaka", lat: 23.8103, lng: 90.4125 },
+            { name: "Barbados", capital: "Bridgetown", code: "bb", timeZone: "America/Barbados", lat: 13.1060, lng: -59.6132 },
+            { name: "Baréin", capital: "Manama", code: "bh", timeZone: "Asia/Bahrain", lat: 26.2285, lng: 50.5860 },
+            { name: "Bélgica", capital: "Bruselas", code: "be", timeZone: "Europe/Brussels", lat: 50.8503, lng: 4.3517 },
+            { name: "Belice", capital: "Belmopán", code: "bz", timeZone: "America/Belize", lat: 17.2510, lng: -88.7669 },
+            { name: "Benín", capital: "Porto Novo", code: "bj", timeZone: "Africa/Porto-Novo", lat: 6.4969, lng: 2.6288 },
+            { name: "Bielorrusia", capital: "Minsk", code: "by", timeZone: "Europe/Minsk", lat: 53.9006, lng: 27.5590 },
+            { name: "Birmania", capital: "Naipyidó", code: "mm", timeZone: "Asia/Yangon", lat: 19.7633, lng: 96.0785 },
+            { name: "Bolivia", capital: "La Paz", code: "bo", timeZone: "America/La_Paz", lat: -16.4897, lng: -68.1193 },
+            { name: "Bosnia y Herzegovina", capital: "Sarajevo", code: "ba", timeZone: "Europe/Sarajevo", lat: 43.8563, lng: 18.4131 },
+            { name: "Botsuana", capital: "Gaborone", code: "bw", timeZone: "Africa/Gaborone", lat: -24.6282, lng: 25.9231 },
+            { name: "Brasil", capital: "Brasilia", code: "br", timeZone: "America/Sao_Paulo", lat: -15.7975, lng: -47.8919 },
+            { name: "Brunéi", capital: "Bandar Seri Begawan", code: "bn", timeZone: "Asia/Brunei", lat: 4.9031, lng: 114.9398 },
+            { name: "Bulgaria", capital: "Sofía", code: "bg", timeZone: "Europe/Sofia", lat: 42.6977, lng: 23.3219 },
+            { name: "Burkina Faso", capital: "Uagadugú", code: "bf", timeZone: "Africa/Ouagadougou", lat: 12.3714, lng: -1.5197 },
+            { name: "Burundi", capital: "Gitega", code: "bi", timeZone: "Africa/Bujumbura", lat: -3.4264, lng: 29.9249 },
+            { name: "Bután", capital: "Timbu", code: "bt", timeZone: "Asia/Thimphu", lat: 27.4728, lng: 89.6393 },
+            { name: "Cabo Verde", capital: "Praia", code: "cv", timeZone: "Atlantic/Cape_Verde", lat: 14.9315, lng: -23.5125 },
+            { name: "Camboya", capital: "Nom Pen", code: "kh", timeZone: "Asia/Phnom_Penh", lat: 11.5564, lng: 104.9282 },
+            { name: "Camerún", capital: "Yaundé", code: "cm", timeZone: "Africa/Douala", lat: 3.8480, lng: 11.5021 },
+            { name: "Canadá", capital: "Ottawa", code: "ca", timeZone: "America/Toronto", lat: 45.4215, lng: -75.6972 },
+            { name: "Catar", capital: "Doha", code: "qa", timeZone: "Asia/Qatar", lat: 25.2854, lng: 51.5310 },
+            { name: "Chad", capital: "Yamena", code: "td", timeZone: "Africa/Ndjamena", lat: 12.1348, lng: 15.0557 },
+            { name: "Chile", capital: "Santiago", code: "cl", timeZone: "America/Santiago", lat: -33.4489, lng: -70.6693 },
+            { name: "China", capital: "Pekín", code: "cn", timeZone: "Asia/Shanghai", lat: 39.9042, lng: 116.4074 },
+            { name: "Chipre", capital: "Nicosia", code: "cy", timeZone: "Asia/Nicosia", lat: 35.1856, lng: 33.3823 },
+            { name: "Ciudad del Vaticano", capital: "Vaticano", code: "va", timeZone: "Europe/Vatican", lat: 41.9029, lng: 12.4534 },
+            { name: "Colombia", capital: "Bogotá", code: "co", timeZone: "America/Bogota", lat: 4.7110, lng: -74.0721 },
+            { name: "Comoras", capital: "Moroni", code: "km", timeZone: "Indian/Comoro", lat: -11.7172, lng: 43.2473 },
+            { name: "Corea del Norte", capital: "Pionyang", code: "kp", timeZone: "Asia/Pyongyang", lat: 39.0392, lng: 125.7625 },
+            { name: "Corea del Sur", capital: "Seúl", code: "kr", timeZone: "Asia/Seoul", lat: 37.5665, lng: 126.9780 },
+            { name: "Costa de Marfil", capital: "Yamusukro", code: "ci", timeZone: "Africa/Abidjan", lat: 6.8276, lng: -5.2893 },
+            { name: "Costa Rica", capital: "San José", code: "cr", timeZone: "America/Costa_Rica", lat: 9.9281, lng: -84.0907 },
+            { name: "Croacia", capital: "Zagreb", code: "hr", timeZone: "Europe/Zagreb", lat: 45.8150, lng: 15.9819 },
+            { name: "Cuba", capital: "La Habana", code: "cu", timeZone: "America/Havana", lat: 23.1136, lng: -82.3666 },
+            { name: "Dinamarca", capital: "Copenhague", code: "dk", timeZone: "Europe/Copenhagen", lat: 55.6761, lng: 12.5683 },
+            { name: "Dominica", capital: "Roseau", code: "dm", timeZone: "America/Dominica", lat: 15.3092, lng: -61.3790 },
+            { name: "Ecuador", capital: "Quito", code: "ec", timeZone: "America/Guayaquil", lat: -0.1807, lng: -78.4678 },
+            { name: "Egipto", capital: "El Cairo", code: "eg", timeZone: "Africa/Cairo", lat: 30.0444, lng: 31.2357 },
+            { name: "El Salvador", capital: "San Salvador", code: "sv", timeZone: "America/El_Salvador", lat: 13.6929, lng: -89.2182 },
+            { name: "Emiratos Árabes Unidos", capital: "Abu Dabi", code: "ae", timeZone: "Asia/Dubai", lat: 24.4539, lng: 54.3773 },
+            { name: "Eritrea", capital: "Asmara", code: "er", timeZone: "Africa/Asmara", lat: 15.3229, lng: 38.9250 },
+            { name: "Eslovaquia", capital: "Bratislava", code: "sk", timeZone: "Europe/Bratislava", lat: 48.1486, lng: 17.1077 },
+            { name: "Eslovenia", capital: "Liubliana", code: "si", timeZone: "Europe/Ljubljana", lat: 46.0569, lng: 14.5058 },
+            { name: "España", capital: "Madrid", code: "es", timeZone: "Europe/Madrid", lat: 40.4168, lng: -3.7038 },
+            { name: "Estados Unidos", capital: "Washington D.C.", code: "us", timeZone: "America/New_York", lat: 38.9072, lng: -77.0369 },
+            { name: "Estonia", capital: "Tallin", code: "ee", timeZone: "Europe/Tallinn", lat: 59.4370, lng: 24.7536 },
+            { name: "Esuatini", capital: "Mbabane", code: "sz", timeZone: "Africa/Mbabane", lat: -26.3055, lng: 31.1367 },
+            { name: "Etiopía", capital: "Adís Abeba", code: "et", timeZone: "Africa/Addis_Ababa", lat: 9.0300, lng: 38.7400 },
+            { name: "Filipinas", capital: "Manila", code: "ph", timeZone: "Asia/Manila", lat: 14.5995, lng: 120.9842 },
+            { name: "Finlandia", capital: "Helsinki", code: "fi", timeZone: "Europe/Helsinki", lat: 60.1699, lng: 24.9384 },
+            { name: "Fiyi", capital: "Suva", code: "fj", timeZone: "Pacific/Fiji", lat: -18.1416, lng: 178.4419 },
+            { name: "Francia", capital: "París", code: "fr", timeZone: "Europe/Paris", lat: 48.8566, lng: 2.3522 },
+            { name: "Gabón", capital: "Libreville", code: "ga", timeZone: "Africa/Libreville", lat: 0.4162, lng: 9.4673 },
+            { name: "Gambia", capital: "Banjul", code: "gm", timeZone: "Africa/Banjul", lat: 13.4549, lng: -16.5790 },
+            { name: "Georgia", capital: "Tiflis", code: "ge", timeZone: "Asia/Tbilisi", lat: 41.7151, lng: 44.8271 },
+            { name: "Ghana", capital: "Acra", code: "gh", timeZone: "Africa/Accra", lat: 5.6037, lng: -0.1870 },
+            { name: "Granada", capital: "Saint George", code: "gd", timeZone: "America/Grenada", lat: 12.0561, lng: -61.7488 },
+            { name: "Grecia", capital: "Atenas", code: "gr", timeZone: "Europe/Athens", lat: 37.9838, lng: 23.7275 },
+            { name: "Guatemala", capital: "Ciudad de Guatemala", code: "gt", timeZone: "America/Guatemala", lat: 14.6349, lng: -90.5069 },
+            { name: "Guinea", capital: "Conakri", code: "gn", timeZone: "Africa/Conakry", lat: 9.6412, lng: -13.5784 },
+            { name: "Guinea-Bisáu", capital: "Bisáu", code: "gw", timeZone: "Africa/Bissau", lat: 11.8816, lng: -15.6178 },
+            { name: "Guinea Ecuatorial", capital: "Malabo", code: "gq", timeZone: "Africa/Malabo", lat: 3.7504, lng: 8.7371 },
+            { name: "Guyana", capital: "Georgetown", code: "gy", timeZone: "America/Guyana", lat: 6.8013, lng: -58.1551 },
+            { name: "Haití", capital: "Puerto Príncipe", code: "ht", timeZone: "America/Port-au-Prince", lat: 18.5944, lng: -72.3074 },
+            { name: "Honduras", capital: "Tegucigalpa", code: "hn", timeZone: "America/Tegucigalpa", lat: 14.0723, lng: -87.1921 },
+            { name: "Hungría", capital: "Budapest", code: "hu", timeZone: "Europe/Budapest", lat: 47.4979, lng: 19.0402 },
+            { name: "India", capital: "Nueva Delhi", code: "in", timeZone: "Asia/Kolkata", lat: 28.6139, lng: 77.2090 },
+            { name: "Indonesia", capital: "Yakarta", code: "id", timeZone: "Asia/Jakarta", lat: -6.2088, lng: 106.8456 },
+            { name: "Irak", capital: "Bagdad", code: "iq", timeZone: "Asia/Baghdad", lat: 33.3152, lng: 44.3661 },
+            { name: "Irán", capital: "Teherán", code: "ir", timeZone: "Asia/Tehran", lat: 35.6892, lng: 51.3890 },
+            { name: "Irlanda", capital: "Dublín", code: "ie", timeZone: "Europe/Dublin", lat: 53.3498, lng: -6.2603 },
+            { name: "Islandia", capital: "Rikiavik", code: "is", timeZone: "Atlantic/Reykjavik", lat: 64.1466, lng: -21.9426 },
+            { name: "Islas Marshall", capital: "Majuro", code: "mh", timeZone: "Pacific/Majuro", lat: 7.1315, lng: 171.1845 },
+            { name: "Islas Salomón", capital: "Honiara", code: "sb", timeZone: "Pacific/Guadalcanal", lat: -9.4456, lng: 159.9729 },
+            { name: "Israel", capital: "Jerusalén", code: "il", timeZone: "Asia/Jerusalem", lat: 31.7683, lng: 35.2137 },
+            { name: "Italia", capital: "Roma", code: "it", timeZone: "Europe/Rome", lat: 41.9028, lng: 12.4964 },
+            { name: "Jamaica", capital: "Kingston", code: "jm", timeZone: "America/Jamaica", lat: 18.0179, lng: -76.8099 },
+            { name: "Japón", capital: "Tokio", code: "jp", timeZone: "Asia/Tokyo", lat: 35.6762, lng: 139.6503 },
+            { name: "Jordania", capital: "Amán", code: "jo", timeZone: "Asia/Amman", lat: 31.9454, lng: 35.9284 },
+            { name: "Kazajistán", capital: "Astana", code: "kz", timeZone: "Asia/Almaty", lat: 51.1694, lng: 71.4491 },
+            { name: "Kenia", capital: "Nairobi", code: "ke", timeZone: "Africa/Nairobi", lat: -1.2921, lng: 36.8219 },
+            { name: "Kirguistán", capital: "Biskek", code: "kg", timeZone: "Asia/Bishkek", lat: 42.8746, lng: 74.5698 },
+            { name: "Kiribati", capital: "Tarawa", code: "ki", timeZone: "Pacific/Tarawa", lat: 1.4518, lng: 172.9717 },
+            { name: "Kuwait", capital: "Ciudad de Kuwait", code: "kw", timeZone: "Asia/Kuwait", lat: 29.3759, lng: 47.9774 },
+            { name: "Laos", capital: "Vientián", code: "la", timeZone: "Asia/Vientiane", lat: 17.9757, lng: 102.6331 },
+            { name: "Lesoto", capital: "Maseru", code: "ls", timeZone: "Africa/Maseru", lat: -29.3151, lng: 27.4869 },
+            { name: "Letonia", capital: "Riga", code: "lv", timeZone: "Europe/Riga", lat: 56.9496, lng: 24.1052 },
+            { name: "Líbano", capital: "Beirut", code: "lb", timeZone: "Asia/Beirut", lat: 33.8938, lng: 35.5018 },
+            { name: "Liberia", capital: "Monrovia", code: "lr", timeZone: "Africa/Monrovia", lat: 6.3156, lng: -10.8074 },
+            { name: "Libia", capital: "Trípoli", code: "ly", timeZone: "Africa/Tripoli", lat: 32.8872, lng: 13.1913 },
+            { name: "Liechtenstein", capital: "Vaduz", code: "li", timeZone: "Europe/Vaduz", lat: 47.1410, lng: 9.5209 },
+            { name: "Lituania", capital: "Vilna", code: "lt", timeZone: "Europe/Vilnius", lat: 54.6872, lng: 25.2797 },
+            { name: "Luxemburgo", capital: "Luxemburgo", code: "lu", timeZone: "Europe/Luxembourg", lat: 49.6116, lng: 6.1319 },
+            { name: "Macedonia del Norte", capital: "Skopie", code: "mk", timeZone: "Europe/Skopje", lat: 41.9981, lng: 21.4254 },
+            { name: "Madagascar", capital: "Antananarivo", code: "mg", timeZone: "Indian/Antananarivo", lat: -18.8792, lng: 47.5079 },
+            { name: "Malasia", capital: "Kuala Lumpur", code: "my", timeZone: "Asia/Kuala_Lumpur", lat: 3.1390, lng: 101.6869 },
+            { name: "Malaui", capital: "Lilongüe", code: "mw", timeZone: "Africa/Blantyre", lat: -13.9631, lng: 33.7741 },
+            { name: "Maldivas", capital: "Malé", code: "mv", timeZone: "Indian/Maldives", lat: 4.1755, lng: 73.5093 },
+            { name: "Malí", capital: "Bamako", code: "ml", timeZone: "Africa/Bamako", lat: 12.6392, lng: -8.0029 },
+            { name: "Malta", capital: "La Valeta", code: "mt", timeZone: "Europe/Malta", lat: 35.8997, lng: 14.5148 },
+            { name: "Marruecos", capital: "Rabat", code: "ma", timeZone: "Africa/Casablanca", lat: 34.0209, lng: -6.8416 },
+            { name: "Mauricio", capital: "Port Louis", code: "mu", timeZone: "Indian/Mauritius", lat: -20.1609, lng: 57.5012 },
+            { name: "Mauritania", capital: "Nuakchot", code: "mr", timeZone: "Africa/Nouakchott", lat: 18.0735, lng: -15.9582 },
+            { name: "México", capital: "CDMX", code: "mx", timeZone: "America/Mexico_City", lat: 19.4326, lng: -99.1332 },
+            { name: "Micronesia", capital: "Palikir", code: "fm", timeZone: "Pacific/Pohnpei", lat: 6.9248, lng: 158.1611 },
+            { name: "Moldavia", capital: "Chisináu", code: "md", timeZone: "Europe/Chisinau", lat: 47.0105, lng: 28.8638 },
+            { name: "Mónaco", capital: "Mónaco", code: "mc", timeZone: "Europe/Monaco", lat: 43.7384, lng: 7.4246 },
+            { name: "Mongolia", capital: "Ulán Bator", code: "mn", timeZone: "Asia/Ulaanbaatar", lat: 47.8864, lng: 106.9057 },
+            { name: "Montenegro", capital: "Podgorica", code: "me", timeZone: "Europe/Podgorica", lat: 42.4304, lng: 19.2594 },
+            { name: "Mozambique", capital: "Maputo", code: "mz", timeZone: "Africa/Maputo", lat: -25.9692, lng: 32.5732 },
+            { name: "Namibia", capital: "Windhoek", code: "na", timeZone: "Africa/Windhoek", lat: -22.5609, lng: 17.0658 },
+            { name: "Nauru", capital: "Yaren", code: "nr", timeZone: "Pacific/Nauru", lat: -0.5228, lng: 166.9315 },
+            { name: "Nepal", capital: "Katmandú", code: "np", timeZone: "Asia/Kathmandu", lat: 27.7172, lng: 85.3240 },
+            { name: "Nicaragua", capital: "Managua", code: "ni", timeZone: "America/Managua", lat: 12.1149, lng: -86.2362 },
+            { name: "Níger", capital: "Niamey", code: "ne", timeZone: "Africa/Niamey", lat: 13.5116, lng: 2.1254 },
+            { name: "Nigeria", capital: "Abuya", code: "ng", timeZone: "Africa/Lagos", lat: 9.0765, lng: 7.3986 },
+            { name: "Noruega", capital: "Oslo", code: "no", timeZone: "Europe/Oslo", lat: 59.9139, lng: 10.7522 },
+            { name: "Nueva Zelanda", capital: "Wellington", code: "nz", timeZone: "Pacific/Auckland", lat: -41.2865, lng: 174.7762 },
+            { name: "Omán", capital: "Mascate", code: "om", timeZone: "Asia/Muscat", lat: 23.5880, lng: 58.3829 },
+            { name: "Países Bajos", capital: "Ámsterdam", code: "nl", timeZone: "Europe/Amsterdam", lat: 52.3676, lng: 4.9041 },
+            { name: "Pakistán", capital: "Islamabad", code: "pk", timeZone: "Asia/Karachi", lat: 33.6844, lng: 73.0479 },
+            { name: "Palaos", capital: "Ngerulmud", code: "pw", timeZone: "Pacific/Palau", lat: 7.5004, lng: 134.6243 },
+            { name: "Palestina", capital: "Ramala", code: "ps", timeZone: "Asia/Hebron", lat: 31.9038, lng: 35.2034 },
+            { name: "Panamá", capital: "Ciudad de Panamá", code: "pa", timeZone: "America/Panama", lat: 8.9824, lng: -79.5199 },
+            { name: "Papúa Nueva Guinea", capital: "Puerto Moresby", code: "pg", timeZone: "Pacific/Port_Moresby", lat: -9.4438, lng: 147.1803 },
+            { name: "Paraguay", capital: "Asunción", code: "py", timeZone: "America/Asuncion", lat: -25.2637, lng: -57.5759 },
+            { name: "Perú", capital: "Lima", code: "pe", timeZone: "America/Lima", lat: -12.0464, lng: -77.0428 },
+            { name: "Polonia", capital: "Varsovia", code: "pl", timeZone: "Europe/Warsaw", lat: 52.2297, lng: 21.0122 },
+            { name: "Portugal", capital: "Lisboa", code: "pt", timeZone: "Europe/Lisbon", lat: 38.7223, lng: -9.1393 },
+            { name: "Reino Unido", capital: "Londres", code: "gb", timeZone: "Europe/London", lat: 51.5074, lng: -0.1278 },
+            { name: "República Centroafricana", capital: "Bangui", code: "cf", timeZone: "Africa/Bangui", lat: 4.3947, lng: 18.5582 },
+            { name: "República Checa", capital: "Praga", code: "cz", timeZone: "Europe/Prague", lat: 50.0755, lng: 14.4378 },
+            { name: "República del Congo", capital: "Brazzaville", code: "cg", timeZone: "Africa/Brazzaville", lat: -4.2634, lng: 15.2429 },
+            { name: "República Democrática del Congo", capital: "Kinsasa", code: "cd", timeZone: "Africa/Kinshasa", lat: -4.4419, lng: 15.2663 },
+            { name: "República Dominicana", capital: "Santo Domingo", code: "do", timeZone: "America/Santo_Domingo", lat: 18.4861, lng: -69.9312 },
+            { name: "Ruanda", capital: "Kigali", code: "rw", timeZone: "Africa/Kigali", lat: -1.9441, lng: 30.0619 },
+            { name: "Rumanía", capital: "Bucarest", code: "ro", timeZone: "Europe/Bucharest", lat: 44.4323, lng: 26.1063 },
+            { name: "Rusia", capital: "Moscú", code: "ru", timeZone: "Europe/Moscow", lat: 55.7558, lng: 37.6173 },
+            { name: "Samoa", capital: "Apia", code: "ws", timeZone: "Pacific/Apia", lat: -13.8333, lng: -171.7667 },
+            { name: "San Cristóbal y Nieves", capital: "Basseterre", code: "kn", timeZone: "America/St_Kitts", lat: 17.3000, lng: -62.7333 },
+            { name: "San Marino", capital: "San Marino", code: "sm", timeZone: "Europe/San_Marino", lat: 43.9333, lng: 12.4500 },
+            { name: "San Vicente y las Granadinas", capital: "Kingstown", code: "vc", timeZone: "America/St_Vincent", lat: 13.1600, lng: -61.2247 },
+            { name: "Santa Lucía", capital: "Castries", code: "lc", timeZone: "America/St_Lucia", lat: 14.0101, lng: -60.9875 },
+            { name: "Santo Tomé y Príncipe", capital: "Santo Tomé", code: "st", timeZone: "Africa/Sao_Tome", lat: 0.3302, lng: 6.7333 },
+            { name: "Senegal", capital: "Dakar", code: "sn", timeZone: "Africa/Dakar", lat: 14.7167, lng: -17.4677 },
+            { name: "Serbia", capital: "Belgrado", code: "rs", timeZone: "Europe/Belgrade", lat: 44.7866, lng: 20.4489 },
+            { name: "Seychelles", capital: "Victoria", code: "sc", timeZone: "Indian/Mahe", lat: -4.6191, lng: 55.4513 },
+            { name: "Sierra Leona", capital: "Freetown", code: "sl", timeZone: "Africa/Freetown", lat: 8.4840, lng: -13.2299 },
+            { name: "Singapur", capital: "Singapur", code: "sg", timeZone: "Asia/Singapore", lat: 1.3521, lng: 103.8198 },
+            { name: "Siria", capital: "Damasco", code: "sy", timeZone: "Asia/Damascus", lat: 33.5138, lng: 36.2765 },
+            { name: "Somalia", capital: "Mogadiscio", code: "so", timeZone: "Africa/Mogadishu", lat: 2.0469, lng: 45.3182 },
+            { name: "Sri Lanka", capital: "Colombo", code: "lk", timeZone: "Asia/Colombo", lat: 6.9271, lng: 79.8612 },
+            { name: "Sudáfrica", capital: "Pretoria", code: "za", timeZone: "Africa/Johannesburg", lat: -25.7479, lng: 28.2293 },
+            { name: "Sudán", capital: "Jartum", code: "sd", timeZone: "Africa/Khartoum", lat: 15.5007, lng: 32.5599 },
+            { name: "Sudán del Sur", capital: "Yuba", code: "ss", timeZone: "Africa/Juba", lat: 4.8594, lng: 31.5713 },
+            { name: "Suecia", capital: "Estocolmo", code: "se", timeZone: "Europe/Stockholm", lat: 59.3293, lng: 18.0686 },
+            { name: "Suiza", capital: "Berna", code: "ch", timeZone: "Europe/Zurich", lat: 46.9480, lng: 7.4474 },
+            { name: "Surinam", capital: "Paramaribo", code: "sr", timeZone: "America/Paramaribo", lat: 5.8520, lng: -55.2038 },
+            { name: "Tailandia", capital: "Bangkok", code: "th", timeZone: "Asia/Bangkok", lat: 13.7563, lng: 100.5018 },
+            { name: "Tanzania", capital: "Dodoma", code: "tz", timeZone: "Africa/Dar_es_Salaam", lat: -6.1630, lng: 35.7516 },
+            { name: "Tayikistán", capital: "Duchanbé", code: "tj", timeZone: "Asia/Dushanbe", lat: 38.5598, lng: 68.7870 },
+            { name: "Timor Oriental", capital: "Dili", code: "tl", timeZone: "Asia/Dili", lat: -8.5569, lng: 125.5603 },
+            { name: "Togo", capital: "Lomé", code: "tg", timeZone: "Africa/Lome", lat: 6.1375, lng: 1.2125 },
+            { name: "Tonga", capital: "Nukualofa", code: "to", timeZone: "Pacific/Tongatapu", lat: -21.1789, lng: -175.1982 },
+            { name: "Trinidad y Tobago", capital: "Puerto España", code: "tt", timeZone: "America/Port_of_Spain", lat: 10.6549, lng: -61.5019 },
+            { name: "Túnez", capital: "Túnez", code: "tn", timeZone: "Africa/Tunis", lat: 36.8065, lng: 10.1815 },
+            { name: "Turkmenistán", capital: "Asjabat", code: "tm", timeZone: "Asia/Ashgabat", lat: 37.9601, lng: 58.3261 },
+            { name: "Turquía", capital: "Ankara", code: "tr", timeZone: "Europe/Istanbul", lat: 39.9334, lng: 32.8597 },
+            { name: "Tuvalu", capital: "Funafuti", code: "tv", timeZone: "Pacific/Funafuti", lat: -8.5201, lng: 179.1983 },
+            { name: "Ucrania", capital: "Kiev", code: "ua", timeZone: "Europe/Kyiv", lat: 50.4501, lng: 30.5234 },
+            { name: "Uganda", capital: "Kampala", code: "ug", timeZone: "Africa/Kampala", lat: 0.3476, lng: 32.5825 },
+            { name: "Uruguay", capital: "Montevideo", code: "uy", timeZone: "America/Montevideo", lat: -34.9011, lng: -56.1645 },
+            { name: "Uzbekistán", capital: "Taskent", code: "uz", timeZone: "Asia/Tashkent", lat: 41.2995, lng: 69.2401 },
+            { name: "Vanuatu", capital: "Port Vila", code: "vu", timeZone: "Pacific/Efate", lat: -17.7333, lng: 168.3270 },
+            { name: "Venezuela", capital: "Caracas", code: "ve", timeZone: "America/Caracas", lat: 10.4806, lng: -66.9036 },
+            { name: "Vietnam", capital: "Hanói", code: "vn", timeZone: "Asia/Ho_Chi_Minh", lat: 21.0285, lng: 105.8542 },
+            { name: "Yemen", capital: "Saná", code: "ye", timeZone: "Asia/Aden", lat: 15.3694, lng: 44.1910 },
+            { name: "Yibuti", capital: "Yibuti", code: "dj", timeZone: "Africa/Djibouti", lat: 11.8251, lng: 42.5903 },
+            { name: "Zambia", capital: "Lusaka", code: "zm", timeZone: "Africa/Lusaka", lat: -15.3875, lng: 28.3228 },
+            { name: "Zimbabue", capital: "Harare", code: "zw", timeZone: "Africa/Harare", lat: -17.8252, lng: 31.0335 }
+        ];
+
+        // 2. MAPA E INICIALIZACIÓN OPTIMIZADA
+        let map, terminator;
+        let mapMarkers = [];
+
+        function initMap() {
+            map = L.map('map', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 2,
+                maxZoom: 6,
+                zoomControl: false,
+                attributionControl: false,
+                preferCanvas: true // Aceleración de renderizado
+            });
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+
+            terminator = L.terminator({
+                fillColor: '#000000',
+                fillOpacity: 0.55,
+                color: '#6366f1',
+                weight: 1,
+                opacity: 0.4
+            }).addTo(map);
+
+            // Actualización de sombra cada 2 minutos en vez de saturar hilos
+            setInterval(() => requestAnimationFrame(() => terminator.setTime()), 120000);
+
+            renderMapPins();
+        }
+
+        // Cache de formateadores de fecha para no instanciar objetos en bucles
+        const formattersCache = new Map();
+        function getFormatters(timeZone) {
+            if (!formattersCache.has(timeZone)) {
+                formattersCache.set(timeZone, {
+                    time: new Intl.DateTimeFormat('es-ES', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }),
+                    date: new Intl.DateTimeFormat('es-ES', { timeZone, weekday: 'short', day: 'numeric', month: 'short' }),
+                    hour24: new Intl.DateTimeFormat('en-US', { timeZone, hour: 'numeric', hour12: false })
+                });
+            }
+            return formattersCache.get(timeZone);
+        }
+
+        function getCountryTimeData(country) {
+            const now = new Date();
+            const { time, date, hour24 } = getFormatters(country.timeZone);
+            const hourNum = parseInt(hour24.format(now), 10);
+
+            return {
+                time: time.format(now),
+                date: date.format(now).toUpperCase(),
+                isDay: hourNum >= 6 && hourNum < 18
+            };
+        }
+
+        function renderMapPins() {
+            mapMarkers.forEach(m => map.removeLayer(m.marker));
+            mapMarkers = [];
+
+            const customIcon = L.divIcon({
+                className: 'custom-pin',
+                html: `<div class="pin-marker"></div>`,
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
+            });
+
+            // Agregamos marcadores directamente
+            countries.forEach(c => {
+                const marker = L.marker([c.lat, c.lng], { icon: customIcon }).addTo(map);
+
+                marker.on('click', () => {
+                    const data = getCountryTimeData(c);
+                    const popupContent = `
+                        <div class="flex items-center gap-3 p-2 min-w-[210px]">
+                            <img src="https://flagcdn.com/w80/${c.code}.png" class="w-8 h-5 object-cover rounded shadow border border-slate-700">
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <h4 class="font-bold text-sm text-white">${c.name}</h4>
+                                    <i class="fa-solid ${data.isDay ? 'fa-sun text-amber-400' : 'fa-moon text-indigo-400'} text-xs"></i>
+                                </div>
+                                <div class="text-base font-bold text-indigo-400 font-mono tracking-wide mt-0.5">${data.time}</div>
+                                <div class="text-[10px] text-slate-400 font-medium">${c.capital} • ${data.date}</div>
+                            </div>
+                        </div>
+                    `;
+                    marker.bindPopup(popupContent, { className: 'custom-popup', offset: [0, -5] }).openPopup();
+                });
+
+                mapMarkers.push({ code: c.code, marker: marker, country: c });
+            });
+        }
+
+        // 3. LÓGICA DE GRUPOS Y OPTIMIZACIÓN DE BUSQUEDA
+        function getUTCOffsetMinutes(timeZone) {
+            const now = new Date();
+            const tzString = now.toLocaleString('en-US', { timeZone, timeZoneName: 'shortOffset' });
+            const match = tzString.match(/GMT([+-]\d+)(?::(\d+))?/);
+            if (!match) return 0;
+            const hours = parseInt(match[1], 10);
+            const minutes = match[2] ? parseInt(match[2], 10) : 0;
+            return hours * 60 + (hours < 0 ? -minutes : minutes);
+        }
+
+        function formatOffsetLabel(offsetMinutes) {
+            const hours = Math.floor(Math.abs(offsetMinutes) / 60);
+            const mins = Math.abs(offsetMinutes) % 60;
+            const sign = offsetMinutes >= 0 ? '+' : '-';
+            return `UTC${sign}${hours}${mins > 0 ? `:${mins}` : ''}`;
+        }
+
+        let groupedZones = [];
+        const container = document.getElementById('zonesContainer');
+        const searchInput = document.getElementById('searchInput');
+
+        function buildGroups(filterText = "") {
+            const groupsMap = new Map();
+            const cleanFilter = filterText.toLowerCase().trim();
+
+            countries.forEach(c => {
+                if (cleanFilter && !c.name.toLowerCase().includes(cleanFilter) && !c.capital.toLowerCase().includes(cleanFilter)) {
+                    return;
+                }
+
+                const offset = getUTCOffsetMinutes(c.timeZone);
+                if (!groupsMap.has(offset)) {
+                    groupsMap.set(offset, {
+                        offset: offset,
+                        timeZone: c.timeZone,
+                        countries: []
+                    });
+                }
+                groupsMap.get(offset).countries.push(c);
+            });
+
+            groupedZones = Array.from(groupsMap.values()).sort((a, b) => a.offset - b.offset);
+            renderHTML();
+        }
+
+        function renderHTML() {
+            container.innerHTML = "";
+
+            if (groupedZones.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-500 font-medium">No se encontraron países coincidentes</div>`;
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            groupedZones.forEach((group, index) => {
+                const groupEl = document.createElement('section');
+                groupEl.className = "bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 sm:p-5 backdrop-blur-xl transition-all";
+                
+                const countriesHTML = group.countries.map(c => `
+                    <div onclick="focusCountryOnMap('${c.code}')" class="flex items-center gap-3 bg-slate-950/60 hover:bg-slate-800/60 p-2.5 rounded-xl border border-slate-800/60 cursor-pointer transition-all duration-200 group">
+                        <img src="https://flagcdn.com/w80/${c.code}.png" 
+                             alt="${c.name}" 
+                             loading="lazy"
+                             class="w-8 h-5 object-cover rounded shadow-sm border border-slate-700/50 flex-shrink-0">
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-xs sm:text-sm font-semibold text-slate-200 truncate group-hover:text-indigo-300">${c.name}</h3>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate">${c.capital}</p>
+                        </div>
+                        <i class="fa-solid fa-location-crosshairs text-slate-600 group-hover:text-indigo-400 text-xs pr-1"></i>
+                    </div>
+                `).join('');
+
+                groupEl.innerHTML = `
+                    <div class="flex justify-between items-center mb-3.5 border-b border-slate-800/80 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-3 py-1 rounded-lg border border-indigo-500/20">
+                                ${formatOffsetLabel(group.offset)}
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium">${group.countries.length} ${group.countries.length === 1 ? 'país' : 'países'}</span>
+                        </div>
+                        <div class="text-right">
+                            <span id="time-group-${index}" class="text-lg sm:text-xl font-bold text-indigo-400 font-mono tracking-wider">--:--:--</span>
+                            <span id="date-group-${index}" class="text-[11px] sm:text-xs text-slate-400 ml-2 font-medium">---</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+                        ${countriesHTML}
+                    </div>
+                `;
+
+                fragment.appendChild(groupEl);
+            });
+
+            container.appendChild(fragment);
+            updateClocksFast();
+        }
+
+        function focusCountryOnMap(code) {
+            const item = mapMarkers.find(m => m.code === code);
+            if (item && map) {
+                map.flyTo([item.country.lat, item.country.lng], 4, { duration: 1 });
+                item.marker.fire('click');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Ticking loop optimizado mediante requestAnimationFrame
+        let lastTick = 0;
+        function updateClocksFast(timestamp) {
+            if (timestamp - lastTick < 1000 && lastTick !== 0) {
+                requestAnimationFrame(updateClocksFast);
+                return;
+            }
+            lastTick = timestamp;
+
+            const now = new Date();
+            
+            groupedZones.forEach((group, index) => {
+                const timeEl = document.getElementById(`time-group-${index}`);
+                const dateEl = document.getElementById(`date-group-${index}`);
+
+                if (timeEl && dateEl) {
+                    const { time, date } = getFormatters(group.timeZone);
+                    timeEl.textContent = time.format(now);
+                    dateEl.textContent = date.format(now).toUpperCase();
+                }
+            });
+
+            requestAnimationFrame(updateClocksFast);
+        }
+
+        // Debounce para la búsqueda
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => buildGroups(e.target.value), 200);
+        });
+
+        // Inicialización General
+        window.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            buildGroups();
+            requestAnimationFrame(updateClocksFast);
+        });
+    </script>
+</body>
+</html>

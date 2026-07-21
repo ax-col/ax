@@ -534,279 +534,6 @@ body {
 @keyframes fallDown { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(100px); opacity: 0; } }
 @keyframes fallIntoPlace { 0% { transform: translateY(-100px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 
-/*
-|======================================================|
-| ESTILOS DEL WIDGET (AISLADO)                        |
-|======================================================|
-*/
-
-/* Contenedor principal del widget */
-.gold-widget-container {
-  margin: 20px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  position: relative;
-}
-
-/* Widget compacto */
-.gold-widget {
-  background: transparent;
-  border: 1px solid rgb(9, 191, 224);
-  border-radius: 12px;
-  padding: 16px 24px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 4px 12px transparent;
-}
-
-/* Título del widget */
-.gold-widget-title {
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-/* Contenido del widget */
-.gold-widget-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* Fila de información */
-.gold-widget-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Última fila sin borde */
-.gold-widget-row:last-child {
-  border-bottom: none;
-}
-
-/* Etiqueta de información */
-.gold-widget-label {
-  color: rgb(110, 255, 197);
-  font-weight: bold;
-  font-size: 12px;
-  text-align: left;
-}
-
-/* Valor de información */
-.gold-widget-value {
-  color: rgb(255, 255, 255);
-  font-weight: 600;
-  font-family: 'Courier New', monospace;
-  text-align: right;
-}
-
-/* Fila de actualización con estilo especial */
-.gold-widget-update .gold-widget-label {
-  color: rgb(255, 0, 0);
-  font-size: 11px;
-}
-
-.gold-widget-update .gold-widget-value {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
-}
-
-/* Responsive para móviles */
-@media (max-width: 600px) {
-  .gold-widget {
-    padding: 12px 16px;
-    max-width: 95%;
-  }
-
-  .gold-widget-title {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-
-  .gold-widget-row {
-    font-size: 11px;
-    padding: 5px 0;
-  }
-
-  .gold-widget-label {
-    font-size: 19px;
-  }
-
-  .gold-widget-value {
-    font-size: 11px;
-  }
-}
-
-/* Animación de carga */
-@keyframes gold-pulse {
-  0%, 100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.gold-widget.loading {
-  animation: gold-pulse 1.5s ease-in-out infinite;
-}
-
-/* Estado de error */
-.gold-widget.error {
-  border-color: rgba(255, 100, 100, 0.3);
-  background: rgba(255, 100, 100, 0.05);
-}
-
-.gold-widget.error .gold-widget-title {
-  color: rgba(255, 150, 150, 0.9);
-}
-
-
-/* Ajustes para el widget Oro + Bitcoin */
-.gold-widget-title {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  font-size: 13px;
-  color: #00ffcc;
-}
-
-#btc-change {
-  font-family: monospace;
-  transition: color 0.3s;
-}
-/*
-|======================================================|
-| ESTILOS DEL WIDGET DE ORO (INTEGRADO)               |
-|======================================================|
-*/
-
-.gold-widget-container {
-  margin: 20px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  position: relative;
-}
-
-.gold-widget {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  padding: 16px 24px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.gold-widget-title {
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.gold-widget-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.gold-widget-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.gold-widget-row:last-child {
-  border-bottom: none;
-}
-
-.gold-widget-label {
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: bold;
-  font-size: 12px;
-  text-align: left;
-}
-
-.gold-widget-value {
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 600;
-  font-family: 'Courier New', monospace;
-  text-align: right;
-  min-width: 120px;
-}
-
-.gold-widget-update .gold-widget-label {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 11px;
-}
-
-.gold-widget-update .gold-widget-value {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
-}
-
-@keyframes gold-pulse {
-  0%, 100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.gold-widget.loading {
-  animation: gold-pulse 1.5s ease-in-out infinite;
-}
-
-.gold-widget.error {
-  border-color: rgba(255, 100, 100, 0.3);
-  background: rgba(255, 100, 100, 0.05);
-}
-
-.gold-widget.error .gold-widget-title {
-  color: rgba(255, 150, 150, 0.9);
-}
-
-/* Responsive para el widget de oro */
-@media (max-width: 600px) {
-  .gold-widget {
-    padding: 12px 16px;
-    max-width: 95%;
-  }
-
-  .gold-widget-title {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-
-  .gold-widget-row {
-    font-size: 11px;
-    padding: 5px 0;
-  }
-
-  .gold-widget-value {
-    min-width: 80px;
-  }
-}
-
 /* --- CONTENEDOR COMPACTO Y AJUSTADO --- */
 .ax-cyber-card-compact {
     position: relative;
@@ -908,4 +635,192 @@ body {
 
 .btn-cyber-download:active {
     transform: scale(0.98);
+}
+
+/* ======================================================
+   WIDGET UTC: UI/UX SLIDER Y BARRA FUTURISTA
+   ====================================================== */
+/* ======================================================
+   WIDGET UTC: SLIDER FLUIDO Y COMPLETO
+   ====================================================== */
+
+.utc-widget-container {
+  margin: 20px auto;
+  width: 95%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Botón de acción hacia time.html */
+.btn-utc-action {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto 5px auto;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.15) 0%, rgba(0, 114, 255, 0.25) 100%);
+  border: 1px solid #00ffcc;
+  border-radius: 8px;
+  color: #00ffcc;
+  font-weight: bold;
+  font-size: 13px;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.btn-utc-action:hover {
+  background: rgba(0, 255, 204, 0.8);
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Contenedor del Carrusel */
+#utcAccordion, .utc-accordion {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start; /* Alinea los encabezados arriba */
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  padding: 10px 10px 20px 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tarjeta individual */
+.utc-card {
+  flex: 0 0 250px;
+  background: rgba(13, 19, 29, 0.85);
+  border: 1px solid rgba(9, 191, 224, 0.3);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  /* Transición fluida de escala, opacidad y bordes */
+  transition: transform 0.3s ease, opacity 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.utc-card-header {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.utc-card-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #00ffcc;
+  font-family: 'Courier New', monospace;
+}
+
+.utc-card-arrow {
+  font-size: 11px;
+  color: #888da8;
+  transition: transform 0.3s ease;
+}
+
+.utc-card.open .utc-card-arrow {
+  transform: rotate(180deg);
+  color: #00ffcc;
+}
+
+/* Contenido desplegado con scroll interno si hay muchos países */
+.utc-card-content {
+  max-height: 0;
+  overflow-y: auto;
+  /* Transición de altura limpia al abrir/cerrar */
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+  padding: 0 12px;
+}
+
+.utc-card.open .utc-card-content {
+  max-height: 200px;
+  padding: 8px 12px 12px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}s
+
+.utc-country-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  font-size: 9px; /* <--- Bajado desde 11px */
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.utc-country-row:last-child {
+  border-bottom: none;
+}
+
+.utc-country-name {
+  color: #ffffff;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+  font-size: 10px; /* <--- Opcional si quieres reforzar el tamaño */
+}
+
+.utc-country-time {
+  color: #00ffff;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 10px; /* <--- Opcional */
+}
+
+.utc-flag {
+  margin-right: 5px;
+}
+
+/* ======================================================
+   ESTADOS DE FOCO Y VECINAS (AL HACER CLIC)
+   ====================================================== */
+
+/* Tarjeta Principal Seleccionada */
+.utc-card.active-focus {
+  border-color: #00ffcc !important;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.5) !important;
+  background: rgba(0, 255, 204, 0.08) !important;
+  opacity: 1 !important;
+  transform: scale(1.02);
+}
+
+/* Las 2 vecinas izquierda + 2 derechas abiertas simultáneamente */
+.utc-card.neighbor-focus {
+  border-color: rgba(0, 225, 255, 0.6) !important;
+  box-shadow: 0 0 8px rgba(0, 225, 255, 0.2) !important;
+  opacity: 0.9 !important;
+}
+
+/* Tarjetas inactivas lejanas */
+.utc-card.dimmed {
+  opacity: 0.35;
+  filter: grayscale(30%);
+}
+
+/* Personalización Barra de Scroll */
+#utcAccordion::-webkit-scrollbar {
+  height: 6px;
+}
+
+#utcAccordion::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+#utcAccordion::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #00ffcc, #0072ff);
+  border-radius: 10px;
 }

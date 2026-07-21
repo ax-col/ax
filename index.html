@@ -77,33 +77,16 @@
     </div>
   </div>
 
-  <div id="gold-counter-widget" class="gold-widget-container">
-    <div class="gold-widget">
-      <div class="gold-widget-title">Precio del Oro</div>
-      <div class="gold-widget-content">
-        <div class="gold-widget-row">
-          <span class="gold-widget-label">Gramo:</span>
-          <span class="gold-widget-value" id="gold-price-gram">$--</span>
-        </div>
-        <div class="gold-widget-row gold-widget-update">
-          <span class="gold-widget-label">Actualización:</span>
-          <span class="gold-widget-value" id="gold-update-time">--:--:--</span>
-        </div>
-      </div>
+  <!-- SECCIÓN DE ZONAS HORARIAS UTC EN LUGAR DE PRECIO DEL ORO Y BITCOIN -->
+  <div class="utc-widget-container">
+    <!-- Botón de acción para ir a la página completa time.html justo encima de las casillas UTC -->
+    <a href="https://ax-col.github.io/ax/time.html" class="btn-utc-action">
+      AX / VER MAPA Y ZONAS HORARIAS COMPLETAS
+    </a>
 
-      <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 12px 0;"></div>
-
-      <div class="gold-widget-title">Bitcoin (BTC/USDT)</div>
-      <div class="gold-widget-content">
-        <div class="gold-widget-row">
-          <span class="gold-widget-label">Precio:</span>
-          <span class="gold-widget-value" id="btc-price" style="font-size: 1.1em;">$ --,--.--</span>
-        </div>
-        <div class="gold-widget-row">
-          <span class="gold-widget-label">Cambio:</span>
-          <span class="gold-widget-value" id="btc-change" style="font-weight: bold; font-family: monospace;">— 0.00%</span>
-        </div>
-      </div>
+    <!-- Casillas colapsables desplegables por UTC -->
+    <div class="utc-accordion" id="utcAccordion">
+      <!-- Generado dinámicamente desde script.js -->
     </div>
   </div>
 
@@ -112,11 +95,11 @@
     <a href="main_ax.html" class="button">Main AX</a>
     <a href="Windows/index.html" class="button">Activación de Windows</a>
     <a href="FF/index.html" class="button">Countdown FF</a>
-    <a href="time.html" class="button">Zonas Horarias</a> 
+    <a href="TIME/time.html" class="button">Zonas Horarias</a>
     <a href="https://github.com/ax-col/ax" class="button">Repositorio AX</a>
   </div>
   
-<div class="ax-cyber-card-compact">
+  <div class="ax-cyber-card-compact">
     <div class="ax-cyber-border"></div>
     <div class="ax-cyber-content">
         <h3>SISTEMA AX - CORE</h3>
@@ -127,7 +110,7 @@
             <span class="btn-text">📥 DESCARGAR APK</span>
         </a>
     </div>
-</div>
+  </div>
 
   <button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
 
