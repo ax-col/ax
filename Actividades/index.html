@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Actividades</title>
+    <script>
+    (function() {
+        const isGithub = window.location.hostname.includes("github.io");
+        // Forzamos la ruta correcta con o sin slash final
+        const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
+        
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptPath;
+        document.head.appendChild(script);
+    })();
+</script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        h1, h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .filter-section {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .events-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .event-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .event-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            background-color: #e0e7ff;
+            color: var(--primary);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 0;
+            margin-top: 10px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            width: fit-content;
+        }
+
+        .toggle-btn:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .dropdown-content {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-color);
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .download-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .no-events {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Calendario de Actividades</h1>
+
+        <!-- Sección de búsqueda y filtros -->
+        <div class="filter-section">
+            <h2>Buscar y Filtrar</h2>
+            <div class="filters">
+                <div class="form-group">
+                    <label for="filterDate">Buscar por Fecha:</label>
+                    <input type="date" id="filterDate">
+                </div>
+                <div class="form-group">
+                    <label for="filterCategory">Filtrar por Categoría:</label>
+                    <select id="filterCategory">
+                        <option value="">Todas las categorías</option>
+                        <option value="Matematicas">Matemáticas</option>
+                        <option value="Ciudadanos">Ciudadanos</option>
+                        <option value="Ingles">Ingles</option>
+                        <option value="Comunicativos">Comunicativos</option>
+                        <option value="Biologia">Biología</option>
+                        <option value="Fisica">Física</option>
+                        <option value="Quimica">Química</option>
+                        <option value="Solidarios">Solidarios</option>
+                        <option value="Innovadores">Innovadores</option>
+                        <option value="Reflexivos">Reflexivos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listado de eventos -->
+        <div>
+            <h2>Historial de Actividades</h2>
+            <ul id="eventsList" class="events-list">
+                <!-- Se cargan dinámicamente desde el código -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // AQUÍ AGREGAS TUS ACTIVIDADES Y DOCUMENTOS
+        // ==========================================
+        const activities = [
+            {
+                date: "2026-08-03",
+                category: "Matematicas",
+                description: "Taller para solucionar problemas de álgebra y geometría.",
+                documentUrl: "documentos/M8D3-1.jpeg" // Coloca aquí la ruta o enlace de tu archivo
+            },
+            {
+                date: "2026-08-03",
+                category: "Ciudadanos",
+                description: "Solucion del problema de la ciudad y sus habitantes.",
+                documentUrl: "documentos/M8D3-2.docx" // Si dejas esto vacío o sin la propiedad, no mostrará botón
+            },
+            {
+                date: "2026-08-02",
+                category: "Otros",
+                description: "Pendiente.",
+                documentUrl: "documentos/M8D2/1.pdf" // Si dejas esto vacío o sin la propiedad, no mostrará botón
+            }
+        ];
+
+        // Elementos del DOM
+        const filterDate = document.getElementById('filterDate');
+        const filterCategory = document.getElementById('filterCategory');
+        const eventsList = document.getElementById('eventsList');
+
+        function renderEvents() {
+            eventsList.innerHTML = '';
+
+            const selectedDate = filterDate.value;
+            const selectedCategory = filterCategory.value;
+
+            // Filtrar actividades según los inputs
+            const filtered = activities.filter(event => {
+                const matchesDate = selectedDate ? event.date === selectedDate : true;
+                const matchesCategory = selectedCategory ? event.category === selectedCategory : true;
+                return matchesDate && matchesCategory;
+            });
+
+            // Ordenar por fecha más reciente primero
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (filtered.length === 0) {
+                eventsList.innerHTML = `<li class="no-events">No hay actividades registradas para esta selección.</li>`;
+                return;
+            }
+
+            filtered.forEach((event, index) => {
+                const li = document.createElement('li');
+                li.className = 'event-card';
+
+                let documentSection = '';
+                if (event.documentUrl) {
+                    documentSection = `
+                        <button class="toggle-btn" onclick="toggleDropdown(${index})">
+                            📂 Abrir documento <span>▼</span>
+                        </button>
+                        <div id="dropdown-${index}" class="dropdown-content">
+                            <a href="${event.documentUrl}" class="download-btn" download>📥 Descargar Documento</a>
+                        </div>
+                    `;
+                }
+
+                li.innerHTML = `
+                    <div class="event-header">
+                        <div class="event-info" style="width: 100%;">
+                            <div class="event-meta">📅 <strong>${event.date}</strong></div>
+                            <p style="margin: 0 0 10px 0; white-space: pre-line;">${event.description}</p>
+                            <span class="badge">${event.category}</span>
+                        </div>
+                    </div>
+                    ${documentSection}
+                `;
+
+                eventsList.appendChild(li);
+            });
+        }
+
+        // Función para mostrar/ocultar el menú desplegable del documento
+        function toggleDropdown(index) {
+            const dropdown = document.getElementById(`dropdown-${index}`);
+            dropdown.classList.toggle('show');
+        }
+
+        // Eventos para los filtros
+        filterDate.addEventListener('input', renderEvents);
+        filterCategory.addEventListener('change', renderEvents);
+
+        // Carga inicial
+        renderEvents();
+    </script>
+</body>
+</html>
