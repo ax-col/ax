@@ -105,7 +105,7 @@ const injectGlobalElements = () => {
         const header = document.createElement('div');
         header.id = 'ax-global-header';
         header.innerHTML = `
-            <div class="ax-header-left">AX</div>
+            <div class="ax-header-left">ANX</div>
             <div class="ax-header-right">
                 <div class="ax-stat-box">
                     <span class="stat-label">VISTAS:</span>
