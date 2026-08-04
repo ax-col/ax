@@ -15,11 +15,13 @@
         script.src = scriptPath;
         document.head.appendChild(script);
     })();
-</script>
+    </script>
     <style>
         :root {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
+            --success: #10b981;
+            --success-hover: #059669;
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-color: #1e293b;
@@ -154,10 +156,23 @@
             padding-top: 10px;
             border-top: 1px dashed var(--border-color);
             animation: fadeIn 0.2s ease-in-out;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .dropdown-content.show {
-            display: block;
+            display: flex;
+        }
+
+        /* Oculto por defecto hasta que se active la clase show */
+        .dropdown-wrapper {
+            display: none;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        .dropdown-wrapper.show {
+            display: flex;
         }
 
         .download-btn {
@@ -174,6 +189,14 @@
 
         .download-btn:hover {
             background-color: var(--primary-hover);
+        }
+
+        .solution-btn {
+            background-color: var(--success);
+        }
+
+        .solution-btn:hover {
+            background-color: var(--success-hover);
         }
 
         .no-events {
@@ -216,6 +239,7 @@
                         <option value="Solidarios">Solidarios</option>
                         <option value="Innovadores">Innovadores</option>
                         <option value="Reflexivos">Reflexivos</option>
+                        <option value="Otros">Otros</option>
                     </select>
                 </div>
             </div>
@@ -239,25 +263,29 @@
                 date: "2026-08-04",
                 category: "Quimica",
                 description: "Completar el taller para proximo examen.",
-                documentUrl: "documentos/M8D4-1.jpg" // Si dejas esto vacío o sin la propiedad, no mostrará botón
+                documentUrl: "documentos/M8D4-1.jpg",
+                solutionUrl: "soluciones/S-M8D4-1.docx"
             },
             {
                 date: "2026-08-03",
                 category: "Matematicas",
                 description: "Taller para solucionar problemas de álgebra y geometría.",
-                documentUrl: "documentos/M8D3-1.jpeg" // Coloca aquí la ruta o enlace de tu archivo
+                documentUrl: "documentos/M8D3-1.jpeg",
+                solutionUrl: "soluciones/S-M8D3-1.docx"
             },
             {
                 date: "2026-08-03",
                 category: "Ciudadanos",
                 description: "Solucion del problema de la ciudad y sus habitantes.",
-                documentUrl: "documentos/M8D3-2.docx" // Si dejas esto vacío o sin la propiedad, no mostrará botón
+                documentUrl: "documentos/M8D3-2.docx",
+                solutionUrl: "soluciones/S-M8D3-2.docx"
             },
             {
                 date: "2026-08-02",
                 category: "Otros",
                 description: "Pendiente.",
-                documentUrl: "documentos/M8D2/1.pdf" // Si dejas esto vacío o sin la propiedad, no mostrará botón
+                documentUrl: "documentos/M8D2/1.pdf",
+                solutionUrl: "soluciones/S-M8D2-1.docx"
             }
         ];
 
@@ -292,13 +320,23 @@
                 li.className = 'event-card';
 
                 let documentSection = '';
-                if (event.documentUrl) {
+                if (event.documentUrl || event.solutionUrl) {
+                    let buttonsHtml = '';
+                    if (event.documentUrl) {
+                        buttonsHtml += `<a href="${event.documentUrl}" class="download-btn" download>📥 Descargar Taller/Documento</a>`;
+                    }
+                    if (event.solutionUrl) {
+                        buttonsHtml += `<a href="${event.solutionUrl}" class="download-btn solution-btn" download>✅ Descargar Solución</a>`;
+                    }
+
                     documentSection = `
                         <button class="toggle-btn" onclick="toggleDropdown(${index})">
-                            📂 Abrir documento <span>▼</span>
+                            📂 Opciones de archivo <span>▼</span>
                         </button>
-                        <div id="dropdown-${index}" class="dropdown-content">
-                            <a href="${event.documentUrl}" class="download-btn" download>📥 Descargar Documento</a>
+                        <div id="dropdown-${index}" class="dropdown-wrapper">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 8px; border-top: 1px dashed var(--border-color);">
+                                ${buttonsHtml}
+                            </div>
                         </div>
                     `;
                 }
