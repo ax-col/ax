@@ -1,0 +1,8 @@
+{
+  "name": "mi-proyecto",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node generate-report.js"
+  }
+}

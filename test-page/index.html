@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escáner de URLs y Generador de Reportes PDF</title>
+  <!-- Tailwind CSS para diseño moderno -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Librerías para generación de PDF en el navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+  <div class="max-w-xl w-full bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-2xl space-y-6">
+    <header class="text-center">
+      <h1 class="text-2xl font-bold text-blue-400">Escáner de Enlaces Web Robust</h1>
+      <p class="text-xs text-slate-400 mt-1">Extrae el dominio raíz, analiza sus rutas internas con sistema anti-bloqueo y genera tu reporte PDF.</p>
+    </header>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1 text-slate-300">URL del Sitio Web:</label>
+        <input type="url" id="targetUrl" placeholder="https://github.com/usuario/repo" required
+          class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500 text-white">
+      </div>
+
+      <button id="startBtn" onclick="runWebScanner()" 
+        class="w-full bg-blue-600 hover:bg-blue-500 font-semibold text-sm py-2.5 rounded-lg transition-all flex items-center justify-center gap-2">
+        <span>Iniciar Verificación y Descargar PDF</span>
+      </button>
+    </div>
+
+    <!-- Panel de estado en tiempo real -->
+    <div id="statusBox" class="hidden bg-slate-900 border border-slate-700 rounded-lg p-4 space-y-2 text-xs font-mono">
+      <p id="statusText" class="text-blue-400">Iniciando proceso...</p>
+      <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+        <div id="progressBar" class="bg-blue-500 h-2 w-0 transition-all duration-300"></div>
+      </div>
+      <p id="scannedCount" class="text-slate-400 text-right">0 páginas analizadas</p>
+    </div>
+  </div>
+
+  <script>
+  // Proxies para la descarga inicial del HTML
+  const PROXY_LIST = [
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://api.corsproxy.io/?${encodeURIComponent(url)}`,
+    url => `https://thingproxy.freeboard.io/fetch/${url}`
+  ];
+
+  // Obtención robusta del HTML
+  async function fetchHtmlWithFallback(targetUrl) {
+    for (const getProxyUrl of PROXY_LIST) {
+      try {
+        const proxyUrl = getProxyUrl(targetUrl);
+        const response = await fetch(proxyUrl);
+        if (response.ok) {
+          const text = await response.text();
+          if (text && text.trim().length > 0) return text;
+        }
+      } catch (err) {}
+    }
+    throw new Error("No se pudo acceder al sitio. Es posible que tenga protección activa de Cloudflare o esté fuera de línea.");
+  }
+
+  // Verificador multitapa de estado HTTP por URL
+  async function checkUrlStatus(url) {
+    const startTime = performance.now();
+
+    // 1. Intento Directo (Petición GET directa por si no hay restricción CORS)
+    try {
+      const directRes = await fetch(url, { method: 'GET', mode: 'cors', cache: 'no-cache' });
+      const duration = Math.round(performance.now() - startTime);
+      return {
+        status: `${directRes.status} OK`,
+        duration: `${duration} ms`,
+        success: directRes.ok
+      };
+    } catch (e) {}
+
+    // 2. Consulta vía API JSON AllOrigins (Desglosa respuestas de GitHub y WAFs)
+    try {
+      const jsonRes = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+      if (jsonRes.ok) {
+        const data = await jsonRes.json();
+        const httpCode = data.status?.http_code || 200;
+        const isSuccess = httpCode >= 200 && httpCode < 400;
+        const duration = Math.round(performance.now() - startTime);
+        return {
+          status: `${httpCode} ${isSuccess ? 'OK' : 'Error'}`,
+          duration: `${duration} ms`,
+          success: isSuccess
+        };
+      }
+    } catch (e) {}
+
+    // 3. Fallback a CorsProxy con GET
+    try {
+      const proxyRes = await fetch(`https://api.corsproxy.io/?${encodeURIComponent(url)}`);
+      const duration = Math.round(performance.now() - startTime);
+      return {
+        status: `${proxyRes.status}`,
+        duration: `${duration} ms`,
+        success: proxyRes.ok
+      };
+    } catch (e) {}
+
+    const duration = Math.round(performance.now() - startTime);
+    return { status: "Error / Bloqueado", duration: `${duration} ms`, success: false };
+  }
+
+  // Función principal del escáner
+  async function runWebScanner() {
+    const input = document.getElementById('targetUrl').value.trim();
+    const statusBox = document.getElementById('statusBox');
+    const statusText = document.getElementById('statusText');
+    const progressBar = document.getElementById('progressBar');
+    const scannedCount = document.getElementById('scannedCount');
+    const startBtn = document.getElementById('startBtn');
+
+    if (!input) {
+      alert("Por favor ingresa una URL válida.");
+      return;
+    }
+
+    let rootDomain = '';
+    try {
+      const parsedUrl = new URL(input.startsWith('http') ? input : `https://${input}`);
+      rootDomain = parsedUrl.origin;
+    } catch (err) {
+      alert("Formato de URL inválido.");
+      return;
+    }
+
+    startBtn.disabled = true;
+    startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    statusBox.classList.remove('hidden');
+    statusText.innerText = `Dominio extraído: ${rootDomain}`;
+
+    try {
+      statusText.innerText = `Obteniendo mapa de enlaces desde: ${rootDomain}...`;
+      
+      const htmlText = await fetchHtmlWithFallback(rootDomain);
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const anchors = doc.querySelectorAll('a[href]');
+      
+      const foundUrls = new Set([rootDomain + '/']);
+
+      anchors.forEach(a => {
+        const href = a.getAttribute('href');
+        if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('javascript:')) {
+          try {
+            const absoluteUrl = new URL(href, rootDomain).href;
+            if (absoluteUrl.startsWith(rootDomain)) {
+              foundUrls.add(absoluteUrl);
+            }
+          } catch (e) {}
+        }
+      });
+
+      const urlList = Array.from(foundUrls);
+      statusText.innerText = `Analizando ${urlList.length} enlaces encontrados...`;
+
+      const results = [];
+      let completed = 0;
+
+      for (const url of urlList) {
+        // Ejecuta la comprobación robusta
+        const checkResult = await checkUrlStatus(url);
+        
+        results.push({
+          url: url,
+          status: checkResult.status,
+          duration: checkResult.duration,
+          success: checkResult.success
+        });
+
+        completed++;
+        progressBar.style.width = `${(completed / urlList.length) * 100}%`;
+        scannedCount.innerText = `${completed} / ${urlList.length} completados`;
+      }
+
+      statusText.innerText = "Generando PDF y descargando...";
+      generateAndDownloadPDF(rootDomain, results);
+      statusText.innerText = "¡Proceso completado! PDF descargado.";
+
+    } catch (error) {
+      statusText.innerText = `Error: ${error.message}`;
+    } finally {
+      startBtn.disabled = false;
+      startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+  }
+
+  // Generador e impresor de PDF
+  function generateAndDownloadPDF(domain, data) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Encabezado
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, 210, 30, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("Reporte de Verificación Web", 14, 16);
+    
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(148, 163, 184);
+    doc.text(`Dominio analizado: ${domain}`, 14, 23);
+
+    // Métricas breves
+    const total = data.length;
+    const pasaron = data.filter(d => d.success).length;
+
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(10);
+    doc.text(`Total de URLs: ${total}   |   Exitosas: ${pasaron}   |   Fecha: ${new Date().toLocaleDateString()}`, 14, 38);
+
+    // Tabla de resultados
+    const tableRows = data.map((item, index) => [
+      index + 1,
+      item.url,
+      item.status,
+      item.duration,
+      item.success ? 'ÉXITO' : 'FALLÓ'
+    ]);
+
+    doc.autoTable({
+      startY: 44,
+      head: [['#', 'URL Analizada', 'Estado', 'Tiempo', 'Resultado']],
+      body: tableRows,
+      theme: 'striped',
+      headStyles: { fillStyle: 'F', fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold' },
+      styles: { fontSize: 8, cellPadding: 3 },
+      columnStyles: {
+        0: { cellWidth: 10 },
+        1: { cellWidth: 110 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 25 },
+        4: { cellWidth: 20 }
+      }
+    });
+
+    // Descarga automática del archivo PDF
+    const cleanName = domain.replace(/https?:\/\//, '').replace(/[^a-zA-Z0-9]/g, '_');
+    doc.save(`reporte_${cleanName}.pdf`);
+  }
+</script>
+</body>
+</html>
