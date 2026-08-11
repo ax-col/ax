@@ -50,6 +50,7 @@ styles.innerHTML = `
     .ax-header-left {
         color: #ffffff !important; font-weight: bold !important; font-size: 18px !important;
         letter-spacing: 5px; text-shadow: 0 0 5px rgb(255, 39, 2); pointer-events: auto;
+        cursor: pointer; /* 👈 Hace que actúe visualmente como un botón */
     }
     .ax-header-right { display: flex; gap: 8px; pointer-events: auto; }
     .ax-stat-box {
@@ -105,7 +106,7 @@ const injectGlobalElements = () => {
         const header = document.createElement('div');
         header.id = 'ax-global-header';
         header.innerHTML = `
-            <div class="ax-header-left">ANX</div>
+            <div class="ax-header-left" onclick="window.location.href='${baseUrl}./index.html/'">ANX</div>
             <div class="ax-header-right">
                 <div class="ax-stat-box">
                     <span class="stat-label">VISTAS:</span>
