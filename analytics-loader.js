@@ -106,7 +106,7 @@ const injectGlobalElements = () => {
         const header = document.createElement('div');
         header.id = 'ax-global-header';
         header.innerHTML = `
-            <div class="ax-header-left" onclick="window.location.href='${baseUrl}./index.html/'">ANX</div>
+            <div class="ax-header-left" onclick="window.location.href='${baseUrl}https://ax-col.github.io/ax/'">ANX</div>
             <div class="ax-header-right">
                 <div class="ax-stat-box">
                     <span class="stat-label">VISTAS:</span>

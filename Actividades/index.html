@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Actividades</title>
+    <title>Cyber // Actividades</title>
     <script>
     (function() {
         const isGithub = window.location.hostname.includes("github.io");
-        // Forzamos la ruta correcta con o sin slash final
         const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
-        
         const script = document.createElement('script');
         script.type = 'module';
         script.src = scriptPath;
@@ -18,370 +16,510 @@
     </script>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
+            --bg-color: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(99, 102, 241, 0.2);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --neon-glow: 0 0 15px rgba(99, 102, 241, 0.25);
             --success: #10b981;
             --success-hover: #059669;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-color) 70%);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 30px 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
             width: 100%;
-            max-width: 900px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            max-width: 950px;
         }
 
-        h1, h2 {
-            color: var(--primary);
+        header {
             text-align: center;
-            margin-top: 0;
+            margin-bottom: 35px;
         }
 
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+            text-shadow: var(--neon-glow);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Panel de Filtros Futurista */
         .filter-section {
-            background: #f1f5f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 20px 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
-        .form-group {
-            margin-bottom: 0;
+        .filter-group {
+            width: 100%;
         }
 
         label {
             display: block;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #a5b4fc;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        input, select {
+        select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 12px 15px;
+            background: rgba(3, 7, 18, 0.8);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            border-radius: 10px;
             box-sizing: border-box;
             font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
         }
 
-        .filters {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: var(--neon-glow);
         }
 
-        @media (max-width: 600px) {
-            .filters {
-                grid-template-columns: 1fr;
-            }
+        /* Bloques de Meses */
+        .month-section {
+            margin-bottom: 35px;
+        }
+
+        .month-title {
+            font-size: 1.25rem;
+            color: #c7d2fe;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .events-list {
             list-style: none;
             padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 15px;
         }
 
+        /* Tarjeta de Evento Estilo Cyber Glass */
         .event-card {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-left: 5px solid var(--primary);
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .event-card:hover {
+            border-color: rgba(99, 102, 241, 0.6);
+            transform: translateY(-2px);
         }
 
         .event-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
-        .event-meta {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 8px;
+        .event-meta-top {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 15px;
         }
 
         .badge {
-            background-color: #e0e7ff;
-            color: var(--primary);
-            padding: 3px 8px;
-            border-radius: 12px;
+            background-color: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .toggle-btn {
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-            padding: 5px 0;
-            margin-top: 10px;
-            text-align: left;
+        .event-desc {
+            margin: 0 0 15px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #e5e7eb;
+        }
+
+        /* Detalles de Estado y Archivos */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            background: rgba(3, 7, 18, 0.4);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .status-item {
             display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 13px;
-            width: fit-content;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .toggle-btn:hover {
-            color: var(--primary-hover);
-            text-decoration: underline;
+        .status-label {
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
-        .dropdown-content {
-            display: none;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed var(--border-color);
-            animation: fadeIn 0.2s ease-in-out;
+        .pending-text {
+            color: var(--danger) !important;
+            font-weight: bold !important;
+        }
+
+        .success-text {
+            color: var(--success);
+        }
+
+        /* Botones de Acción */
+        .actions-container {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .dropdown-content.show {
-            display: flex;
-        }
-
-        /* Oculto por defecto hasta que se active la clase show */
-        .dropdown-wrapper {
-            display: none;
-            flex-direction: column;
-            margin-top: 10px;
-        }
-        .dropdown-wrapper.show {
-            display: flex;
-        }
-
         .download-btn {
             background-color: var(--primary);
             color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 7px 14px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            display: inline-block;
-            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
         }
 
         .download-btn:hover {
             background-color: var(--primary-hover);
+            box-shadow: var(--neon-glow);
         }
 
-        .solution-btn {
+        .download-btn.solution {
             background-color: var(--success);
         }
 
-        .solution-btn:hover {
+        .download-btn.solution:hover {
             background-color: var(--success-hover);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .disabled-btn {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            pointer-events: none;
         }
 
         .no-events {
             text-align: center;
-            color: #64748b;
+            color: var(--text-muted);
             font-style: italic;
-            padding: 20px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Calendario de Actividades</h1>
+        <header>
+            <h1>ANX  REPORTES</h1>
+            <p class="subtitle">Gestión de Actividades y Soluciones</p>
+        </header>
 
-        <!-- Sección de búsqueda y filtros -->
+        <!-- Filtro por Categoría / Área -->
         <div class="filter-section">
-            <h2>Buscar y Filtrar</h2>
-            <div class="filters">
-                <div class="form-group">
-                    <label for="filterDate">Buscar por Fecha:</label>
-                    <input type="date" id="filterDate">
-                </div>
-                <div class="form-group">
-                    <label for="filterCategory">Filtrar por Categoría:</label>
-                    <select id="filterCategory">
-                        <option value="">Todas las categorías</option>
-                        <option value="Matematicas">Matemáticas</option>
-                        <option value="Ciudadanos">Ciudadanos</option>
-                        <option value="Ingles">Ingles</option>
-                        <option value="Comunicativos">Comunicativos</option>
-                        <option value="Biologia">Biología</option>
-                        <option value="Fisica">Física</option>
-                        <option value="Quimica">Química</option>
-                        <option value="Solidarios">Solidarios</option>
-                        <option value="Innovadores">Innovadores</option>
-                        <option value="Reflexivos">Reflexivos</option>
-                        <option value="Otros">Otros</option>
-                    </select>
-                </div>
+            <div class="filter-group">
+                <label for="filterCategory">Filtrar por Área / Categoría:</label>
+                <select id="filterCategory">
+                    <option value="">Todas las áreas</option>
+                    <option value="Matematicas">Matemáticas</option>
+                    <option value="Ciudadanos">Ciudadanos</option>
+                    <option value="Ingles">Inglés</option>
+                    <option value="Comunicativos">Comunicativos</option>
+                    <option value="Biologia">Biología</option>
+                    <option value="Fisica">Física</option>
+                    <option value="Quimica">Química</option>
+                    <option value="Solidarios">Solidarios</option>
+                    <option value="Innovadores">Innovadores</option>
+                    <option value="Reflexivos">Reflexivos</option>
+                    <option value="Otros">Otros</option>
+                </select>
             </div>
         </div>
 
-        <!-- Listado de eventos -->
-        <div>
-            <h2>Historial de Actividades</h2>
-            <ul id="eventsList" class="events-list">
-                <!-- Se cargan dinámicamente desde el código -->
-            </ul>
+        <!-- Contenedor principal agrupado por meses -->
+        <div id="calendarContainer">
+            <!-- Se inyecta dinámicamente -->
         </div>
     </div>
 
     <script>
         // ==========================================
-        // AQUÍ AGREGAS TUS ACTIVIDADES Y DOCUMENTOS
+        // REGISTRO DE ACTIVIDADES Y ESTADOS
         // ==========================================
         const activities = [
             {
-                date: "2026-08-12",
+                date: "2026-12-31", // Usado para determinar el bloque de mes (YYYY-MM-DD)
+                category: "Otros", // Categoría o área de la actividad
+                description: "Solo para futuras actividades.",
+                documentUrl: "", // Actividad pendiente, sin documento ni solución
+                documentDate: "", // Fecha de subida pendiente
+                solutionUrl: "", // Solución pendiente, sin documento ni solución
+                solutionDate: "" // Fecha de subida pendiente
+            },
+            {
+                date: "2026-08-12", 
                 category: "Ciudadanos",
                 description: "Taller 1 Desempeño 2 de ciudadanos para completar.",
                 documentUrl: "documentos/M8D12-1.jpg",
-                solutionUrl: "soluciones/S-M8D12-1.docx"
+                documentDate: "12/08/2026 - 14:30 hrs",
+                solutionUrl: "soluciones/S-M8D12-1.docx",
+                solutionDate: "12/08/2026 - 18:45 hrs"
             },
             {
                 date: "2026-08-06",
                 category: "Fisica",
                 description: "Taller de física sobre leyes del movimiento y energía.",
                 documentUrl: "documentos/M8D6-1.jpeg",
-                solutionUrl: "soluciones/S-M8D6-1.docx"
+                documentDate: "06/08/2026 - 10:15 hrs",
+                solutionUrl: "soluciones/S-M8D6-1.docx",
+                solutionDate: "06/08/2026 - 15:00 hrs"
             },
             {
                 date: "2026-08-04",
                 category: "Quimica",
                 description: "Taller de química para aprender sobre reacciones químicas y compuestos.",
                 documentUrl: "documentos/M8D4-1.jpg",
-                solutionUrl: "soluciones/S-M8D4-1.docx"
+                documentDate: "04/08/2026 - 09:00 hrs",
+                solutionUrl: "soluciones/S-M8D4-1.docx",
+                solutionDate: "05/08/2026 - 16:20 hrs"
+            },
+            {
+                date: "2026-08-04",
+                category: "Ciudadanos",
+                description: "Taller para aprender sobre derechos y deberes de los ciudadanos.",
+                documentUrl: "documentos/M8D3-2.docx",
+                documentDate: "04/08/2026 - 09:00 hrs",
+                solutionUrl: "soluciones/S-M8D3-2.docx",
+                solutionDate: "05/08/2026 - 16:20 hrs"
             },
             {
                 date: "2026-08-03",
                 category: "Matematicas",
-                description: "Taller para solucionar problemas de álgebra y geometría.",
+                description: "Evaluación acumulativa de funciones y trigonometría.",
                 documentUrl: "documentos/M8D3-1.jpeg",
-                solutionUrl: "soluciones/S-M8D3-1.docx"
+                documentDate: "03/08/2026 - 08:00 hrs",
+                solutionUrl: "soluciones/S-M8D3-1.docx",
+                solutionDate: "04/08/2026 - 14:30 hrs"
             },
             {
-                date: "2026-08-03",
-                category: "Ciudadanos",
-                description: "Solucion del problema de la ciudad y sus habitantes.",
-                documentUrl: "documentos/M8D3-2.docx",
-                solutionUrl: "soluciones/S-M8D3-2.docx"
-            },
-            {
-                date: "2026-08-02",
+                date: "2000-01-01", // Ejemplo de actividad muy antigua
                 category: "Otros",
-                description: "Pendiente.",
-                documentUrl: "documentos/M8D2/1.pdf",
-                solutionUrl: "soluciones/S-M8D2-1.docx"
+                description: "PENDIENTE: Actividad sin documento ni solución, solo para pruebas.",
+                documentUrl: "", // Actividad pendiente, sin documento ni solución
+                documentDate: "", // Fecha de subida pendiente
+                solutionUrl: "", // Solución pendiente, sin documento ni solución
+                solutionDate: "" // Fecha de subida pendiente
             }
+
         ];
 
-        // Elementos del DOM
-        const filterDate = document.getElementById('filterDate');
         const filterCategory = document.getElementById('filterCategory');
-        const eventsList = document.getElementById('eventsList');
+        const calendarContainer = document.getElementById('calendarContainer');
 
-        function renderEvents() {
-            eventsList.innerHTML = '';
+        // Nombres de los meses en español
+        const monthNames = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        ];
 
-            const selectedDate = filterDate.value;
+        function renderCalendar() {
+            calendarContainer.innerHTML = '';
             const selectedCategory = filterCategory.value;
 
-            // Filtrar actividades según los inputs
+            // Filtrar por categoría si se seleccionó alguna
             const filtered = activities.filter(event => {
-                const matchesDate = selectedDate ? event.date === selectedDate : true;
-                const matchesCategory = selectedCategory ? event.category === selectedCategory : true;
-                return matchesDate && matchesCategory;
+                return selectedCategory ? event.category === selectedCategory : true;
             });
 
-            // Ordenar por fecha más reciente primero
-            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-
             if (filtered.length === 0) {
-                eventsList.innerHTML = `<li class="no-events">No hay actividades registradas para esta selección.</li>`;
+                calendarContainer.innerHTML = `<div class="no-events">No hay actividades registradas para esta selección.</div>`;
                 return;
             }
 
-            filtered.forEach((event, index) => {
-                const li = document.createElement('li');
-                li.className = 'event-card';
-
-                let documentSection = '';
-                if (event.documentUrl || event.solutionUrl) {
-                    let buttonsHtml = '';
-                    if (event.documentUrl) {
-                        buttonsHtml += `<a href="${event.documentUrl}" class="download-btn" download>📥 Descargar Taller/Documento</a>`;
-                    }
-                    if (event.solutionUrl) {
-                        buttonsHtml += `<a href="${event.solutionUrl}" class="download-btn solution-btn" download>✅ Descargar Solución</a>`;
-                    }
-
-                    documentSection = `
-                        <button class="toggle-btn" onclick="toggleDropdown(${index})">
-                            📂 Opciones de archivo <span>▼</span>
-                        </button>
-                        <div id="dropdown-${index}" class="dropdown-wrapper">
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 8px; border-top: 1px dashed var(--border-color);">
-                                ${buttonsHtml}
-                            </div>
-                        </div>
-                    `;
+            // Agrupar actividades por Mes y Año (Ej: "Agosto 2026")
+            const groupedByMonth = {};
+            filtered.forEach(event => {
+                const dateObj = new Date(event.date + "T00:00:00");
+                const year = dateObj.getFullYear();
+                const monthName = monthNames[dateObj.getMonth()];
+                const monthKey = `${monthName} ${year}`;
+                
+                if (!groupedByMonth[monthKey]) {
+                    groupedByMonth[monthKey] = [];
                 }
+                groupedByMonth[monthKey].push(event);
+            });
 
-                li.innerHTML = `
-                    <div class="event-header">
-                        <div class="event-info" style="width: 100%;">
-                            <div class="event-meta">📅 <strong>${event.date}</strong></div>
-                            <p style="margin: 0 0 10px 0; white-space: pre-line;">${event.description}</p>
+            // Ordenar los meses del más reciente al más antiguo
+            const sortedMonthKeys = Object.keys(groupedByMonth).sort((a, b) => {
+                const dateA = new Date(groupedByMonth[a][0].date);
+                const dateB = new Date(groupedByMonth[b][0].date);
+                return dateB - dateA;
+            });
+
+            // Generar la interfaz por cada bloque de mes
+            sortedMonthKeys.forEach(monthKey => {
+                const monthSection = document.createElement('div');
+                monthSection.className = 'month-section';
+
+                const monthHeader = document.createElement('h3');
+                monthHeader.className = 'month-title';
+                monthHeader.innerHTML = `🗓️ ${monthKey}`;
+                monthSection.appendChild(monthHeader);
+
+                const ul = document.createElement('ul');
+                ul.className = 'events-list';
+
+                // Ordenar eventos dentro del mes por fecha descendente
+                groupedByMonth[monthKey].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                groupedByMonth[monthKey].forEach(event => {
+                    const li = document.createElement('li');
+                    li.className = 'event-card';
+
+                    // Validar estado de la Actividad
+                    let docHtml = '';
+                    if (event.documentUrl && event.documentDate) {
+                        docHtml = `<span class="success-text">Subida (${event.documentDate})</span>`;
+                    } else {
+                        docHtml = `<span class="pending-text">Pendiente</span>`;
+                    }
+
+                    // Validar estado de la Solución
+                    let solHtml = '';
+                    if (event.solutionUrl && event.solutionDate) {
+                        solHtml = `<span class="success-text">Subida (${event.solutionDate})</span>`;
+                    } else {
+                        solHtml = `<span class="pending-text">Pendiente</span>`;
+                    }
+
+                    // Botones de descarga según disponibilidad
+                    const docButton = event.documentUrl 
+                        ? `<a href="${event.documentUrl}" class="download-btn" download>📥 Descargar Actividad</a>`
+                        : `<button class="download-btn disabled-btn">📥 Actividad Pendiente</button>`;
+
+                    const solButton = event.solutionUrl 
+                        ? `<a href="${event.solutionUrl}" class="download-btn solution" download>✅ Descargar Solución</a>`
+                        : `<button class="download-btn disabled-btn">✅ Solución Pendiente</button>`;
+
+                    li.innerHTML = `
+                        <div class="event-header">
+                            <div class="event-meta-top">
+                                <span>📅 Creada: <strong>${event.date}</strong></span>
+                            </div>
                             <span class="badge">${event.category}</span>
                         </div>
-                    </div>
-                    ${documentSection}
-                `;
+                        <p class="event-desc">${event.description}</p>
+                        
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <span class="status-label">Estado Actividad:</span>
+                                <span>${docHtml}</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Estado Solución:</span>
+                                <span>${solHtml}</span>
+                            </div>
+                        </div>
 
-                eventsList.appendChild(li);
+                        <div class="actions-container">
+                            ${docButton}
+                            ${solButton}
+                        </div>
+                    `;
+
+                    ul.appendChild(li);
+                });
+
+                monthSection.appendChild(ul);
+                calendarContainer.appendChild(monthSection);
             });
         }
 
-        // Función para mostrar/ocultar el menú desplegable del documento
-        function toggleDropdown(index) {
-            const dropdown = document.getElementById(`dropdown-${index}`);
-            dropdown.classList.toggle('show');
-        }
+        // Escuchar cambios en el filtro
+        filterCategory.addEventListener('change', renderCalendar);
 
-        // Eventos para los filtros
-        filterDate.addEventListener('input', renderEvents);
-        filterCategory.addEventListener('change', renderEvents);
-
-        // Carga inicial
-        renderEvents();
+        // Renderizado inicial
+        renderCalendar();
     </script>
 </body>
 </html>
