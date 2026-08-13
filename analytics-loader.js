@@ -281,7 +281,7 @@ document.head.appendChild(styles);
 const injectElements = () => {
     if (!document.body) return;
 
-    const targetUrl = baseUrl ? `${baseUrl}/index.html` : '/index.html';
+    const targetUrl = baseUrl ? `${baseUrl}index.html` : 'index.html';
 
     const existingHeader = document.getElementById('ax-global-header');
     if (existingHeader) existingHeader.remove();
@@ -322,7 +322,7 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}../estructure.html" class="ax-drawer-btn">Estructura AX</a>
+                    <a href="${baseUrl}estructure.html" class="ax-drawer-btn">Estructura AX</a>
                     <a href="https://github.com/ax-col/ax" target="_blank" class="ax-drawer-btn">Repositorio AX</a>
                 </div>
             </div>
@@ -334,8 +334,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}../TIME/index.html" class="ax-drawer-btn">Zonas Horarias</a>
-                    <a href="${baseUrl}../FF/index.html" class="ax-drawer-btn">Countdown FF</a>
+                    <a href="${baseUrl}TIME/index.html" class="ax-drawer-btn">Zonas Horarias</a>
+                    <a href="${baseUrl}FF/index.html" class="ax-drawer-btn">Countdown FF</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                 </div>
@@ -348,8 +348,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}../Windows/index.html" class="ax-drawer-btn">Windows</a>
-                    <a href="${baseUrl}../curts/index.html" class="ax-drawer-btn">Acortar Enlaces</a>
+                    <a href="${baseUrl}Windows/index.html" class="ax-drawer-btn">Windows</a>
+                    <a href="${baseUrl}curts/index.html" class="ax-drawer-btn">Acortar Enlaces</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                 </div>
             </div>
@@ -361,8 +361,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}../CPWEB/index.html" class="ax-drawer-btn">Pendiente X</a>
-                    <a href="${baseUrl}../YJPO/index.html" class="ax-drawer-btn">Pendiente</a>
+                    <a href="${baseUrl}CPWEB/index.html" class="ax-drawer-btn">Pendiente X</a>
+                    <a href="${baseUrl}YJPO/index.html" class="ax-drawer-btn">Pendiente</a>
                 </div>
             </div>
 
