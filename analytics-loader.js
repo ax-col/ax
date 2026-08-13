@@ -281,7 +281,7 @@ document.head.appendChild(styles);
 const injectElements = () => {
     if (!document.body) return;
 
-    const targetUrl = baseUrl ? `${baseUrl}index.html` : 'index.html';
+    const targetUrl = baseUrl ? `${baseUrl}/index.html` : '/index.html';
 
     const existingHeader = document.getElementById('ax-global-header');
     if (existingHeader) existingHeader.remove();
