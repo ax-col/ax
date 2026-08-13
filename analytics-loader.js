@@ -101,12 +101,15 @@ document.head.appendChild(styles);
 const injectGlobalElements = () => {
     if (!document.body) return; // Salvaguarda mecánica
 
+    // Ruta de retorno a la raíz / index.html respetando el entorno
+    const targetUrl = baseUrl ? `${baseUrl}/index.html` : '/index.html';
+
     // Asegurar inyección de la barra superior
     if (!document.getElementById('ax-global-header')) {
         const header = document.createElement('div');
         header.id = 'ax-global-header';
         header.innerHTML = `
-            <div class="ax-header-left" onclick="window.location.href='${baseUrl}https://ax-col.github.io/ax/'">ANX</div>
+            <div class="ax-header-left" onclick="window.location.href='${targetUrl}'">ANX</div>
             <div class="ax-header-right">
                 <div class="ax-stat-box">
                     <span class="stat-label">VISTAS:</span>
@@ -141,6 +144,7 @@ const injectGlobalElements = () => {
     // Conectar Firebase una vez que la estructura visual está asegurada
     startFirebaseAnalytics();
 };
+
 
 // 🌌 ANIMACIÓN DE PARTICULAS REORGANIZADA
 const initCanvasAnimation = (canvas) => {
