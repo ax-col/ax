@@ -7,7 +7,6 @@
     <script>
     (function() {
         const isGithub = window.location.hostname.includes("github.io");
-        // Forzamos la ruta correcta con o sin slash final
         const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
         
         const script = document.createElement('script');
@@ -127,9 +126,9 @@
       margin-left: 5px;
     }
 
-    pre {
+    .tree-container {
       background: rgba(0, 0, 0, 0.3);
-      padding: 10px 15px;
+      padding: 15px;
       border-left: 3px solid var(--blue);
       border-radius: 8px;
       overflow-x: auto;
@@ -137,6 +136,25 @@
       animation: fadeIn 1.3s ease-in;
       color: var(--white);
       line-height: 1.5;
+    }
+
+    ul.tree-root, ul.tree-list {
+      list-style: none;
+      padding-left: 20px;
+      margin: 5px 0;
+    }
+
+    ul.tree-root {
+      padding-left: 0;
+    }
+
+    .folder-toggle {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .folder-toggle:hover {
+      text-decoration: underline;
     }
 
     .dir { color: var(--blue); }
@@ -205,62 +223,7 @@
     <p>Todos los servicios en línea. No se detectan errores críticos.</p>
 
     <h2>ACERCA DE LA PAGINA RAIZ</h2>
-    <!-- Árbol de archivos estático -->
-<pre><code>
-<span class="dir">ax/</span>
-├── <span class="file">.</span>
-├── <span class="file">.git</span>
-├── <span class="file">Apk.java</span>
-├── <span class="file">AX-Service.java</span>
-├── <span class="file">AX.py</span>
-├── <span class="file">index.html</span>
-├── <span class="file">main_ax.html</span>
-├── <span class="file">manifest.json</span>
-├── <span class="file">README.md</span>
-├── <span class="file">repomix-output.xml</span>
-├── <span class="file">rf.html</span>
-├── <span class="file">script.js</span>
-├── <span class="file">styles.css</span>
-├── <span class="file">sw.js</span>
-├── <span class="file">version-manager.js</span>
-├── <span class="file">version.json</span>
-├── <span class="dir">AX-Root/</span>
-│   ├── <span class="file">*</span>
-│   └── <span class="file">AndroidManifest.xml</span>
-├── <span class="dir">CPWEB/</span>
-│   ├── <span class="file">index.html</span>
-│   ├── <span class="file">index1.html</span>
-│   ├── <span class="file">index2.html</span>
-│   ├── <span class="file">index3.html</span>
-│   ├── <span class="file">index4.html</span>
-│   ├── <span class="file">script.js</span>
-│   ├── <span class="file">styles.css</span>
-│   └── <span class="file">styles2.css</span>
-├── <span class="dir">Windows/</span>
-│   ├── <span class="file">index.html</span>
-│   └── <span class="file">styles.css</span>
-├── <span class="dir">Orito/</span>
-│   └── <span class="file">index.html</span>
-├── <span class="dir">Curts/</span>
-│   ├── <span class="file">index.html</span>
-│   └── <span class="file">styles.css</span>
-├── <span class="dir">FF</span>
-│   ├── <span class="file">index.html</span>
-│   ├── <span class="file">styles.css</span>
-│   └── <span class="file">script.js</span>
-├── <span class="dir">AX-Files/</span>
-│   ├── <span class="file">AX-C1.mp4</span>
-│   ├── <span class="file">AX-C2.mp4</span>
-│   ├── <span class="file">AX-C3.mp4</span>
-│   ├── <span class="file">AX-M1.mp4</span>
-│   ├── <span class="file">AX-M2.mp4</span>
-│   ├── <span class="file">AX-M3.mp4</span>
-│   └── <span class="file">AX-M4.mp4</span>
-└── <span class="dir">png-principal/</span>
-    ├── <span class="file">icon-192x192.png</span>
-    └── <span class="file">icon-512x512.png</span>
-</code></pre>
-
+    <div class="tree-container" id="tree-view"></div>
   </main>
 
   <footer>
@@ -281,6 +244,180 @@
     }
     setInterval(updateCounter, 1000);
     updateCounter();
+
+    // Estructura de rutas suministrada[span_1](start_span)[span_1](end_span)
+    const paths = [
+      ".",
+      "./app",
+      "./app/AndroidManifest.xml",
+      "./app/android.jar",
+      "./app/assets",
+      "./app/assets/CPWEB",
+      "./app/assets/FF",
+      "./app/assets/TIME",
+      "./app/assets/Windows",
+      "./app/assets/actualizador.js",
+      "./app/assets/analytics-loader.js",
+      "./app/assets/curts",
+      "./app/assets/index.html",
+      "./app/assets/main_ax.html",
+      "./app/assets/manifest.json",
+      "./app/assets/png-principal",
+      "./app/assets/rf.html",
+      "./app/assets/script.js",
+      "./app/assets/styles.css",
+      "./app/assets/version-manager.js",
+      "./app/assets/version.json",
+      "./app/compiled_res.zip",
+      "./app/obj",
+      "./app/obj/com",
+      "./app/compilar.sh",
+      "./app/classes.dex",
+      "./app/debug.keystore",
+      "./app/base.apk.idsig",
+      "./app/res",
+      "./app/res/drawable-hdpi",
+      "./app/res/drawable-ldpi",
+      "./app/res/drawable-mdpi",
+      "./app/res/drawable-xhdpi",
+      "./app/res/drawable",
+      "./app/res/layout",
+      "./app/res/values",
+      "./app/run.py",
+      "./app/src",
+      "./app/src/com",
+      "./ax",
+      "./ax/AX-Files",
+      "./ax/AX-Files/AX-C1.mp4",
+      "./ax/AX-Files/AX-M1.mp4",
+      "./ax/AX.py",
+      "./ax/CPWEB",
+      "./ax/CPWEB/index.html",
+      "./ax/CPWEB/index1.html",
+      "./ax/CPWEB/index2.html",
+      "./ax/CPWEB/index3.html",
+      "./ax/CPWEB/index4.html",
+      "./ax/CPWEB/script.js",
+      "./ax/CPWEB/styles.css",
+      "./ax/CPWEB/styles2.css",
+      "./ax/FF",
+      "./ax/FF/index.html",
+      "./ax/FF/script.js",
+      "./ax/FF/styles.css",
+      "./ax/README.md",
+      "./ax/Windows",
+      "./ax/Windows/index.html",
+      "./ax/Windows/styles.css",
+      "./ax/YJPO",
+      "./ax/YJPO/index.html",
+      "./ax/YJPO/script.js",
+      "./ax/YJPO/styles.css",
+      "./ax/analytics-loader.js",
+      "./ax/curts",
+      "./ax/curts/index.html",
+      "./ax/curts/styles.css",
+      "./ax/icon-loader.js",
+      "./ax/index.html",
+      "./ax/TIME",
+      "./ax/TIME/index.html",
+      "./ax/manifest.json",
+      "./ax/png-principal",
+      "./ax/png-principal/ax_apk.png",
+      "./ax/png-principal/ax_web.png",
+      "./ax/png-principal/icon-192x192.png",
+      "./ax/png-principal/icon-512x512.png",
+      "./ax/repomix-output.xml",
+      "./ax/rf.html",
+      "./ax/run.py",
+      "./ax/script.js",
+      "./ax/styles.css",
+      "./ax/sw.js",
+      "./ax/estructure.html",
+      "./ax/Actividades",
+      "./ax/Actividades/index.html",
+      "./ax/Actividades/soluciones",
+      "./ax/Actividades/documentos",
+      "./ax/Actividades/v1.html",
+      "./ax/version-manager.js",
+      "./ax/version.json",
+      "./ax/files-temp",
+      "./ax/files-temp/WIFI",
+      "./ax/Backups",
+      "./ax/Backups/(130826)ax.zip",
+      "./ax/zonadepruebas",
+      "./ax/zonadepruebas/test-page",
+      "./ax/zonadepruebas/test-ax"
+    ];
+
+    function buildTree(paths) {
+      const root = { name: ".", type: "dir", children: {} };
+      paths.forEach(path => {
+        let cleanPath = path.startsWith("./") ? path.slice(2) : path;
+        if (!cleanPath || cleanPath === ".") return;
+        const parts = cleanPath.split("/");
+        let curr = root;
+        parts.forEach((part, index) => {
+          if (!part) return;
+          const existing = curr.children[part];
+          if (existing) {
+            curr = existing;
+          } else {
+            const isDir = index < parts.length - 1 || paths.some(p => {
+              let cp = p.startsWith("./") ? p.slice(2) : p;
+              return cp.startsWith(cleanPath + "/");
+            });
+            const newNode = {
+              name: part,
+              type: isDir ? "dir" : "file",
+              children: isDir ? {} : null
+            };
+            curr.children[part] = newNode;
+            curr = newNode;
+          }
+        });
+      });
+      return root;
+    }
+
+    function renderNodeChildren(node) {
+      if (!node.children) return '';
+      let html = `<ul class="tree-list">`;
+      let keys = Object.keys(node.children).sort((a, b) => {
+        let ca = node.children[a];
+        let cb = node.children[b];
+        if (ca.type === cb.type) return a.localeCompare(b);
+        return ca.type === 'dir' ? -1 : 1;
+      });
+      keys.forEach(key => {
+        let child = node.children[key];
+        if (child.type === 'dir') {
+          html += `<li><span class="dir folder-toggle">📁 ${child.name}/</span><div class="folder-content" style="display:none;">${renderNodeChildren(child)}</div></li>`;
+        } else {
+          html += `<li><span class="file">📄 ${child.name}</span></li>`;
+        }
+      });
+      html += `</ul>`;
+      return html;
+    }
+
+    function generateHTMLTree(root) {
+      let html = `<ul class="tree-root"><li><span class="dir folder-toggle">📁 ${root.name}</span><div class="folder-content">`;
+      html += renderNodeChildren(root);
+      html += `</div></li></ul>`;
+      return html;
+    }
+
+    const treeRoot = buildTree(paths);
+    document.getElementById('tree-view').innerHTML = generateHTMLTree(treeRoot);
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('folder-toggle')) {
+        let content = e.target.nextElementSibling;
+        if (content && content.classList.contains('folder-content')) {
+          content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+      }
+    });
   </script>
 </body>
 </html>
