@@ -2,16 +2,24 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, runTransaction, onValue, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 👑 1. DETECTAR RUTA BASE AUTOMÁTICAMENTE
-const getBaseURL = () => {
+// 👑 1. DETECTAR RUTA BASE Y GENERAR URLS ABSOLUTAS INFALIBLES
+const getAbsoluteUrl = (path) => {
+    const loc = window.location;
+    let base = "";
+    if (loc.hostname.includes("github.io") && loc.pathname.startsWith("/ax")) {
+        base = "/ax";
+    }
+    const cleanPath = path.startsWith('/') ? path : '/' + path;
+    return loc.origin + base + cleanPath;
+};
+
+const baseUrl = (() => {
     const loc = window.location;
     if (loc.hostname.includes("github.io") && loc.pathname.startsWith("/ax")) {
         return "/ax";
     }
-    return ""; 
-};
-
-const baseUrl = getBaseURL();
+    return "";
+})();
 
 // 🚀 2. INYECTAR FAVICONS Y METADATOS
 (function() {
@@ -34,7 +42,7 @@ const baseUrl = getBaseURL();
     });
 })();
 
-// 🎨 3. ESTILOS UI/UX SIN MANCHAS: FONDO TOTALMENTE TRANSPARENTE, SOLO CAJAS ACTIVAS
+// 🎨 3. ESTILOS UI/UX DINÁMICOS
 const styleId = 'ax-absolute-styles';
 const oldStyle = document.getElementById(styleId);
 if (oldStyle) oldStyle.remove();
@@ -113,7 +121,6 @@ styles.innerHTML = `
         box-shadow: 0 0 8px #00ffcc !important;
     }
 
-    /* BOTÓN < */
     #axMenuBtn {
         background: rgba(255, 0, 0, 0.3) !important;
         border: 2px solid #ff0000 !important;
@@ -135,7 +142,6 @@ styles.innerHTML = `
         transform: scale(1.05);
     }
 
-    /* CONTENEDOR GENERAL DEL MENÚ - CERO FONDO, TOTALMENTE TRANSPARENTE */
     #ax-side-drawer {
         position: fixed !important;
         top: 70px !important;
@@ -157,7 +163,6 @@ styles.innerHTML = `
         pointer-events: auto !important;
     }
 
-    /* BARRA DE SECCIONES - SIN NINGÚN COLOR DE FONDO */
     .ax-menu-bar {
         display: flex !important;
         justify-content: flex-end !important;
@@ -167,7 +172,6 @@ styles.innerHTML = `
         box-sizing: border-box !important;
     }
 
-    /* CADA SECCIÓN */
     .ax-section-item {
         position: relative !important;
         background: transparent !important;
@@ -222,7 +226,6 @@ styles.innerHTML = `
         box-shadow: 0 0 20px rgba(0, 255, 204, 0.3) !important;
     }
 
-    /* CONTENIDO DESPLEGABLE */
     .ax-section-content {
         max-height: 0 !important;
         overflow: hidden !important;
@@ -280,7 +283,6 @@ styles.innerHTML = `
         display: block !important;
     }
 
-    /* --- AJUSTE MÓVIL: APILADO LIMPIO SIN FONDO GENERAL --- */
     @media screen and (max-width: 768px) {
         .ax-menu-bar {
             flex-direction: column !important;
@@ -288,7 +290,7 @@ styles.innerHTML = `
             justify-content: flex-start !important;
             padding: 15px !important;
             gap: 10px !important;
-            background: transparent !important; /* Eliminada la mancha negra por completo */
+            background: transparent !important;
             backdrop-filter: none !important;
             width: 100% !important;
             box-sizing: border-box !important;
@@ -302,11 +304,11 @@ styles.innerHTML = `
 `;
 document.head.appendChild(styles);
 
-// 🏢 4. INYECTAR ELEMENTOS EN EL DOM
+// 🏢 4. INYECTAR ELEMENTOS EN EL DOM CON RUTAS ABSOLUTAS SEGURAS
 const injectElements = () => {
     if (!document.body) return;
 
-    const targetUrl = baseUrl ? `${baseUrl}/index.html` : '/index.html';
+    const targetUrl = getAbsoluteUrl('/index.html');
 
     const existingHeader = document.getElementById('ax-global-header');
     if (existingHeader) existingHeader.remove();
@@ -346,8 +348,7 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}/estructure.html" class="ax-drawer-btn">Estructura AX</a>
-                    <a href="https://github.com/ax-col/app" class="ax-drawer-btn">Repositorio APP</a>
+                    <a href="${getAbsoluteUrl('/estructure.html')}" class="ax-drawer-btn">Estructura AX</a>
                     <a href="https://github.com/ax-col/ax" target="_blank" class="ax-drawer-btn">Repositorio AX</a>
                 </div>
             </div>
@@ -359,8 +360,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}/TIME/index.html" class="ax-drawer-btn">Zonas Horarias</a>
-                    <a href="${baseUrl}/FF/index.html" class="ax-drawer-btn">Countdown FF</a>
+                    <a href="${getAbsoluteUrl('/TIME/index.html')}" class="ax-drawer-btn">Zonas Horarias</a>
+                    <a href="${getAbsoluteUrl('/FF/index.html')}" class="ax-drawer-btn">Countdown FF</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                 </div>
@@ -373,8 +374,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}/Windows/index.html" class="ax-drawer-btn">Windows</a>
-                    <a href="${baseUrl}/curts/index.html" class="ax-drawer-btn">Acortar Enlaces</a>
+                    <a href="${getAbsoluteUrl('/Windows/index.html')}" class="ax-drawer-btn">Windows</a>
+                    <a href="${getAbsoluteUrl('/curts/index.html')}" class="ax-drawer-btn">Acortar Enlaces</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                 </div>
             </div>
@@ -386,8 +387,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="#" class="ax-drawer-btn">CPWEB</a>
-                    <a href="${baseUrl}/YJPO/index.html" class="ax-drawer-btn">Pendiente</a>
+                    <a href="${getAbsoluteUrl('/CPWEB/index.html')}" class="ax-drawer-btn">Pendiente X</a>
+                    <a href="${getAbsoluteUrl('/YJPO/index.html')}" class="ax-drawer-btn">Pendiente</a>
                 </div>
             </div>
         </div>
@@ -487,7 +488,7 @@ if (document.readyState === "complete" || document.readyState === "interactive")
     window.addEventListener("load", injectElements);
 }
 
-// 🔥 6. ANALÍTICA DE FIREBASE
+// 🔥 6. ANALÍTICA DE FIREBASE Y VENTANA DESLIZANTE DE 15 DÍAS
 function startFirebaseAnalytics() {
     const firebaseConfig = {
         apiKey: "AIzaSyDI8C65d5SJa-DslwylhK58iWZcsf-3duE",
@@ -510,6 +511,11 @@ function startFirebaseAnalytics() {
         const total = snapshot.val() || 0;
         const viewEl = document.getElementById('global-total-visits');
         if (viewEl) viewEl.textContent = Number(total).toLocaleString();
+
+        const dashVisitsEl = document.getElementById('dash-total-visits');
+        if (dashVisitsEl) dashVisitsEl.textContent = Number(total).toLocaleString();
+
+        gestionarVentanaYGrafica15Dias(total);
     });
 
     let sessionToken = sessionStorage.getItem('ax_user_session');
@@ -530,7 +536,82 @@ function startFirebaseAnalytics() {
     onValue(onlineRef, (snapshot) => {
         let totalActive = 0;
         if (snapshot.exists()) { snapshot.forEach(() => { totalActive++; }); }
+        
         const onlineEl = document.getElementById('global-active-users');
         if (onlineEl) onlineEl.textContent = totalActive;
+
+        const dashOnlineEl = document.getElementById('dash-active-users');
+        if (dashOnlineEl) dashOnlineEl.textContent = totalActive;
+    });
+}
+
+// 📈 GESTIÓN DE VENTANA DESLIZANTE DE 15 DÍAS Y CHART.JS
+function gestionarVentanaYGrafica15Dias(valorActualMetrica) {
+    let historial = JSON.parse(localStorage.getItem('ax_15_days_history')) || [];
+    const fechaHoy = new Date().toISOString().split('T')[0];
+    
+    const indiceHoy = historial.findIndex(item => item.date === fechaHoy);
+    
+    if (indiceHoy !== -1) {
+        historial[indiceHoy].value = valorActualMetrica;
+    } else {
+        historial.push({ date: fechaHoy, value: valorActualMetrica });
+        if (historial.length > 15) {
+            historial.shift();
+        }
+    }
+    
+    localStorage.setItem('ax_15_days_history', JSON.stringify(historial));
+    renderizarChartJs(historial);
+}
+
+function renderizarChartJs(datosHistorial) {
+    const canvasElement = document.getElementById('ax15DaysChart');
+    if (!canvasElement) return;
+
+    const etiquetasFechas = datosHistorial.map(item => item.date);
+    const valoresMetricas = datosHistorial.map(item => item.value);
+
+    if (window.axChartInstance) {
+        window.axChartInstance.destroy();
+    }
+
+    const ctx = canvasElement.getContext('2d');
+    window.axChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: etiquetasFechas,
+            datasets: [{
+                label: 'Visitas / Recargas (Últimos 15 Días)',
+                data: valoresMetricas,
+                borderColor: '#00ffcc',
+                backgroundColor: 'rgba(0, 255, 204, 0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#ff0055',
+                pointBorderColor: '#ffffff',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: { color: '#a0a5c0', font: { size: 9 } },
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                },
+                y: {
+                    ticks: { color: '#a0a5c0', font: { size: 9 } },
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: { color: '#ffffff', font: { family: 'Courier New', size: 10 } }
+                }
+            }
+        }
     });
 }
