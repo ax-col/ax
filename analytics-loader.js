@@ -34,7 +34,7 @@ const baseUrl = getBaseURL();
     });
 })();
 
-// 🎨 3. ESTILOS UI/UX PREMIUM CON TRANSPARENCIA TOTAL EN SECCIONES CERRADAS
+// 🎨 3. ESTILOS UI/UX SIN MANCHAS: FONDO TOTALMENTE TRANSPARENTE, SOLO CAJAS ACTIVAS
 const styleId = 'ax-absolute-styles';
 const oldStyle = document.getElementById(styleId);
 if (oldStyle) oldStyle.remove();
@@ -113,7 +113,7 @@ styles.innerHTML = `
         box-shadow: 0 0 8px #00ffcc !important;
     }
 
-    /* BOTÓN < EN SU UBICACIÓN ORIGINAL EXACTA CON ESTILO PREMIUM */
+    /* BOTÓN < */
     #axMenuBtn {
         background: rgba(255, 0, 0, 0.3) !important;
         border: 2px solid #ff0000 !important;
@@ -135,7 +135,7 @@ styles.innerHTML = `
         transform: scale(1.05);
     }
 
-    /* CONTENEDOR GENERAL DEL MENÚ CON FONDO TOTALMENTE TRANSPARENTE */
+    /* CONTENEDOR GENERAL DEL MENÚ - CERO FONDO, TOTALMENTE TRANSPARENTE */
     #ax-side-drawer {
         position: fixed !important;
         top: 70px !important;
@@ -153,10 +153,11 @@ styles.innerHTML = `
 
     #ax-side-drawer.open {
         max-height: calc(100vh - 70px) !important;
+        overflow-y: auto !important;
         pointer-events: auto !important;
     }
 
-    /* BARRA HORIZONTAL FLOTANTE */
+    /* BARRA DE SECCIONES - SIN NINGÚN COLOR DE FONDO */
     .ax-menu-bar {
         display: flex !important;
         justify-content: flex-end !important;
@@ -166,12 +167,13 @@ styles.innerHTML = `
         box-sizing: border-box !important;
     }
 
-    /* CADA SECCIÓN: SIN BLOQUES SÓLIDOS NI CAJAS VACÍAS CUANDO ESTÁ CERRADA */
+    /* CADA SECCIÓN */
     .ax-section-item {
         position: relative !important;
         background: transparent !important;
         border: none !important;
         min-width: 160px !important;
+        width: 180px !important;
         transition: all 0.3s ease !important;
     }
 
@@ -200,7 +202,6 @@ styles.innerHTML = `
         box-shadow: 0 0 15px rgba(0, 255, 204, 0.2) !important;
     }
 
-    /* FLECHA > AL FINAL DE CADA SECCIÓN */
     .ax-section-arrow {
         color: #00ffcc !important;
         font-size: 14px !important;
@@ -221,18 +222,20 @@ styles.innerHTML = `
         box-shadow: 0 0 20px rgba(0, 255, 204, 0.3) !important;
     }
 
-    /* CONTENIDO DESPLEGABLE: SOLO APARECE EN LA SECCIÓN ACTIVA, EL RESTO ES 100% TRANSPARENTE */
+    /* CONTENIDO DESPLEGABLE */
     .ax-section-content {
         max-height: 0 !important;
         overflow: hidden !important;
         transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease !important;
-        padding: 0 10px !important;
+        padding: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         gap: 6px !important;
         background: rgba(8, 8, 16, 0.95) !important;
         backdrop-filter: blur(15px) !important;
         border-radius: 0 0 8px 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .ax-section-item.open .ax-section-content {
@@ -255,6 +258,8 @@ styles.innerHTML = `
         text-align: center !important;
         transition: all 0.2s ease !important;
         letter-spacing: 1px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
     }
 
     .ax-drawer-btn:hover {
@@ -273,6 +278,26 @@ styles.innerHTML = `
         z-index: -9999 !important;
         pointer-events: none !important;
         display: block !important;
+    }
+
+    /* --- AJUSTE MÓVIL: APILADO LIMPIO SIN FONDO GENERAL --- */
+    @media screen and (max-width: 768px) {
+        .ax-menu-bar {
+            flex-direction: column !important;
+            align-items: flex-end !important;
+            justify-content: flex-start !important;
+            padding: 15px !important;
+            gap: 10px !important;
+            background: transparent !important; /* Eliminada la mancha negra por completo */
+            backdrop-filter: none !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .ax-section-item {
+            width: 220px !important;
+            min-width: unset !important;
+        }
     }
 `;
 document.head.appendChild(styles);
@@ -314,7 +339,6 @@ const injectElements = () => {
     drawer.id = 'ax-side-drawer';
     drawer.innerHTML = `
         <div class="ax-menu-bar">
-            
             <!-- SECCIÓN 4 -->
             <div class="ax-section-item" data-section="4">
                 <div class="ax-section-header">
@@ -322,7 +346,7 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}./estructure.html" class="ax-drawer-btn">Estructura AX</a>
+                    <a href="estructure.html" class="ax-drawer-btn">Estructura AX</a>
                     <a href="https://github.com/ax-col/ax" target="_blank" class="ax-drawer-btn">Repositorio AX</a>
                 </div>
             </div>
@@ -334,8 +358,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}./TIME/index.html" class="ax-drawer-btn">Zonas Horarias</a>
-                    <a href="${baseUrl}./FF/index.html" class="ax-drawer-btn">Countdown FF</a>
+                    <a href="TIME/index.html" class="ax-drawer-btn">Zonas Horarias</a>
+                    <a href="FF/index.html" class="ax-drawer-btn">Countdown FF</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                 </div>
@@ -348,8 +372,8 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}./Windows/index.html" class="ax-drawer-btn">Windows</a>
-                    <a href="${baseUrl}./curts/index.html" class="ax-drawer-btn">Acortar Enlaces</a>
+                    <a href="Windows/index.html" class="ax-drawer-btn">Windows</a>
+                    <a href="curts/index.html" class="ax-drawer-btn">Acortar Enlaces</a>
                     <a href="#" class="ax-drawer-btn">Pendiente</a>
                 </div>
             </div>
@@ -361,11 +385,10 @@ const injectElements = () => {
                     <span class="ax-section-arrow">&gt;</span>
                 </div>
                 <div class="ax-section-content">
-                    <a href="${baseUrl}./CPWEB/index.html" class="ax-drawer-btn">Pendiente X</a>
-                    <a href="${baseUrl}./YJPO/index.html" class="ax-drawer-btn">Pendiente</a>
+                    <a href="CPWEB/index.html" class="ax-drawer-btn">Pendiente X</a>
+                    <a href="YJPO/index.html" class="ax-drawer-btn">Pendiente</a>
                 </div>
             </div>
-
         </div>
     `;
     document.body.appendChild(drawer);
@@ -377,7 +400,6 @@ const injectElements = () => {
         initCanvasAnimation(canvas);
     }
 
-    // Redirección del logo principal
     document.getElementById('axLogoHome').onclick = () => { window.location.href = targetUrl; };
     
     const menuBtn = document.getElementById('axMenuBtn');
@@ -388,7 +410,6 @@ const injectElements = () => {
         sideDrawer.classList.toggle('open');
     };
 
-    // Acordeón individual: al hacer clic en una sección, se despliega solo esa y el resto queda despejado/transparente
     const sectionItems = drawer.querySelectorAll('.ax-section-item');
     sectionItems.forEach(item => {
         const itemHeader = item.querySelector('.ax-section-header');
@@ -402,7 +423,6 @@ const injectElements = () => {
         };
     });
 
-    // Cerrar menú al hacer clic fuera del panel
     document.addEventListener('click', (e) => {
         if (!sideDrawer.contains(e.target) && e.target !== menuBtn) {
             sideDrawer.classList.remove('open');
@@ -459,7 +479,6 @@ const initCanvasAnimation = (canvas) => {
     animate();
 };
 
-// Ejecución segura al cargar
 if (document.readyState === "complete" || document.readyState === "interactive") {
     injectElements();
 } else {
