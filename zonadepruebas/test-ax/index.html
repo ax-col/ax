@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AX PRINCIPAL</title>
+<h5>Version V4.6.1</h5>
 <meta name="description" content="AX alojado en GitHub Pages.">
 
 <script>
@@ -12,7 +13,7 @@
         const isGithub = window.location.hostname.includes("github.io");
         // Forzamos la ruta correcta con o sin slash final
         const scriptPath = isGithub ? "/ax/analytics-loader.js" : "./analytics-loader.js";
-
+        
         const script = document.createElement('script');
         script.type = 'module';
         script.src = scriptPath;
@@ -77,54 +78,42 @@
     </div>
   </div>
 
-  <!-- SECCIÓN DE ZONAS HORARIAS UTC EN LUGAR DE PRECIO DEL ORO Y BITCOIN -->
-  <div class="utc-widget-container">
-    <!-- Botón de acción para ir a la página completa time.html justo encima de las casillas UTC -->
-    <a href="https://ax-col.github.io/ax/TIME/time.html" class="btn-utc-action">
-      AX / VER MAPA Y ZONAS HORARIAS COMPLETAS
-    </a>
-
-    <!-- Casillas colapsables desplegables por UTC -->
-    <div class="utc-accordion" id="utcAccordion">
-      <!-- Generado dinámicamente desde script.js -->
-    </div>
-  </div>
-
   <div class="button-container">
     <a href="curts/index.html" class="button">Acortar Enlaces</a>
     <a href="main_ax.html" class="button">Main AX</a>
     <a href="Windows/index.html" class="button">Activación de Windows</a>
     <a href="FF/index.html" class="button">Countdown FF</a>
+    <a href="Actividades/index.html" class="button">Actividades</a>
     <a href="TIME/time.html" class="button">Zonas Horarias</a>
+    <a href="https://github.com/ax-col/ax/raw/refs/heads/main/files-temp/WIFI/dist/redeswifi.exe" class="button">Pentest wifi</a>
     <a href="https://github.com/ax-col/ax" class="button">Repositorio AX</a>
   </div>
 
-  <button link="https://github.com/ax-col/ax/blob/main/grupo7.pptx" class="btn-cyber-download" onclick="window.open(this.getAttribute('link'), '_blank')">
-  <button link="https://github.com/ax-col/ax/raw/refs/heads/main/grupo7.pptx" class="btn-cyber-download" onclick="window.open(this.getAttribute('link'), '_blank')">
+<!--  
+  <button link="https://github.com/ax-col/ax/raw/refs/heads/main/archivos.txt" class="btn-cyber-download" onclick="window.open(this.getAttribute('link'), '_blank')">
     <span class="btn-glow"></span>
-    <span class="btn-text">📥 DESCARGAR PRESENTACIÓN</span>
+    <span class="btn-text">DESCARGAR ARCHIVO</span>
   </button>
+-->
 
   <div class="ax-cyber-card-compact">
     <div class="ax-cyber-border"></div>
     <div class="ax-cyber-content">
         <h3>SISTEMA AX - CORE</h3>
         <p>Descargar paquete móvil [base.apk]</p>
-
+        
         <a href="https://github.com/ax-col/app/raw/refs/heads/main/base.apk" download="AX-Comunidad.apk" class="btn-cyber-download">
             <span class="btn-glow"></span>
             <span class="btn-text">📥 DESCARGAR APK</span>
         </a>
     </div>
   </div>
-
   <button class="mute-toggle" onclick="toggleMute()">ACTIVAR SONIDO</button>
-
   <video class="video-fondo" id="videoFondo" autoplay muted loop playsinline preload="auto">
   </video>
 
   <script src="script.js"></script>
-
+  
   <script>
     // Registro de SW optimizado para el APK
     if ('serviceWorker' in navigator) {
@@ -148,3 +137,4 @@
   </script>
 
 </body>
+</html>
