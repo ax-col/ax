@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AndreX</title>
+<link href="https://fonts.googleapis.com/css2?family=Devonshire&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050000;--main:#fff;--red:#ff1a1a;--cyan:#00e5ff;--shadow:rgba(0,0,0,.9);--font:'Devonshire';--size:clamp(70px,19vw,260px);--split:5px;--gsplit:16px;--stroke-w:2.5px;--stroke-w2:1.4px;--draw:1.1s;--g:6;--axgap:.22em;--up:3px;--vib:.6s}
+*{margin:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg);overflow:hidden}
+body{display:grid;place-items:center;position:relative}
+#fx{position:fixed;inset:0;pointer-events:none}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 30%,rgba(130,0,0,.5) 100%)}
+#flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
+#stage{position:relative;will-change:transform}
+#stage.shake{animation:shake .45s steps(5) 1}
+@keyframes shake{20%{transform:translate(-12px,5px) scale(1.04)}40%{transform:translate(10px,-6px)}60%{transform:translate(-6px,3px) scale(1.02)}80%{transform:translate(4px,-2px)}100%{transform:none}}
+#word{display:grid;font-family:var(--font),cursive;font-size:var(--size);line-height:1.25;padding:0 .2em;will-change:transform}
+.layer{grid-area:1/1;display:flex;justify-content:center;white-space:nowrap;user-select:none}
+.layer span{display:inline-block}
+.layer .mid{display:inline-flex;margin:0 calc(var(--axgap)/2);transition:margin .7s cubic-bezier(.2,.8,.2,1)}
+.layer .mid.open{margin:0}
+.l{max-width:0;opacity:0;transition:max-width .4s cubic-bezier(.2,.9,.2,1),opacity .25s}
+.l.in{max-width:1.2em;opacity:1}
+.l.in.pop{animation:pop .4s steps(8) 1}
+@keyframes pop{0%{transform:translateY(-.25em) skewX(-30deg) scale(1.4)}45%{transform:translateX(.08em);opacity:.3}100%{transform:none}}
+.shadow{color:var(--shadow);transform:translate(0,calc(var(--up)*-1));text-shadow:0 calc(var(--up)*-1) .25em rgba(255,0,0,.55)}
+.ghostR{color:var(--red);transform:translate(0,calc(var(--up)*-1));animation:jit .4s steps(2) infinite}
+.ghostC{color:var(--cyan);opacity:.45;transform:translateY(calc(var(--split)*.7))}
+@keyframes jit{0%{transform:translate(0,calc(var(--up)*-1))}50%{transform:translate(1px,calc(var(--up)*-1.4))}100%{transform:translate(-1px,calc(var(--up)*-.8))}}
+.main{color:var(--main)}
+.epic .main{text-shadow:0 0 .12em rgba(255,255,255,.25),0 calc(var(--up)*-1) .3em rgba(255,0,0,.55)}
+/* Trazo rojo: garabato por "cuadros" (solo transform, muy ligero) */
+.stroke{color:transparent;-webkit-text-stroke:var(--stroke-w) var(--red);transform:rotate(-1.4deg) scale(1.03)}
+.stroke.s2{-webkit-text-stroke-width:var(--stroke-w2);transform:rotate(1.6deg) translate(.02em,.04em) scale(1.06)}
+.epic .stroke{animation:sA var(--vib) steps(1) infinite}
+.epic .stroke.s2{animation:sB calc(var(--vib)*.75) steps(1) infinite}
+@keyframes sA{0%{transform:rotate(-1.4deg) scale(1.03)}25%{transform:rotate(-.5deg) scale(1.05) translate(calc(var(--g)*1px),calc(var(--g)*-.6px))}50%{transform:rotate(-2.2deg) scale(1.02) translate(calc(var(--g)*-1px),calc(var(--g)*.5px));opacity:.6}75%{transform:rotate(-1deg) scale(1.04) translate(calc(var(--g)*.5px),calc(var(--g)*.8px));opacity:1}}
+@keyframes sB{0%{transform:rotate(1.6deg) scale(1.06)}25%{transform:rotate(2.4deg) scale(1.03) translate(calc(var(--g)*-1px),calc(var(--g)*.7px));opacity:.7}50%{transform:rotate(.8deg) scale(1.07) translate(calc(var(--g)*.8px),calc(var(--g)*-.8px));opacity:1}75%{transform:rotate(1.9deg) scale(1.05) translate(calc(var(--g)*-.4px),calc(var(--g)*-.4px))}}
+.stroke span{clip-path:inset(-20% 101% -20% -10%);transition:clip-path var(--draw) cubic-bezier(.6,0,.2,1)}
+.stroke span.draw{clip-path:inset(-20% -10% -20% -10%)}
+#word.glitch{animation:gl .22s steps(3) 1}
+#word.glitch .ghostR{--split:var(--gsplit)}
+@keyframes gl{0%{transform:skewX(9deg) translateX(-10px)}33%{transform:skewX(-7deg) translateX(12px)}66%{transform:skewX(3deg)}100%{transform:none}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas><div class="vig"></div><div id="flash"></div>
+<div id="stage"><div id="word"></div></div>
+
+<script>
+/* ============================================================
+   SECCIÓN 1 · CONFIGURACIÓN RÁPIDA (texto, fuente, tiempos)
+   ============================================================ */
+const CONFIG = {
+  inicio: ["A", "X"],
+  medio: "ndre",
+  fuente: "Devonshire",
+  tamano: "clamp(70px,19vw,260px)",
+  separacionAX: ".22em",     // espacio entre A y X al inicio (0 = pegadas)
+
+  esperaInicial: 1100,      // ms mostrando solo AX
+  retardoLetra: 420,        // ms entre letras al escribir
+  esperaTrazo: 350,         // ms antes del estallido y del trazo rojo
+  duracionTrazo: 1100,      // ms que tarda en dibujarse cada letra del trazo
+  desfaseTrazo: 150,        // ms entre letras del trazo
+  duracionEfectos: 5000,    // ms que dura el modo épico antes de desaparecer
+  retardoBorrado: 260,      // ms entre letras al desaparecer
+  esperaFinal: 700,         // ms en AX antes de repetir
+  glitchCada: 1900,         // ms entre glitches fuertes
+  vibracionTrazo: 600,      // ms de un ciclo del garabato (menor = más nervioso)
+  intensidadGarabato: 6,    // px de movimiento del trazo
+  particulas: true,         // polvo y chispas rojas
+  maxParticulas: 70,        // menos = más ligero
+  repetir: true,            // bucle infinito
+};
+
+/* ============================================================
+   SECCIÓN 2 · COLORES Y EFECTO RGB
+   ============================================================ */
+const ESTILO = {
+  fondo: "#050000",
+  blanco: "#ffffff",
+  rojo: "#ff1a1a",
+  cian: "#00e5ff",            // franja fina (pon "transparent" para quitarla)
+  sombra: "rgba(0,0,0,.9)",
+  sombraArriba: "3px",        // sombra roja centrada, subida estos px
+  separacionRGB: "5px",
+  separacionGlitch: "16px",
+  grosorTrazo: "2.5px",
+  grosorTrazo2: "1.4px",
+};
+
+/* ================= NO NECESITAS TOCAR DESDE AQUÍ ================= */
+const R=document.documentElement.style;
+[["--bg",ESTILO.fondo],["--main",ESTILO.blanco],["--red",ESTILO.rojo],["--cyan",ESTILO.cian],["--shadow",ESTILO.sombra],
+ ["--up",ESTILO.sombraArriba],["--split",ESTILO.separacionRGB],["--gsplit",ESTILO.separacionGlitch],["--stroke-w",ESTILO.grosorTrazo],["--stroke-w2",ESTILO.grosorTrazo2],
+ ["--axgap",CONFIG.separacionAX],["--font",`'${CONFIG.fuente}'`],["--size",CONFIG.tamano],["--draw",CONFIG.duracionTrazo+"ms"],
+ ["--g",CONFIG.intensidadGarabato],["--vib",CONFIG.vibracionTrazo+"ms"]].forEach(([k,v])=>R.setProperty(k,v));
+if(CONFIG.fuente!=="Devonshire"){const l=document.createElement("link");l.rel="stylesheet";
+  l.href=`https://fonts.googleapis.com/css2?family=${CONFIG.fuente.replace(/ /g,"+")}&display=swap`;document.head.appendChild(l)}
+const $=id=>document.getElementById(id),word=$("word"),stage=$("stage"),wait=ms=>new Promise(r=>setTimeout(r,ms));
+let run=0,glitchT;
+
+/* ---------- Partículas (ligeras: sin blur, 30 fps) ---------- */
+const cv=$("fx"),cx=cv.getContext("2d");let P=[],last=0;
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener("resize",size);
+function burst(n,x=innerWidth/2,y=innerHeight/2,sp=8){
+  if(!CONFIG.particulas)return;
+  for(let i=0;i<n&&P.length<CONFIG.maxParticulas;i++){const a=Math.random()*6.283,v=Math.random()*sp;
+    P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,s:2+Math.random()*2,d:.02+Math.random()*.02})}
+}
+function frame(t){
+  requestAnimationFrame(frame);
+  if(t-last<33)return;last=t;
+  cx.clearRect(0,0,cv.width,cv.height);
+  if(CONFIG.particulas&&P.length<CONFIG.maxParticulas&&Math.random()<.3)
+    P.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7,l:.7,s:2+Math.random()*2,d:.012});
+  P=P.filter(p=>p.l>0);cx.fillStyle=ESTILO.rojo;
+  for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vx*=.96;p.vy*=.96;p.l-=p.d;cx.globalAlpha=Math.max(p.l,0);cx.fillRect(p.x,p.y,p.s,p.s)}
+}
+requestAnimationFrame(frame);
+
+/* ---------- Animación en bucle ---------- */
+function build(){
+  word.innerHTML="";word.classList.remove("epic");
+  ["shadow","ghostR","ghostC","main","stroke","stroke s2"].forEach(k=>{
+    const d=document.createElement("div");d.className="layer "+k;
+    d.innerHTML=`<span class="c">${CONFIG.inicio[0]}</span><span class="mid"></span><span class="c">${CONFIG.inicio[1]}</span>`;
+    word.appendChild(d);
+  });
+}
+function glitch(){word.classList.remove("glitch");void word.offsetWidth;word.classList.add("glitch")}
+function boom(){
+  const f=$("flash");f.style.opacity=.8;setTimeout(()=>f.style.opacity=0,70);
+  stage.classList.remove("shake");void stage.offsetWidth;stage.classList.add("shake");
+  burst(50,innerWidth/2,innerHeight/2,12);
+}
+async function ciclo(id){
+  build();
+  await wait(CONFIG.esperaInicial);if(id!==run)return;
+  word.querySelectorAll(".mid").forEach(m=>m.classList.add("open"));       // A y X se separan
+  await wait(250);
+  for(const ch of CONFIG.medio){                                            // se escribe ndre
+    if(id!==run)return;
+    word.querySelectorAll(".mid").forEach(m=>{const s=document.createElement("span");s.className="l";s.textContent=ch;m.appendChild(s)});
+    await wait(20);
+    word.querySelectorAll(".mid .l:not(.in)").forEach(s=>s.classList.add("in","pop"));
+    glitch();burst(8,innerWidth/2,innerHeight/2,5);
+    await wait(CONFIG.retardoLetra);
+  }
+  await wait(CONFIG.esperaTrazo);if(id!==run)return;
+  boom();word.classList.add("epic");                                         // efectos
+  word.querySelectorAll(".stroke").forEach((layer,li)=>{
+    layer.querySelectorAll(".c,.l").forEach((s,i)=>{s.style.transitionDelay=(i*CONFIG.desfaseTrazo+li*110)+"ms";s.classList.add("draw")});
+  });
+  glitchT=setInterval(()=>{glitch();burst(6,Math.random()*innerWidth,innerHeight/2,4)},CONFIG.glitchCada);
+  await wait(CONFIG.duracionEfectos);clearInterval(glitchT);if(id!==run)return;
+  // desaparecen los efectos: el trazo se borra y se quita el modo épico
+  word.querySelectorAll(".stroke span").forEach(s=>{s.style.transitionDelay="0ms";s.classList.remove("draw")});
+  word.classList.remove("epic");
+  await wait(CONFIG.duracionTrazo*.6);
+  for(let i=CONFIG.medio.length-1;i>=0;i--){                                 // se borran e,r,d,n
+    if(id!==run)return;
+    word.querySelectorAll(".mid").forEach(m=>{const s=m.lastElementChild;if(s)s.classList.remove("in","pop")});
+    glitch();
+    await wait(CONFIG.retardoBorrado);
+    word.querySelectorAll(".mid").forEach(m=>{const s=m.lastElementChild;if(s)s.remove()});
+  }
+  word.querySelectorAll(".mid").forEach(m=>m.classList.remove("open"));      // A y X se juntan
+  await wait(CONFIG.esperaFinal);
+}
+async function play(){
+  const id=++run;clearInterval(glitchT);
+  do{await ciclo(id);}while(CONFIG.repetir&&id===run);
+}
+document.fonts.ready.then(play);
+</script>
+</body>
+</html>
