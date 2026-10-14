@@ -38,7 +38,7 @@ html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,
 .keys .eq{grid-column:span 4;background:#2b2b2b;color:#fff;font-size:30px}
 
 /* ===== Intro AndreX -> AX ===== */
-@keyframes rgb{0%{color:#ff2b2b}17%{color:#ffe62b}33%{color:#2bff4f}50%{color:#2bf0ff}67%{color:#2b4fff}83%{color:#ff2bf0}100%{color:#ff2b2b}}
+@keyframes flow{to{background-position:300% 0}}
 @keyframes blink{50%{opacity:0}}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
 #splash{position:fixed;inset:0;z-index:99;background:#000;display:flex;align-items:center;justify-content:center;
@@ -48,7 +48,8 @@ html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,
   white-space:nowrap;display:flex;align-items:center;line-height:1.2}
 #word.joined{animation:pop .7s ease}
 .ch{display:inline-block;overflow:visible;white-space:nowrap;opacity:0;transform:translateY(.25em) scale(.7);
-  transition:opacity .35s,transform .35s,width .55s ease;animation:rgb 4s linear infinite;
+  transition:opacity .35s,transform .35s,width .55s ease;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 5s linear infinite;
   text-shadow:0 0 .25em currentColor}
 .ch.in{opacity:1;transform:none}
 .ch.gone{width:0!important;opacity:0;transform:scale(.1) rotate(-12deg)}
@@ -56,7 +57,8 @@ html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,
 .skip{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#555;font:13px system-ui,sans-serif}
 .brand{text-align:center;font-family:"Devonshire","Brush Script MT","Segoe Script",cursive;font-size:30px;line-height:1.1;
   opacity:0;transition:opacity .8s .3s}
-.brand span{animation:rgb 4s linear infinite;text-shadow:0 0 .3em currentColor}
+.brand span{background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 5s linear infinite;text-shadow:0 0 .3em currentColor}
 body.ready .brand{opacity:1}
 @media (prefers-reduced-motion:reduce){.ch,.brand span{animation:none;color:#fff}}
 </style></head><body>
