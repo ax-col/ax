@@ -1,0 +1,405 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Devonshire&display=swap" rel="stylesheet"><title>Calculadora con división larga</title><style>
+:root{--bg:#f3f0fa;--key:#fff;--text:#1d1b26;--op:#6c4bd8;--fn:#e4def7}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.app{max-width:460px;margin:0 auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.card{background:#000;color:#fff;border-radius:18px;padding:16px 14px;min-height:230px;max-height:55vh;overflow:auto;
+  font-family:"Courier New",Courier,monospace;font-size:clamp(16px,5.2vw,24px);line-height:1.55}
+.hint{color:#888;text-align:center;padding-top:80px;font-family:system-ui,sans-serif;font-size:15px}
+.ops{text-align:right;white-space:pre;letter-spacing:.06em}
+.ld{display:flex;justify-content:flex-end;margin-top:.9em;width:max-content;min-width:100%}
+.left{white-space:pre;letter-spacing:.06em}
+.left .ln{height:1.55em}
+.right{margin-left:.6ch;white-space:pre;letter-spacing:.06em}
+.dv{border-left:2px solid #9a9a9a;border-bottom:2px solid #9a9a9a;padding:0 .6ch;height:1.55em}
+.q{padding:0 .6ch}
+.rem{position:relative;display:inline-block}
+.rem::after{content:"";position:absolute;left:-.6ch;right:-.6ch;bottom:-.25em;height:.55em;
+  border-bottom:2px solid #9a9a9a;border-left:2px solid transparent;border-right:2px solid transparent;
+  border-radius:0 0 50% 50%}
+.step{padding-bottom:.9em;margin-bottom:.9em;border-bottom:1px solid #2a2a2a;overflow:hidden}
+.stephead{color:#9a9a9a;font-size:.6em;font-family:system-ui,sans-serif;margin-bottom:.4em;letter-spacing:0}
+.stepnote{color:#9a9a9a;font-size:.6em;font-family:system-ui,sans-serif;text-align:right;letter-spacing:0;margin-top:.6em}
+.final{margin-top:.4em;text-align:center;font-size:1.05em;letter-spacing:.04em;word-break:break-all}
+.final small{display:block;color:#9a9a9a;font-size:.65em;font-family:system-ui,sans-serif;letter-spacing:0}
+.err{color:#ff8a8a;text-align:center;padding-top:70px;font-family:system-ui,sans-serif}
+.simple{display:inline-block;text-align:right;white-space:pre;letter-spacing:.06em;float:right}
+.clr{clear:both}
+
+.screen{background:#fff;border-radius:16px;padding:10px 16px;text-align:right}
+.expr{min-height:1.4em;color:#777;font-size:15px;overflow-x:auto;white-space:nowrap}
+.entry{font-size:34px;font-weight:600;overflow-x:auto;white-space:nowrap;min-height:1.3em}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:56px;gap:8px}
+.keys button{border:0;border-radius:16px;background:var(--key);font-size:24px;color:var(--text);
+  box-shadow:0 1px 2px rgba(0,0,0,.12);cursor:pointer}
+.keys button:active{transform:scale(.96)}
+.keys .op{background:var(--op);color:#fff}
+.keys .fn{background:var(--fn)}
+.keys .eq{grid-column:span 4;background:#2b2b2b;color:#fff;font-size:30px}
+
+/* ===== Intro AndreX -> AX ===== */
+@keyframes rgb{0%{color:#ff2b2b}17%{color:#ffe62b}33%{color:#2bff4f}50%{color:#2bf0ff}67%{color:#2b4fff}83%{color:#ff2bf0}100%{color:#ff2b2b}}
+@keyframes blink{50%{opacity:0}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+#splash{position:fixed;inset:0;z-index:99;background:#000;display:flex;align-items:center;justify-content:center;
+  transition:opacity .7s ease,visibility .7s;cursor:pointer}
+#splash.hide{opacity:0;visibility:hidden}
+#word{font-family:"Devonshire","Brush Script MT","Segoe Script",cursive;font-size:clamp(56px,17vw,120px);
+  white-space:nowrap;display:flex;align-items:center;line-height:1.2}
+#word.joined{animation:pop .7s ease}
+.ch{display:inline-block;overflow:visible;white-space:nowrap;opacity:0;transform:translateY(.25em) scale(.7);
+  transition:opacity .35s,transform .35s,width .55s ease;animation:rgb 4s linear infinite;
+  text-shadow:0 0 .25em currentColor}
+.ch.in{opacity:1;transform:none}
+.ch.gone{width:0!important;opacity:0;transform:scale(.1) rotate(-12deg)}
+.cursor{display:inline-block;width:.06em;height:.8em;margin-left:.05em;background:#fff;animation:blink .8s steps(1) infinite}
+.skip{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#555;font:13px system-ui,sans-serif}
+.brand{text-align:center;font-family:"Devonshire","Brush Script MT","Segoe Script",cursive;font-size:30px;line-height:1.1;
+  opacity:0;transition:opacity .8s .3s}
+.brand span{animation:rgb 4s linear infinite;text-shadow:0 0 .3em currentColor}
+body.ready .brand{opacity:1}
+@media (prefers-reduced-motion:reduce){.ch,.brand span{animation:none;color:#fff}}
+</style></head><body>
+<div id="splash"><div id="word"></div><div class="skip">toca para saltar</div></div>
+<main class="app">
+  <div class="brand"><span>A</span><span style="animation-delay:-.8s">X</span></div>
+  <section class="card" id="card"></section>
+
+  <section class="screen">
+    <div class="expr" id="top">&nbsp;</div>
+    <div class="entry" id="entry">0</div>
+  </section>
+
+  <section class="keys">
+    <button data-k="C" class="fn">C</button>
+    <button data-k="B" class="fn">⌫</button>
+    <button data-k="(" class="fn">(</button>
+    <button data-k=")" class="fn">)</button>
+
+    <button data-k="7">7</button>
+    <button data-k="8">8</button>
+    <button data-k="9">9</button>
+    <button data-k="÷" class="op">÷</button>
+
+    <button data-k="4">4</button>
+    <button data-k="5">5</button>
+    <button data-k="6">6</button>
+    <button data-k="×" class="op">×</button>
+
+    <button data-k="1">1</button>
+    <button data-k="2">2</button>
+    <button data-k="3">3</button>
+    <button data-k="−" class="op">−</button>
+
+    <button data-k="0">0</button>
+    <button data-k=",">,</button>
+    <button data-k="√" class="fn">√</button>
+    <button data-k="+" class="op">+</button>
+
+    <button data-k="=" class="eq">=</button>
+  </section>
+</main>
+<script>
+/* ===== Utilidades con enteros exactos (BigInt) ===== */
+const pow10 = n => 10n ** BigInt(n);
+function parse(str){                       // "4,35" -> {v:435n, s:2}
+  let neg = str.startsWith('-'); if (neg) str = str.slice(1);
+  const [i, d = ''] = str.split(',');
+  const v = BigInt((i || '0') + d);
+  return {v: neg ? -v : v, s: d.length};
+}
+function fmt(v, s){                        // {v,s} -> "4,35"
+  const neg = v < 0n; if (neg) v = -v;
+  const t = v.toString().padStart(s + 1, '0');
+  const ip = t.slice(0, t.length - s);
+  const dp = t.slice(t.length - s).replace(/0+$/, '');
+  return (neg && v !== 0n ? '-' : '') + ip + (dp ? ',' + dp : '');
+}
+const norm = str => { const p = parse(str); return fmt(p.v, p.s); };
+function isqrt(n){
+  if (n < 2n) return n;
+  let x = n, y = (x + 1n) / 2n;
+  while (y < x){ x = y; y = (x + n / x) / 2n; }
+  return x;
+}
+
+/* ===== División larga ===== */
+function longDivision(A, B){               // A, B: BigInt enteros positivos
+  const D = A.toString(), intLen = D.length;
+  let cur = 0n, started = false, firstIdx = 0;
+  const q = [], lines = [];
+  for (let i = 0; i < intLen; i++){
+    cur = cur * 10n + BigInt(D[i]);
+    if (!started){
+      if (cur >= B || i === intLen - 1){ started = true; firstIdx = i; }
+      else continue;
+    } else lines.push({text: cur.toString(), col: i});
+    const qd = cur / B; cur -= qd * B; q.push(qd.toString());
+  }
+  let decs = 0;
+  while (cur !== 0n && decs < 2){          // hasta 2 decimales
+    decs++; cur *= 10n;
+    lines.push({text: cur.toString(), col: intLen + decs});
+    const qd = cur / B; cur -= qd * B; q.push(qd.toString());
+  }
+  const nInt = intLen - firstIdx;
+  return {
+    dividendShown: D + (decs ? ',' + '0'.repeat(decs) : ''),
+    lines, remainder: cur.toString(), remCol: decs ? intLen + decs : intLen - 1,
+    quotient: q.slice(0, nInt).join('') + (decs ? ',' + q.slice(nInt).join('') : '')
+  };
+}
+function divStep(aStr, bStr){
+  const a = parse(aStr), b = parse(bStr);
+  if (b.v === 0n) throw new Error('No se puede dividir entre 0');
+  const k = Math.max(a.s, b.s);
+  const absA = (a.v < 0n ? -a.v : a.v) * pow10(k - a.s);
+  const absB = (b.v < 0n ? -b.v : b.v) * pow10(k - b.s);
+  const r = longDivision(absA, absB);
+  const neg = (a.v < 0n) !== (b.v < 0n) && absA !== 0n;
+  const result = (neg ? '-' : '') + r.quotient;
+  const A = norm(aStr), Bn = norm(bStr), mult = '1' + '0'.repeat(k);
+  let body = `<div class="ops">${A}÷${Bn} =</div>`;
+  if (k > 0) body += `<div class="ops">${A}x${mult}÷${Bn}x${mult} =</div>`;
+  const pad = (col, len) => ' '.repeat(Math.max(0, col + 1 - len));
+  let left = `<div class="ln">${r.dividendShown}</div>`;
+  r.lines.forEach(l => left += `<div class="ln">${pad(l.col, l.text.length)}${l.text}</div>`);
+  left += `<div class="ln">${pad(r.remCol, r.remainder.length)}<span class="rem">${r.remainder}</span></div>`;
+  body += `<div class="ld"><div class="left">${left}</div>` +
+          `<div class="right"><div class="dv">${absB}</div><div class="q">${r.quotient}</div></div></div>`;
+  return {body, result, label: `${A} ÷ ${Bn}`, small: `cociente ${r.quotient} · resto ${r.remainder}`};
+}
+
+/* ===== Suma, resta, multiplicación ===== */
+function simpleStep(aStr, op, bStr){
+  const a = parse(aStr), b = parse(bStr);
+  let v, s;
+  if (op === '*'){ v = a.v * b.v; s = a.s + b.s; }
+  else {
+    s = Math.max(a.s, b.s);
+    const x = a.v * pow10(s - a.s), y = b.v * pow10(s - b.s);
+    v = op === '+' ? x + y : x - y;
+  }
+  const result = fmt(v, s);
+  const A = norm(aStr), B = norm(bStr), sym = {'+':'+','-':'−','*':'×'}[op];
+  const w = Math.max(A.length, B.length + 2, result.length);
+  const txt = A.padStart(w) + '\n' + (sym + ' ' + B).padStart(w) + '\n' + '─'.repeat(w) + '\n' + result.padStart(w);
+  return {body: `<div class="simple">${txt}</div><div class="clr"></div>`, result, label: `${A} ${sym} ${B}`};
+}
+
+/* ===== Raíz cuadrada (2 decimales) ===== */
+function sqrtStep(aStr){
+  const a = parse(aStr);
+  if (a.v < 0n) throw new Error('No existe la raíz cuadrada de un número negativo');
+  const n = a.s <= 4 ? a.v * pow10(4 - a.s) : a.v / pow10(a.s - 4);
+  const r = isqrt(n);
+  const result = fmt(r, 2);
+  const exact = r * r * pow10(a.s) === a.v * pow10(4);
+  const A = norm(aStr);
+  const sq = fmt(r * r, 4);
+  let body = `<div class="ops">√${A} ${exact ? '=' : '≈'}</div><div class="ops">${result}</div>`;
+  body += `<div class="stepnote">comprobación: ${result}² = ${sq}</div>`;
+  return {body, result, label: `√${A}`};
+}
+
+/* ===== Tokenizador y evaluador (paréntesis, √, precedencia) ===== */
+function tokenize(src){
+  const toks = []; let i = 0;
+  while (i < src.length){
+    const c = src[i];
+    if (/\d/.test(c)){
+      let j = i; while (j < src.length && /\d/.test(src[j])) j++;
+      if (src[j] === ','){ j++; while (j < src.length && /\d/.test(src[j])) j++; }
+      toks.push({t: 'num', v: norm(src.slice(i, j).replace(/,$/, ''))}); i = j; continue;
+    }
+    if ('+−-×÷'.includes(c)) toks.push({t: 'op', v: c === '-' ? '−' : c});
+    else if (c === '(') toks.push({t: '('});
+    else if (c === ')') toks.push({t: ')'});
+    else if (c === '√') toks.push({t: '√'});
+    else throw new Error('Carácter no válido');
+    i++;
+  }
+  return toks;
+}
+function evaluate(src){
+  const toks = tokenize(src), steps = []; let p = 0;
+  const bad = () => new Error('Expresión incompleta o no válida');
+  const peek = () => toks[p];
+  const push = s => { steps.push(s); return s.result; };
+  const bin = (a, op, b) => push(op === '/' ? divStep(a, b) : simpleStep(a, op, b));
+  function expr(){
+    let a = term();
+    while (peek() && peek().t === 'op' && (peek().v === '+' || peek().v === '−')){
+      const op = toks[p++].v; a = bin(a, op === '+' ? '+' : '-', term());
+    }
+    return a;
+  }
+  function term(){
+    let a = factor();
+    for (;;){
+      const t = peek(); if (!t) break;
+      if (t.t === 'op' && (t.v === '×' || t.v === '÷')){ p++; a = bin(a, t.v === '×' ? '*' : '/', factor()); }
+      else if (t.t === 'num' || t.t === '(' || t.t === '√') a = bin(a, '*', factor());   // multiplicación implícita
+      else break;
+    }
+    return a;
+  }
+  function factor(){
+    const t = toks[p++]; if (!t) throw bad();
+    if (t.t === 'op'){
+      if (t.v === '−'){ const x = parse(factor()); return fmt(-x.v, x.s); }
+      if (t.v === '+') return factor();
+      throw bad();
+    }
+    if (t.t === 'num') return t.v;
+    if (t.t === '√') return push(sqrtStep(factor()));
+    if (t.t === '('){
+      const x = expr();
+      if (peek() && peek().t === ')') p++; else if (peek()) throw bad();   // si falta ")" al final, se cierra sola
+      return x;
+    }
+    throw bad();
+  }
+  if (!toks.length) throw bad();
+  const result = expr();
+  if (p < toks.length) throw bad();
+  return {result, steps};
+}
+function pretty(s){
+  let o = '';
+  for (let i = 0; i < s.length; i++){
+    const c = s[i], prev = s[i - 1];
+    if (c === '+' || c === '×' || c === '÷') o += ' ' + c + ' ';
+    else if (c === '−') o += (prev && /[\d)]/.test(prev)) ? ' − ' : '−';
+    else o += c;
+  }
+  return o;
+}
+function renderAll(src){
+  const {result, steps} = evaluate(src);
+  const shown = pretty(src);
+  let html = '';
+  if (steps.length > 1)
+    steps.forEach((s, i) => html += `<div class="step"><div class="stephead">Paso ${i + 1} · ${s.label}</div>${s.body}</div>`);
+  else if (steps.length === 1) html += `<div class="step" style="border:0">${steps[0].body}</div>`;
+  const small = steps.length === 1 && steps[0].small ? `<small>${steps[0].small}</small>` : '';
+  html += `<div class="final">${shown} = ${result}${small}</div>`;
+  return {html, result};
+}
+
+if (typeof module !== 'undefined') module.exports = {evaluate, renderAll, tokenize};
+
+/* ===== Interfaz ===== */
+if (typeof document !== 'undefined'){
+  let expr = '', fresh = false;
+  const $card = document.getElementById('card'),
+        $top = document.getElementById('top'),
+        $entry = document.getElementById('entry');
+  const HINT = '<div class="hint">Escribe una operación y presiona =<br>Puedes usar ( ) y √</div>';
+  const isOp = c => '+−×÷'.includes(c);
+
+  function paint(){
+    $entry.textContent = expr === '' ? '0' : expr;
+    $entry.scrollLeft = $entry.scrollWidth;
+  }
+  function lastNumber(){ return (expr.match(/\d*,?\d*$/) || [''])[0]; }
+  function startNew(){ if (fresh){ expr = ''; $top.innerHTML = '&nbsp;'; fresh = false; } }
+
+  function press(k){
+    const last = expr.slice(-1);
+    if (/^\d$/.test(k)){
+      startNew();
+      const n = lastNumber(), [i, d] = n.split(',');
+      if (d !== undefined ? d.length >= 2 : i.length >= 10) return;
+      if (n === '0' && !n.includes(',')) expr = expr.slice(0, -1);
+      expr += k;
+    } else if (k === ','){
+      startNew();
+      const n = lastNumber();
+      if (n.includes(',')) return;
+      expr += n === '' ? '0,' : ',';
+    } else if (k === '(' || k === '√'){
+      startNew(); expr += k;
+    } else if (k === ')'){
+      const open = (expr.match(/\(/g) || []).length - (expr.match(/\)/g) || []).length;
+      if (open <= 0 || expr === '' || isOp(last) || last === '(' || last === '√') return;
+      expr += ')';
+    } else if ('+−×÷'.includes(k)){
+      fresh = false; $top.innerHTML = '&nbsp;';
+      if (expr === '' || last === '(' ){ if (k === '−') expr += k; }
+      else if (last === '√') { /* nada */ }
+      else if (isOp(last)){
+        if (k === '−' && last !== '−') expr += k;
+        else if (k !== '−'){
+          const prev = expr.slice(-2, -1);
+          expr = expr.slice(0, isOp(prev) || prev === '' || prev === '(' ? -1 : -1) + k;
+        }
+      } else expr += k;
+    } else if (k === 'B'){
+      if (fresh){ expr = ''; fresh = false; $top.innerHTML = '&nbsp;'; } else expr = expr.slice(0, -1);
+    } else if (k === 'C'){
+      expr = ''; fresh = false; $top.innerHTML = '&nbsp;'; $card.innerHTML = HINT;
+    } else if (k === '='){
+      if (expr === '') return;
+      try {
+        const src = expr, r = renderAll(src);
+        $card.innerHTML = r.html;
+        $top.textContent = pretty(src) + ' =';
+        expr = r.result.replace('-', '−'); fresh = true;
+      } catch (e){
+        $card.innerHTML = `<div class="err">${e.message}</div>`;
+      }
+    }
+    paint();
+  }
+  document.querySelectorAll('.keys button').forEach(b => b.addEventListener('click', () => press(b.dataset.k)));
+  document.addEventListener('keydown', e => {
+    const map = {'.': ',', '*': '×', 'x': '×', 'X': '×', '/': '÷', '-': '−', 'Enter': '=', 'Backspace': 'B',
+                 'Escape': 'C', 'Delete': 'C', 'r': '√', 'R': '√'};
+    const k = map[e.key] || e.key;
+    if (/^[\d,+−×÷()√=BC]$/.test(k)){ e.preventDefault(); press(k); }
+  });
+  $card.innerHTML = HINT;
+  paint();
+}
+</script>
+<script>
+(function(){
+  const splash=document.getElementById('splash'), word=document.getElementById('word');
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const letters=[...'AndreX'].map((ch,i)=>{
+    const s=document.createElement('span'); s.className='ch'; s.textContent=ch;
+    s.style.animationDelay=(-i*0.45)+'s'; return s;
+  });
+  const cursor=document.createElement('span'); cursor.className='cursor';
+  let done=false;
+  function finish(){
+    if(done) return; done=true;
+    splash.classList.add('hide'); document.body.classList.add('ready');
+    setTimeout(()=>splash.remove(),900);
+  }
+  splash.addEventListener('click',finish);
+  async function run(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
+    try{ await Promise.race([document.fonts.load('100px Devonshire'),sleep(1500)]); }catch(e){}
+    word.appendChild(cursor);
+    for(const l of letters){                       // 1) se escribe AndreX
+      if(done) return;
+      word.insertBefore(l,cursor); void l.offsetWidth; l.classList.add('in'); await sleep(260);
+    }
+    await sleep(900);
+    for(const i of [2,3,1,4]){                     // 2) se borran las del centro
+      if(done) return;
+      const l=letters[i]; l.style.width=l.offsetWidth+'px'; void l.offsetWidth;
+      l.classList.add('gone'); await sleep(380);
+    }
+    await sleep(500);
+    if(done) return;
+    cursor.remove(); word.classList.add('joined'); // 3) A y X quedan juntas
+    await sleep(1800);
+    finish();
+  }
+  run();
+})();
+</script>
+</body></html>
